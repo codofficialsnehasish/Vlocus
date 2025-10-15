@@ -1,0 +1,90 @@
+<?php $__env->startSection('title'); ?> Shop <?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('content'); ?>
+    <!--breadcrumb-->
+    <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+        <div class="breadcrumb-title pe-3">Shop</div>
+        <div class="ps-3">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0 p-0">
+                    <li class="breadcrumb-item">
+                        <a href="<?php echo e(route('dashboard')); ?>">
+                            <i class="bx bx-home-alt"></i>
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">Shop</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="ms-auto">
+            <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('Shop Create')): ?>
+                <div class="d-flex align-items-center gap-2 justify-content-lg-end">
+                    <a class="btn btn-primary px-4" href="<?php echo e(route('shop.create')); ?>"><i class="bi bi-plus-lg me-2"></i>Add New</a>
+                </div>
+            <?php endif; ?>
+        </div>
+    </div>
+    <!--end breadcrumb-->
+
+    <div class="card mt-4">
+        <div class="card-body">
+            <div class="product-table">
+                <div class="table-responsive">
+                    <table id="example2" class="table table-striped table-bordered" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>S.l</th>
+                                <th>Shop Number</th>
+                                <th>Name</th>
+                                <th>Image</th>
+                                <th>Address</th>
+                                <th>Contact Person</th>
+                                <th>Contact Number</th>
+                                <th>Location Coordinates</th>
+                                <th>Status</th>
+                                <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->any(['Shop Edit', 'Shop Delete'])): ?>
+                                    <th>Action</th>
+                                <?php endif; ?>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php if($shops->isNotEmpty()): ?>
+                                <?php $__currentLoopData = $shops; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <tr>
+                                    <td><?php echo e($loop->iteration); ?></td>
+                                     <td><?php echo e($item->shop_number); ?></td>
+                                    <td><?php echo e($item->shop_name); ?></td>
+                                    <td><img src="<?php echo e($item->getFirstMediaUrl('shop-image')); ?>" alt="" width="50"></td>
+                                    <td><?php echo e($item->shop_address); ?></td>
+                                    <td><?php echo e($item->shop_contact_person_name); ?></td>
+                                    <td><?php echo e($item->shop_contact_person_phone); ?></td>
+                                    <td><?php echo e($item->shop_latitude); ?>, <?php echo e($item->shop_longitude); ?></td>
+                                    <td><?php echo check_status($item->is_visible); ?></td>
+
+                                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->any(['Shop Edit', 'Shop Delete'])): ?>
+                                        <td class="d-flex">
+                                            <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('Shop Edit')): ?>
+                                                <a class="btn" href="<?php echo e(route('shop.edit', $item->id)); ?>" alt="edit"><i
+                                                        class="text-primary" data-feather="edit"></i></a>
+                                            <?php endif; ?>
+                                            <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('Shop Delete')): ?>
+                                                <a class="btn" href="javascript:void(0);" onclick="deleteItem(this)"
+                                                    data-url="<?php echo e(route('shop.destroy',$item->id)); ?>" data-item="Shop"
+                                                    alt="delete"><i
+                                                    class="text-danger" data-feather="trash-2"></i></a>
+                                            <?php endif; ?>
+                                        </td>
+                                    <?php endif; ?>
+                                </tr>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            <?php endif; ?>
+                           
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\wamp64\www\vlocus\resources\views/admin/shop/index.blade.php ENDPATH**/ ?>

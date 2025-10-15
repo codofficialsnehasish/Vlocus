@@ -1,0 +1,33 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+class DeliveryScheduleShop extends Model implements HasMedia
+{
+    use InteractsWithMedia ;
+    protected $fillable = ['lr_no','delivery_schedule_id','shop_id','sender_branch_id','order_serial','invoice_no','delivery_note','payment_type','amount','otp','status','is_delivered','delivered_at','is_cancelled','cancelled_at'];
+
+    public function deliverySchedule()
+    {
+        return $this->belongsTo(DeliverySchedule::class, 'delivery_schedule_id');
+    }
+    public function shop()
+    {
+        return $this->belongsTo(Shop::class);
+    }
+
+    public function products()
+    {
+        return $this->hasMany(DeliveryScheduleShopProduct::class, 'delivery_schedule_shop_id');
+    }
+
+    public function branch()
+    {
+        return $this->belongsTo(User::class,'sender_branch_id','id');
+    }
+
+}
