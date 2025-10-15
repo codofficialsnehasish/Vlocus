@@ -7,7 +7,7 @@
 <?php $__env->startSection('css'); ?>
 <style>
     .vehicle-list-container {
-        height: 500px;
+        height: 400px;
         overflow-y: auto;
         padding-right: 10px;
         position: relative;
@@ -21,9 +21,11 @@
     .list-group-item {
         border-radius: 8px;
         margin-bottom: 8px;
+        padding: 10px;
         cursor: pointer;
         transition: all 0.3s;
         border-left: 3px solid transparent;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
     }
     
     .list-group-item:hover {
@@ -195,30 +197,16 @@
 
 <?php $__env->startSection('content'); ?>
     <!--breadcrumb-->
-    <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-        <div class="breadcrumb-title pe-3">Vehicle Tracking</div>
-        <div class="ps-3">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb mb-0 p-0">
-                    <li class="breadcrumb-item">
-                        <a href="<?php echo e(route('dashboard')); ?>">
-                            <i class="bx bx-home-alt"></i>
-                        </a>
-                    </li>
-                    <li class="breadcrumb-item active" aria-current="page">Tracking</li>
-                </ol>
-            </nav>
-        </div>
-    </div>
+    
     <!--end breadcrumb-->
 
     <div class="card mt-4">
-        <div class="card-body">
+        <div class="card-body" style="height:80vh;">
             <div class="row">
                 <div class="col-md-4">
-                    <div class="vehicle-list-container">
+                    <div >
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h5 class="mb-0" id="list-title">Active Vehicles</h5>
+                            <h5 class="mb-0" id="list-title">Vehicle Tracking</h5>
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" id="liveTrackingToggle" checked>
                                 <label class="form-check-label" for="liveTrackingToggle">Live Updates</label>
@@ -244,7 +232,7 @@
                         </div>
                         
                         <!-- Vehicle List (initially visible) -->
-                        <div class="list-group" id="vehicle-list">
+                        <div class="vehicle-list-container" id="vehicle-list">
                             <?php $__currentLoopData = $drivers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $driver): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <?php $driver_vehicle = getDriverDetails($driver->id)->vehicle; ?>
                             <div class="list-group-item list-group-item-action flex-column align-items-start mb-2 vehicle-item" 

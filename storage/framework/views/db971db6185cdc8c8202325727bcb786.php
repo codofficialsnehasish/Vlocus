@@ -8,570 +8,603 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.14.1/themes/base/jquery-ui.css">
 
+    <!-- Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+    <!-- Flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
 
     <style>
-        .main-wrapper {
-            position: relative;
-        }
-
-        .page-footer {
-            display: none;
-        }
-
-        #page-footer-createPage {
-            display: block;
-            text-align: center;
-
-        }
-
-        #page-footer-createPage p {
-            padding: 15px 0;
-        }
-
-        /* Default styles (large screens) */
-        .top-header .navbar {
-            z-index: 999;
-        }
-
-        #right-card-main-body {
-            position: absolute;
-            margin-top: 10px;
-            right: 20px;
-            top: 50%;
-            z-index: 0;
-            transform: translateY(-45%);
-            width: 33.333%;
-            /* Matches col-lg-4 */
+        .edit-task-selector{
+            padding: 3px !important;
         }
 
         #shopMap {
-            height: 100vh;
-            padding-top: 10px;
-            position: relative;
-            width: auto;
+            position: static !important;
+            overflow: visible !important;
+        }
+        /* Base Reset */
+        html, body {
+        height: 100%;
+        margin: 0;
+        overflow: hidden;
         }
 
-
-
-        @media(max-width:1450) {
-            #right-card-main-body {
-                position: absolute;
-                margin-top: 10px;
-                right: 20px;
-                top: 50%;
-                z-index: 0;
-                transform: translateY(-45%);
-                width: 33.333%;
-                /* Matches col-lg-4 */
-            }
-
-
-
-            #page-footer-createPage-2 {
-                display: hidden;
-                text-align: center;
-            }
-
-            #shopMap {
-                height: 80vh;
-            }
-            
-            .main-content {
-            height: 0px;
-        }  
-
+        /* Topbar */
+        .topbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        margin-top: 55px;
+        height: 50px;
+        background-color: #ddd;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 1rem;
+        z-index: 100;
         }
 
-        /* Responsive styles for medium screens */
-        @media (max-width: 1199px) {
-            #right-card-main-body {
-                position: static;
-                transform: translateY(50%);
-                width: 100%;
-                padding: 0;
-            }
-
-            .main-wrapper {
-                height: 1700px;
-            }
-
-            #shopMap {
-                height: 150vh;
-            }
-
-             
-        }
-
-
-
-        /* Responsive styles for small screens (tablets and below) */
-        @media (max-width: 991px) {
-            #right-card-main-body {
-                position: static;
-                transform: translateY(50%);
-                width: 100%;
-                margin-top: 20px;
-                padding: 0;
-            }
-
-            #shopMap {
-                height: 60vh;
-                /* Reduce map height to make room for form */
-            }
-
-            .scrollable-list {
-                height: auto !important;
-                /* Remove fixed height */
-                max-height: 300px;
-                /* Add scroll if needed */
-            }
-
-            #shopMap {
-                height: 150vh;
-            }
-
-            
-        }
-
-        /* Mobile-specific adjustments */
-        @media (max-width: 767px) {
-            #right-card-body {
-                height: auto !important;
-                /* Make form card height flexible */
-                padding-bottom: 80px;
-                /* Space for bottom buttons */
-            }
-
-            .position-absolute.bottom-0 {
-                position: relative !important;
-                margin-top: 20px;
-            }
-
-            .dashboardleft.card {
-                margin-bottom: 20px;
-            }
-            
-        }
-    </style>
-
-
-
-    <style>
-        
-
-        @media only screen and (min-width: 1366px) and (max-width: 1600px) {
-            #page-footer-createPage {
-                margin-top: 100vh;
-            }
-
-            .main-wrapper {
-                /* height: 1400px; */
-            }
-
-            #shopMap {
-                height: 130vh;
-            }
-
-            .main-content{
-            height: 900px;
-            }
-             .main-content {
-            height: 120vh;
-        } 
-        }
-
-        @media only screen and (min-width: 1200px) and (max-width: 1355px) {
-            .main-wrapper {
-                margin-top: 0px
-            }
-
-            .main-content {
-                /* height: 1590px; */
-            }
-        }
-
-        @media only screen and (min-width: 992px) and (max-width: 1199px) {
-            .shopMap {
-                height: 100vh;
-            }
-            
-        }
-
-        @media only screen and (max-width: 767px) {
-            #date-picker {
-                width: 20%
-            }
-
-            .header-area {
-                position: fixed;
-                width: 100%;
-                top: 0;
-                z-index: 99999;
-
-            }
-
-            
-        }
-
-        .main-content {
-            height: 120vh;
-        } 
-        
-        date-picker
-
-        /* .main-wrapper{
-                        margin-top: 0;
-                    } */
-        #suggestions {
-            position: absolute;
-            z-index: 1050;
-            max-height: 188px;
-            overflow-y: auto;
-            max-width: 350px;
-        }
-
-       
-        .card {
+        /* Sidebar */
+        .sidebar {
+            /* updated Code */
+            /* height: 90vh; */
+            /* ----------------- */
+            position: fixed;
+            top: 100px;
+            left: 0;
+            width: 600px;
             background: #fff;
-            /* box-shadow: 0px 0px 5px 0px #9999999e;
-                        margin: 20px 25px 0px 0px; */
-            /* padding: 20px; */
-            border-radius: 0px;
+            overflow-y: auto;
+            transition: transform 0.3s ease;
+            transform: translateX(-100%);
+            z-index: 50;
+            margin-top: -38px;
         }
 
-        .deliveryScheduleDashboardRight {
-            background: #e7e3e3;
-            padding: 0px 0px 0px 0px;
+        .sidebar.show {
+        transform: translateX(0);
         }
 
-        .form-label {
-            margin-bottom: .5rem;
-            color: #000;
+        /* Map Container */
+        .map-container {
+        position: absolute;
+        top: 50px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        height: calc(100vh - 50px);
+        transition: margin-left 0.3s;
         }
 
-        .dashboardleft img {
+        .sidebar.show ~ .map-container {
+        /* margin-left: 700px;
+        width: calc(100% - 700px); */
+        width: 100%;
+        }
+
+        /* Location List */
+        #locations {
+        height: 430px;
+        overflow-y: auto;
+        }
+
+        /* Location Box */
+        .location-box {
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        overflow: hidden;
+        }
+
+        .location-header {
+        background-color: #f5f5f5;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        cursor: pointer;
+        }
+
+        .location-content {
+        padding: 10px;
+        }
+
+        .toggle-icon.rotate {
+        transform: rotate(180deg);
+        transition: transform 0.3s ease;
+        }
+
+        /* Task Section */
+        .task-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            /* width: 100%; */
+            padding: 0 10px;
+            background-color: #349eff;
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+            /* margin-bottom: 10px; */
+        }
+
+        /* Task Item */
+        .item-row {
+        padding: 0.5rem;
+        background-color: #fafafa;
+        border-bottom: 1px solid #eee;
+        border-radius: 5px;
+        margin-bottom: 4px;
+        }
+
+        /* Buttons */
+        .btn-icon {
+        background: none;
+        border: none;
+        color: #dc3545;
+        margin-left: 0.5rem;
+        }
+
+        .btn-submit {
+        width: 48%;
+        }
+
+        /* Bottom Button Container */
+        .bottom-button-container {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        padding: 16px;
+        background-color: #fff;
+        border-top: 1px solid #ddd;
+        z-index: 20;
+        width: 600px;
+        margin-top: -555px;
+        }
+
+        /* Responsive Adjustments */
+
+        @media only screen and (min-width: 1366px) and (max-width: 1600px){
+            #locations {
+        height: 58vh;
+        overflow-y: auto;
+        }
+        }
+
+        @media (max-width: 1199px) {
+        .bottom-button-container {
+            width: 100%;
+        }
+        }
+
+        @media(max-width:1024px){
+            #locations {
+        height: 430px;
+        overflow-y: auto;
+        }
+        }
+
+        @media (max-width: 767px) {
+        .sidebar {
             width: 100%;
         }
 
-        .dashboardleft {
-            /* padding: 75px 0px 0px 25px; */
-            padding: 0px 0px 0px 0px;
-            /* margin: 20px 0px; */
-            box-shadow: none;
-            border-radius: 0px;
+        .sidebar.show ~ .map-container {
+            margin-left: 0;
+            width: 100%;
+        }
+        #locations {
+        height: 450px;
+        overflow-y: auto;
+        }
         }
 
-        .dashboardleft .card-header {
-            background: #ffff;
-            /* margin-bottom: 20px; */
-            padding: 25px 0px;
-            border-radius: 0px;
-
-
+        /* Delivery Note Offcanvas */
+        .delivery-note-overlay {
+        position: fixed;
+        z-index: 1065;
+        width: 100%;
+        max-width: 600px;
+        background: white;
+        transition: transform 0.3s ease-in-out;
         }
 
-        .scrollable-list {
-            margin: 10px 0;
-            max-height: 348px;
-            overflow-y: auto;
+        .offcanvas-backdrop {
+        z-index: 1064 !important;
+        background-color: rgba(0, 0, 0, 0.2);
         }
 
-        #sortable-shops {
-            /*position: absolute;*/
-            /*       z-index: 1050;*/
-            /*       max-height: 250px;*/
-            overflow-y: auto;
+        body.offcanvas-open {
+        overflow: hidden;
         }
 
-        .form-control {
-
-            color: #000;
+        /* Delivery Note Input Fields */
+        .custom-input-wrapper {
+        position: relative;
         }
 
-        .select2-container--bootstrap-5.select2-container--focus .select2-selection,
-        .select2-container--bootstrap-5.select2-container--open .select2-selection {
-
-            border: 1px solid #000;
+        .custom-floating-label {
+        position: absolute;
+        top: -0.6rem;
+        left: 1rem;
+        background: white;
+        padding: 0 5px;
+        font-size: 0.75rem;
+        color: #666;
+        z-index: 1;
         }
 
-        .form-control:focus {
-
-            border: 1px solid #000;
-            color: #000;
+        .custom-input {
+        border: 1px solid #bbb;
+        border-radius: 6px;
+        padding: 12px;
+        font-size: 0.875rem;
+        /* margin-bottom: 25px; */
         }
 
-        .select2-selection .select2-selection--single {
-            background: #e7e3e3;
-            border: 1px solid #000;
+    </style>
+    <style>
+        /* Default state - show top-header and primary-menu */
+        .top-header {
+        display: block;
         }
 
-        .select2 .select2-container .select2-container--bootstrap-5 {
-            background: #e7e3e3 !important;
-            border: 1px solid #000 !important;
+        .primary-menu {
+        display: block;
         }
 
-        .calender {
-            position: relative;
+        /* Hide top-header when screen width is 1366px or more (full screen) */
+        @media screen and (min-width: 1366px) {
+        .top-header {
+            display: none;
         }
 
-        .fa-calendar {
-            position: absolute;
-            top: 12px;
-            right: 16px;
+        .primary-menu .navbar {
+            top: 0;
         }
 
-        .card-color {
-            /* opacity: 0.9; */
-            background: #ffff;
+        .main-wrapper {
+            margin-top: 50px;
+        }
+        }
+    </style>
+
+    <style>
+        .order-card {
+        color: #fff;
         }
 
-        span.select2-selection.select2-selection--single {
-            /* background: blue; */
+        .bg-c-blue {
+        background: linear-gradient(45deg, #4099ff, #73b4ff);
+        }
 
-            background-repeat: no-repeat !important;
-            background-position: right !important;
+        .bg-c-green {
+        background: linear-gradient(45deg, #2ed8b6, #59e0c5);
+        }
+
+        .bg-c-yellow {
+        background: linear-gradient(45deg, #FFB64D, #ffcb80);
+        }
+
+        .bg-c-pink {
+        background: linear-gradient(45deg, #FF5370, #ff869a);
         }
 
 
-        #shop_suggestions {
-            position: absolute;
-            z-index: 1050;
-            max-height: 250px;
-            overflow-y: auto;
+        .card {
+        border-radius: 5px;
+        -webkit-box-shadow: 0 1px 2.94px 0.06px rgba(4, 26, 55, 0.16);
+        box-shadow: 0 1px 2.94px 0.06px rgba(4, 26, 55, 0.16);
+        border: none;
+        margin-bottom: 30px;
+        -webkit-transition: all 0.3s ease-in-out;
+        transition: all 0.3s ease-in-out;
         }
 
-        #shop_address_suggestions {
-            position: absolute;
-            z-index: 1050;
-            max-height: 250px;
-            overflow-y: auto;
+        .card .card-block {
+        padding: 25px;
+        }
+
+        .order-card i {
+        font-size: 26px;
+        }
+
+        .f-left {
+        float: left;
+        }
+
+        .f-right {
+        float: right;
+        }
+    </style>
+
+    <style>
+        .product-row {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 8px;
+        }
+
+        .product-title {
+            flex: 1; /* take remaining space */
+        }
+
+        .product-unit {
+            width: 120px; /* fixed width for select */
+        }
+
+        .product-qty {
+            width: 80px; /* enough for ~5 digits */
+            /* text-align: right; */
+        }
+
+        .product-row .remove-row,
+        .product-row .add-row {
+            height: 46px;
+            padding: 0 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 5px;
+        }
+
+        .product-row .remove-row i,
+        .product-row .add-row i {
+            font-size: 18px;
+        }
+
+        .show-important {
+            display: flex !important;
+        }
+        .hide-important {
+            display: none !important;
+        }
+    </style>
+
+    <style>
+        /* Updated Code */
+        @media screen and (min-width: 1440px) {
+            .sidebar {
+                top: 150px !important;
+                height: 90vh !important;
+            }
+        }
+
+        @media screen and (min-width: 1024px) {
+            .sidebar {
+                top: 106px !important;
+                height: 88vh;
+            }
+        }
+
+        @media screen and (min-width: 768px) {
+            .sidebar {
+                top: 108px !important;
+                height: 88vh;
+            }
+        }
+
+        @media screen and (min-width: 425px) {
+            .sidebar {
+                top: 100px !important;
+                height: 87vh;
+            }
         }
     </style>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css">
     <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css">
+
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('content'); ?>
+
     <!--breadcrumb-->
-    <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-        <div class="breadcrumb-title pe-3">Delivery Schedule</div>
-        <div class="ps-3">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb mb-0 p-0">
-                    <li class="breadcrumb-item">
-                        <a href="<?php echo e(route('dashboard')); ?>">
-                            <i class="bx bx-home-alt"></i>
-                        </a>
-                    </li>
-                    <li class="breadcrumb-item active" aria-current="page">Add New Delivery Schedule</li>
-                </ol>
-            </nav>
-        </div>
-        <div class="ms-auto">
-            <div class="d-flex align-items-center gap-2 justify-content-lg-end">
-                <a class="btn btn-primary px-4" href="<?php echo e(route('delivery-schedule.index')); ?>"><i
-                        class="fadeIn animated bx bx-arrow-back"></i>Back</a>
+    <div class="offcanvas offcanvas-start delivery-note-overlay" tabindex="-1" id="deliveryNote" aria-modal="true" role="dialog" style="width: 100%; margin-top: 60px;">
+
+        <form id="task-form" >
+            <div class="offcanvas-header border-bottom mt-2">
+                <h6 class="offcanvas-title fw-bold">DELIVERY NOTE</h6>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                <button type="submit" class="btn-close" id="edit-submit-close-btn" style="display: none;"></button>
             </div>
-        </div>
-    </div>
-    <!--end breadcrumb-->
 
-    <form class="needs-validation" action="<?php echo e(route('delivery-schedule.store')); ?>" method="post" novalidate
-        enctype="multipart/form-data">
-        <?php echo csrf_field(); ?>
-        <input type="hidden" name="shop_ids" id="shop_ids">
-        <div class="row">
-            <!--<div class="col-md-3 bg-white">-->
+            <div class="offcanvas-body" style="position: relative; height: 80vh;  overflow-y: auto;" style="margin-bottom:50px;">
+            
+                
 
-            <!--</div>-->
-            <div class="col-md-12">
-                <div class="deliveryScheduleDashboardRight">
-                    <div class="bg-white">
-                        <div class="row">
-                            
-                            <div class=" col-lg-8"
-                                style="padding-right: 0; padding-left: 0; height:555px; position: relative; width:100%">
-                                <div class="dashboardleft card" style="">
-                                    <div class="card-header text-center text-black">Easy Task Creation to manage deliveries
-                                    </div>
-                                    <!--<img src="<?php echo e(asset('assets/dashboard-assets/assets/images/map new.jpg')); ?>">-->
-                                    <div id="shopMap"></div>
-                                </div>
+                <div class="custom-input-wrapper mb-3">
+                    <label class="custom-floating-label">ORDER NO.</label>
+                    <input type="text" class="form-control custom-input" name="invoice_no" placeholder="9999999999">
+                </div>
 
+                <input type="hidden" name="shop_id" id="shop_id">
+                <input type="hidden" name="shop_name" id="shop_name">
+                <input type="hidden" name="shop_addresse" id="shop_addresse">
+                <input type="hidden" name="shop_latitude" id="shop_latitude">
+                <input type="hidden" name="shop_longitude" id="shop_longitude">
 
-                            </div>
+                <div class="custom-input-wrapper mb-3">
+                    <label class="custom-floating-label">
+                        CONSIGNOR DETAILS
+                    </label>
+                    <?php if(auth()->user()->hasRole('Employee')): ?>
+                    <input type="text" value="<?php echo e(auth()->user()->employee?->branch?->name ?? 'N/A'); ?>" class="form-control custom-input" placeholder="Type here..." readonly>
+                    <input type="hidden" value="<?php echo e(auth()->user()->employee?->branch?->id ?? ''); ?>" name="branch_id" id="branch_id">
+                    <?php endif; ?>
 
-                            
-                            <div class="col-lg-4 col-md-6 col-12" id="right-card-main-body">
-                                <div class="card card-color" style="box-shadow: white 0px; margin-right:0px;">
-                                    <div class="card-header text-center text-black" style="padding: 25px 0px">Add Delivery
-                                        Schedule</div>
-                                    <div class="card-body">
+                    <?php if(auth()->user()->hasRole('Branch')): ?>
+                    <input type="text" value="<?php echo e(auth()->user()->name ?? 'N/A'); ?>" class="form-control custom-input" placeholder="Type here..." readonly>
+                    <input type="hidden" value="<?php echo e(auth()->user()->id ?? ''); ?>" name="branch_id" id="branch_id">
+                    <?php endif; ?>
+                </div>
 
-                                        <div class="row">
-                                            <div style="display: flex; gap:20px; width:470px; padding: 0 10px 0px 10px; ">
-                                                <div class="mb-3 col-md-12" style="width: 30%">
-                                                    <label class="form-label" for="delivery_date">Delivery Date <span
-                                                            class="text-danger">*</span></label>
+                <div class="custom-input-wrapper mb-3">
+                    <label class="custom-floating-label">
+                        CONSIGNEE DETAILS
+                        <a class="" data-bs-toggle="modal" data-bs-target="#quickShopAddModal">
+                            <i class="text-primary" data-feather="plus"></i>
+                        </a>
+                    </label>
+                    <input type="text" class="form-control custom-input" id="search_shop_name" name="consignee_details" placeholder="Type here...">
+                    <div id="suggestions" class="list-group position-absolute z-index-3"
+                        style="z-index: 99999; height: 100px; overflow-y: auto; width: 95%;background: white;">
+                    </div>
+                </div>
 
-                                                    <input style="font-size: 15px " type="date" class="form-control"
-                                                        value="<?php echo e(old('delivery_date', date('Y-m-d'))); ?>"
-                                                        name="delivery_date" id="delivery_date" placeholder="Enter date"
-                                                        required>
+                
 
-
-
-                                                    <div class="valid-feedback">Looks good!</div>
-                                                    <div class="invalid-feedback">Please enter shop name.</div>
-                                                </div>
-
-                                                <div class="mb-3 col-md-12" style="width:63%" id="date-picker">
-                                                    <label class="form-label" for="driver_id">Choose Driver <span
-                                                            class="text-danger">*</span>
-                                                    </label>
-
-                                                    <select class="form-select single-select-field" name="driver_id"
-                                                        id="driver_id" required>
-                                                        <option value="" selected disabled>Select Driver</option>
-
-                                                        <?php $__currentLoopData = $drivers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $driver): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                            <option value="<?php echo e($driver->id); ?>"
-                                                                <?php echo e(old('driver_id') == $driver->id ? 'selected' : ''); ?>>
-                                                                <?php echo e($driver->name); ?> (<?php echo e($driver->phone); ?>)
-                                                                (<?php echo e(getDriverDetails($driver->id)->vehicle->vehicle_number); ?>)
-                                                            </option>
-                                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                                    </select>
-                                                    <div class="valid-feedback">Looks good!</div>
-                                                    <div class="invalid-feedback">Please enter shop contact person name.
-                                                    </div>
-                                                </div>
-                                            </div>
-
-
-                                            <!--<div style="display: flex; gap:20px; width:470px">-->
-                                            <!--    <div class="mb-3 col-md-12" style="width: 30%">-->
-                                            <!--        <label class="form-label" for="payment_type">Payment Type </label>-->
-                                            <!--        <select class="form-select " name="payment_type"-->
-                                            <!--            id="payment_type" required>-->
-                                            <!--            <option value="" selected disabled>Select Type</option>-->
-
-                                            <!--            <option value="Pre-Paid"-->
-                                            <!--                <?php echo e(old('payment_type') == 'Pre-Paid' ? 'selected' : ''); ?>>-->
-                                            <!--                Pre-Paid-->
-
-                                            <!--            </option>-->
-                                            <!--            <option value="Pre-Paid"-->
-                                            <!--                <?php echo e(old('payment_type') == 'COD' ? 'selected' : ''); ?>>COD-->
-
-                                            <!--            </option>-->
-
-                                            <!--        </select>-->
-                                            <!--        <div class="valid-feedback">Looks good!</div>-->
-                                            <!--        <div class="invalid-feedback">Please payment type.</div>-->
-                                            <!--    </div>-->
-
-                                            <!--    <div class="mb-3 col-md-12" style="width:70%">-->
-                                            <!--        <label class="form-label" for="amount">Amount <span-->
-                                            <!--                class="text-danger">*</span>-->
-                                            <!--        </label>-->
-
-                                            <!--        <input style="font-size: 15px" type="text" class="form-control"-->
-                                            <!--            value="<?php echo e(old('amount')); ?>"-->
-                                            <!--            name="amount" id="amount" placeholder="Enter amount"-->
-                                            <!--            >-->
-                                            <!--        <div class="valid-feedback">Looks good!</div>-->
-                                            <!--        <div class="invalid-feedback">Please enter amount.-->
-                                            <!--        </div>-->
-                                            <!--    </div>-->
-                                            <!--</div>-->
-
-                                            <!--<div class="mb-3 col-md-12" >-->
-                                            <!--    <label class="form-label" for="delivery_date">Delivery Note <span-->
-                                            <!--            class="text-danger">*</span></label>-->
-                                            <!--    <textarea name="delivery_note" id="delivery_note" class="form-control"><?php echo e(old('delivery_note')); ?></textarea>-->
-                                            <!--    <div class="valid-feedback">Looks good!</div>-->
-                                            <!--    <div class="invalid-feedback">Please delivery note.</div>-->
-                                            <!--</div>-->
-
-                                            <!--<div class="mb-3 col-md-4">-->
-                                            <!--    <label class="form-label" for="vehicle_id">Choose Vehicle <span-->
-                                            <!--            class="text-danger">*</span></label>-->
-                                            <!--    <select class="form-select single-select-field" name="vehicle_id" id="vehicle_id" required>-->
-                                            <!--        <option value="" selected disabled>Select Vehicle</option>-->
-                                            <!--        <?php $__currentLoopData = $vehicles; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $vehicle): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-    -->
-                                            <!--            <option value="<?php echo e($vehicle->id); ?>"-->
-                                            <!--                <?php echo e(old('vehicle_id') == $vehicle->id ? 'selected' : ''); ?>>-->
-                                            <!--                <?php echo e($vehicle->name); ?>( <?php echo e($vehicle->vehicle_number); ?> )</option>-->
-                                            <!--
-    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>-->
-                                            <!--    </select>-->
-                                            <!--    <div class="valid-feedback">Looks good!</div>-->
-                                            <!--    <div class="invalid-feedback">Please enter a valid shop address.</div>-->
-                                            <!--</div>-->
-
-                                            
-
-                                            
-
-
-                                            <!--<div class="mb-3">-->
-                                            <!--      <div class="col-md-1">-->
-
-                                            <!--</div>-->
-                                            <!--    <label class="form-label">Search Shop Name</label>-->
-                                            <!--      <a class="btn view-map border" data-bs-toggle="modal" data-bs-target="#quickShopAddModal">-->
-                                            <!--        <i class="text-primary" data-feather="plus"></i>-->
-                                            <!--    </a>-->
-                                            <!--    <input type="text" class="form-control" id="search_shop_name"-->
-                                            <!--        placeholder="Enter shop name">-->
-                                            <!--    <div id="suggestions" class="list-group position-absolute w-100 z-index-3"></div>-->
-                                            <!--</div>-->
-                                            
-
-                                            <div class="mb-3" style="height: 450px">
-                                                <label class="form-label">Add Shops</label>
-                                                <a class="btn view-map border" data-bs-toggle="modal"
-                                                    data-bs-target="#quickShopAddModal">
-                                                    <i class="text-primary" data-feather="plus"></i>
-                                                </a>
-                                                <input type="text" class="form-control" id="search_shop_name"
-                                                    placeholder="Enter shop name" style="margin: 15px 0;">
-                                                <ul id="sortable-shop-location" class="list-group scrollable-list">
-                                                </ul>
-                                                <div id="suggestions" class="list-group position-absolute z-index-3"
-                                                    style="z-index: 99999; height: 100px; overflow-y: auto; width: 95%;">
-                                                </div>
-                                                <div class="position-absolute bottom-0 end-0 start-0 p-3"
-                                                    style="margin-top: 15px; z-index: 0;">
-                                                    <div
-                                                        class="d-md-flex  mb-lg-4 mb-sm-3 mb-4 d-grid justify-content-end align-items-center gap-2">
-                                                        <button type="submit"
-                                                            class="btn btn-grd-primary px-4 text-light">Submit</button>
-                                                        <button type="button" class="btn btn-success px-4"
-                                                            id="sortByNearestBtn">Sort</button>
-                                                        <button type="reset"
-                                                            class="btn btn-grd-info px-4 text-light">Reset</button>
-                                                    </div>
-
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                <div id="product-container">
+                    <div class="product-row">
+                        <input type="text" placeholder="Product Title" class="product-title form-control custom-input">
+                        <select class="product-unit form-select custom-input">
+                            <option value="unit">Unit</option>
+                            <option value="box">Box</option>
+                        </select>
+                        <input type="number" min="1" value="1" class="product-qty form-control custom-input">
+                        <button type="button" class="remove-row btn btn-sm btn-danger" onclick="removeRow(this)">
+                            <i class="material-icons-outlined">delete</i>
+                        </button>
+                        <button type="button" class="add-row btn btn-sm btn-success" onclick="addRow()">
+                            <i class="material-icons-outlined">add</i>
+                        </button>
                     </div>
                 </div>
 
 
+                
+
+                <div class="custom-input-wrapper mb-3" style="margin-top: 15px;">
+                    <label class="custom-floating-label">TOTAL ITEM</label>
+                    <input type="text" id="total-pcs" class="form-control custom-input" placeholder="0">
+                </div>
+
+                
+
+                <div class="custom-input-wrapper mb-3" >
+                    <label class="custom-floating-label">PAYMENT DETAILS</label>
+                    <select class="form-control form-select custom-input payment-type" name="payment_type">
+                        <option value="" selected disabled>Select Type</option>
+                        <option value="Pre-Paid">Pre-Paid</option>
+                        <option value="COD">COD</option>
+                    </select>
+                </div>
+
+                <div class="custom-input-wrapper mb-3" style="margin-top: 15px;">
+                    <label class="custom-floating-label">TOTAL Amount</label>
+                    <input type="number" class="form-control custom-input amount" name="amount" placeholder="Enter amount" >
+                </div>
+
+                
+
+                
+                <div id="ofcanvus-submit-btn" style="position: fixed; bottom: 0; background: white; padding: 10px 0; z-index: 10; width: 555px;">
+                    <button type="submit" class="btn btn-primary text-uppercase fw-bold w-100">
+                        Add Delivery Task
+                    </button>
+                </div>
+
+                <div class="d-grid" >
+                </div>
+            </div>
+        </form>
+
+        <!-- <div id="ofcanvus-submit-btn" style="position: sticky; bottom: 0; background: white; padding: 10px 0; z-index: 10; margin:0 15px;">
+                    <button type="submit" class="btn btn-primary text-uppercase fw-bold w-100">
+                        Add Delivery Task
+                    </button>
+        </div> -->
+    </div>
+
+    <form class="needs-validation" action="<?php echo e(route('delivery-schedule.store')); ?>" method="post" novalidate enctype="multipart/form-data">
+        <?php echo csrf_field(); ?>
+        
+        <div class="d-flex ">
+            <!-- Sidebar -->
+            <div class="sidebar show" id="sidebar" style="z-index:5">
+                <div class="d-flex task-header">
+                    <div class="task-header">
+                        <div class="py-1 px-2 rounded-circle  bg-white"><i class="bi bi-pencil-square text-black"></i>
+                        </div>
+                        Create Task
+                    </div>
+                    <div class="mb-4 mt-3">
+                        
+                        <a href="javascript:void(0);" id="openDeliveryNoteBtn"
+                            class="btn-add text-decoration-none text-white">
+                            <i class="bi bi-plus-circle me-1 display-6"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="p-3">
+                    <div class="row p-1">
+                        <div class="mb-3 col-md-3 p-0 edit-task-selector">
+                            <input type="text" id="delivery_date"  name="delivery_date" value="<?php echo e(old('delivery_date')); ?>" class="form-control" placeholder="DD/MM/YYYY">
+                            <div class="invalid-feedback">Please enter a delivery date.</div>
+                        </div>
+                        <div class="custom-input-wrapper mb-3 col-md-5 p-0 edit-task-selector">
+                            <select class="form-select single-select-field" name="vehicle_id" id="vehicle_id" required>
+                                <option value="" selected disabled>Select Vehicle</option>
+            
+                                <?php $__currentLoopData = $vehicles; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $vehicle): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <option value="<?php echo e($vehicle->id); ?>"
+                                        <?php echo e(old('vehicle_id') == $vehicle->id ? 'selected' : ''); ?>>
+                                        <?php echo e($vehicle->name); ?> | <?php echo e($vehicle->vehicle_number); ?>
+
+                                    </option>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                <option value="add_new">➕ Add New Vehicle</option>
+                            </select>
+                            <div class="invalid-feedback">Please select a vehicle.</div>
+                        </div>
+            
+                        <div class=" mb-3 col-md-4 p-0 edit-task-selector">
+                            <select class="form-select single-select-field" name="driver_id" id="driver_id" required>
+                                <option value="" selected disabled>Select Driver</option>
+            
+                                <?php $__currentLoopData = $drivers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $driver): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <option value="<?php echo e($driver->id); ?>"
+                                        <?php echo e(old('driver_id') == $driver->id ? 'selected' : ''); ?>>
+                                        <?php echo e($driver->name); ?> (<?php echo e($driver->phone); ?>)
+                                    </option>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                <option value="add_new">➕ Add New Driver</option>
+                            </select>
+                            <div class="invalid-feedback">Please select a driver.</div>
+                        </div>
+                    </div>
+                    <div class="mb-3" id="searchWrapper" style="display:none;">
+                        <input type="text" class="form-control" id="searchShop" placeholder="Search Shop...">
+                    </div>
+
+                    <!-- Locations -->
+                    <div id="locations"></div>
+
+                    <!-- Buttons -->
+                    <div class="bottom-button-container">
+                        <div class="d-flex justify-content-between">
+                            <button class="btn btn-primary w-50 me-2" type="button"
+                                id="sortByNearestBtn">Routing</button>
+                            <button class="btn btn-primary w-50" type="submit">Submit</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- -------------------------------- -->
+
+            <!-- Map Section -->
+            <div class="map-container">
+                <div id="shopMap"></div>
             </div>
         </div>
-        </div>
-        
     </form>
 
     <div class="modal fade" id="quickShopAddModal">
@@ -697,13 +730,323 @@
             </div>
         </div>
     </div>
+
+    <!-- Add New Vehicle Modal -->
+    <div class="modal fade" id="addVehicleModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+            <form id="addVehicleForm">
+                <?php echo csrf_field(); ?>
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Add New Vehicle</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <input type="hidden" name="response_for" value="modal">
+                            <!-- Vehicle Name -->
+                            <div class="mb-3 col-md-6">
+                                <label for="name" class="form-label">Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="name" id="name" placeholder="Enter Vehicle Name" value="<?php echo e(old('name')); ?>" required>
+                                <div class="valid-feedback">Looks good!</div>
+                                <div class="invalid-feedback">Please enter the vehicle name.</div>
+                            </div>
+
+                            <!-- Vehicle Number -->
+                            <div class="mb-3 col-md-6">
+                                <label for="vehicle_number" class="form-label">Vehicle Number <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="vehicle_number" id="vehicle_number" placeholder="Enter Vehicle Number" value="<?php echo e(old('vehicle_number')); ?>" required>
+                                <div class="valid-feedback">Looks good!</div>
+                                <div class="invalid-feedback">Please enter the vehicle number.</div>
+                            </div>
+
+                            <!-- RWC Number -->
+                            <div class="mb-3 col-md-6">
+                                <label for="rwc_number" class="form-label">RWC Number <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="rwc_number" id="rwc_number" placeholder="Enter RWC Number" value="<?php echo e(old('rwc_number')); ?>" required>
+                                <div class="valid-feedback">Looks good!</div>
+                                <div class="invalid-feedback">Please enter the RWC number.</div>
+                            </div>
+
+                            <!-- Engine Number -->
+                            <div class="mb-3 col-md-6">
+                                <label for="rwc_number" class="form-label">Engine Number <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="engine_number" id="engine_number" placeholder="Enter RWC Number" value="<?php echo e(old('engine_number')); ?>" required>
+                                <div class="valid-feedback">Looks good!</div>
+                                <div class="invalid-feedback">Please enter the Engine number.</div>
+                            </div>
+
+                            <!-- Fuel Type -->
+                            <div class="mb-3 col-md-6">
+                                <label for="fuel_type" class="form-label">Fuel Type</label>
+
+                                <select class="form-select" name="fuel_type" id="fuel_type" required>
+                                    <option value="0" <?php echo e(old('fuel_type') == '0' ? 'selected' : ''); ?>>Petrol
+                                    </option>
+                                    <option value="1" <?php echo e(old('fuel_type') == '1' ? 'selected' : ''); ?>>Disel
+                                    </option>
+                                </select>
+                                <div class="invalid-feedback">Please enter a valid fuel type.</div>
+                            </div>
+
+                            <div class="mb-3 col-md-6">
+                                <label for="brand_id" class="form-label">Vehicle Type <span
+                                        class="text-danger">*</span></label>
+                                <select class="form-select" name="vehicle_type" id="vehicle_type" required>
+                                    <option value="" selected>Select Vehicle Type</option>
+                                    <?php $__currentLoopData = $vehicle_types; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $vehicle_type): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <option value="<?php echo e($vehicle_type->id); ?>"
+                                            <?php echo e(old('vehicle_type') == $vehicle_type->id ? 'selected' : ''); ?>>
+                                            <?php echo e($vehicle_type->name); ?></option>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                </select>
+                                <div class="invalid-feedback">Please select a vehicle type.</div>
+                            </div>
+
+                            <!-- Description -->
+                            <div class="mb-3 col-md-12">
+                                <label for="description" class="form-label">Description</label>
+                                <textarea name="description" id="description" class="form-control" placeholder="Enter Description"><?php echo e(old('description')); ?></textarea>
+                                <div class="invalid-feedback">Please enter a valid description.</div>
+                            </div>
+
+                            <div class="mb-3">
+                                <img class="img-thumbnail rounded me-2" id="blah" alt="" width="200" src="" data-holder-rendered="true" style="display: none;">
+                            </div>
+                            <div class="mb-3">
+                                <input type="file" class="form-control" name="image" id="imgInp" required>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Save Vehicle</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add New Driver Modal -->
+    <div class="modal fade" id="addDriverModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+            <form id="addDriverForm">
+                <?php echo csrf_field(); ?>
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Add New Driver</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <input type="hidden" name="response_for" value="modal">
+                            <div class="mb-3 col-md-6">
+                                <label class="form-label">First Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" placeholder="Enter First name" name="first_name" value="<?php echo e(old('first_name')); ?>" required>
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <label class="form-label">Last Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" placeholder="Enter Last name" name="last_name" value="<?php echo e(old('last_name')); ?>" required>
+                            </div>
+                            <div class="mb-3 col-md-4">
+                                <label class="form-label">Email <span class="text-danger">*</span></label>
+                                <input type="email" class="form-control" name="email" id="email" value="<?php echo e(old('email')); ?>" required>
+                            </div>
+                            <div class="mb-3 col-md-4">
+                                <label class="form-label">Password <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="password" value="<?php echo e(old('password')); ?>" required>
+                            </div>
+                            <div class="mb-3 col-md-4">
+                                <label class="form-label">Gender <span class="text-danger">*</span></label>
+                                <select class="form-control input-height" name="gender" required>
+                                    <option value selected disabled>Select...</option>
+                                    <option value="male" <?php if(old('gender') == 'male'): ?> selected <?php endif; ?>>Male</option>
+                                    <option value="female" <?php if(old('gender') == 'female'): ?> selected <?php endif; ?>>Female</option>
+                                    <option value="others" <?php if(old('gender') == 'others'): ?> selected <?php endif; ?>>Others</option>
+                                </select>
+                            </div>
+                            <div class="mb-3 col-md-4">
+                                <label class="form-label">Mobile No. <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="phone" value="<?php echo e(old('phone')); ?>" required>
+                            </div>
+                            <div class="mb-3 col-md-4">
+                                <label class="form-label">Date Of Birth <span class="text-danger"></span></label>
+                                <input type="date" class="form-control" name="date_of_birth" value="<?php echo e(old('date_of_birth')); ?>">
+                            </div>
+                            <div class="mb-3 col-md-4">
+                                <label class="form-label">Address <span class="text-danger"></span></label>
+                                <input type="text" class="form-control" name="address" value="<?php echo e(old('address')); ?>">
+                            </div>
+                            <div class="mb-3 col-md-4">
+                                <label class="form-label">Driving License Number <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="driving_license_number" value="<?php echo e(old('driving_license_number')); ?>">
+                            </div>
+
+                            <div class="mb-3 col-md-4">
+                                <label class="form-label">Vehicle Types <span class="text-danger">*</span></label>
+                                <select class="form-control input-height" name="vehicle_type" required>
+                                    <option value selected disabled>Select...</option>
+                                    <?php $__currentLoopData = $vehicle_types; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <option value="<?php echo e($item->id); ?>"
+                                            <?php if(old('vehicle_type') == $item->id): ?> selected <?php endif; ?>><?php echo e($item->name); ?></option>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                </select>
+                            </div>
+
+                            <div class="mb-3 col-md-4">
+                                <label class="form-label">Driving Exprience <span class="text-danger"></span></label>
+                                <input type="text" class="form-control" name="driving_exprience" value="<?php echo e(old('driving_exprience')); ?>">
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Save Driver</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('scripts'); ?>
     <script src="https://code.jquery.com/ui/1.14.1/jquery-ui.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="<?php echo e(asset('assets/dashboard-assets/assets/plugins/select2/js/select2-custom.js')); ?>"></script>
+    
+    <script>
+        flatpickr("#delivery_date", {
+            dateFormat: "d/m/Y",
+            minDate: "today",
+            closeOnSelect: true,
+        });
+    </script>
 
+    <script>
+        $(document).ready(function () {
+            $("#openDeliveryNoteBtn").on("click", function () {
+                let isValid = true;
+
+                // reset previous invalid states
+                $("#delivery_date, #vehicle_id, #driver_id").removeClass("is-invalid");
+
+                // check delivery date
+                if ($("#delivery_date").val().trim() === "") {
+                    $("#delivery_date").addClass("is-invalid");
+                    isValid = false;
+                }
+
+                // check vehicle
+                if (!$("#vehicle_id").val()) {
+                    $("#vehicle_id").addClass("is-invalid");
+                    isValid = false;
+                }
+
+                // check driver
+                if (!$("#driver_id").val()) {
+                    $("#driver_id").addClass("is-invalid");
+                    isValid = false;
+                }
+
+                if (!isValid) {
+                    return false; // stop if any invalid
+                }
+
+                $("#ofcanvus-submit-btn button[type='submit']").text("Add Delivery Task");
+
+                $(".btn-close[data-bs-dismiss='offcanvas']").show();
+                // .attr("data-bs-dismiss", "") // remove dismiss attribute
+                // .attr("type", "submit")      // make it submit button
+                // .attr("id", "editSubmitBtn") // optional: give ID for tracking
+                // .off("click");               // remove default close behavior
+
+                $("#edit-submit-close-btn").hide();
+
+                // Open offcanvas manually
+                let offcanvas = new bootstrap.Offcanvas($("#deliveryNote")[0]);
+                offcanvas.show();
+            });
+        });
+    </script>
+
+    
+    <script>
+        function addRow() {
+            const container = document.getElementById('product-container');
+            const row = document.createElement('div');
+            row.classList.add('product-row');
+            row.innerHTML = `
+                <input type="text" placeholder="Product Title" class="product-title form-control custom-input">
+                <select class="product-unit form-select custom-input">
+                    <option value="unit">Unit</option>
+                    <option value="box">Box</option>
+                </select>
+                <input type="number" min="1" value="1" class="product-qty form-control custom-input">
+                <button type="button" class="remove-row btn btn-sm btn-danger" onclick="removeRow(this)">
+                    <i class="material-icons-outlined">delete</i>
+                </button>
+                <button type="button" class="add-row btn btn-sm btn-success" onclick="addRow()">
+                    <i class="material-icons-outlined">add</i>
+                </button>
+            `;
+            container.appendChild(row);
+            bindEvents(row);
+            updateTotal();
+        }
+
+        function removeRow(btn) {
+            const container = document.getElementById('product-container');
+            const rows = container.getElementsByClassName('product-row');
+
+            if (rows.length <= 1) {
+                alert("At least one product row is required.");
+                return; // stop here so the row is not deleted
+            }
+
+            btn.parentElement.remove();
+            updateTotal();
+        }
+
+
+        function bindEvents(row) {
+            row.querySelectorAll('input, select').forEach(el => {
+            el.addEventListener('input', updateTotal);
+            });
+        }
+
+        function updateTotal() {
+            let total = 0;
+            let units = new Set();
+
+            document.querySelectorAll('.product-row').forEach(row => {
+                let qty = parseInt(row.querySelector('.product-qty').value) || 0;
+                let unit = row.querySelector('.product-unit').value;
+                total += qty;
+                units.add(unit);
+            });
+
+            let unitDisplay = (units.size === 1) ? [...units][0] : 'Mixed';
+            document.getElementById('total-pcs').value = total + ' ' + unitDisplay;
+        }
+
+        // Bind events for the initial row
+        bindEvents(document.querySelector('.product-row'));
+    </script>
+
+    <script>
+        $(document).on('change', '.payment-type', function() {
+            let $amountInput = $(this).closest('.custom-input-wrapper').next('.custom-input-wrapper').find('.amount');
+
+            if ($(this).val() === 'Pre-Paid') {
+                $amountInput.val('0.00').prop('readonly', true);
+            } else if ($(this).val() === 'COD') {
+                $amountInput.val('').prop('readonly', false);
+            } else {
+                $amountInput.val('').prop('readonly', false);
+            }
+        });
+    </script>
 
     <script>
         $(document).ready(function() {
@@ -752,6 +1095,113 @@
             });
 
         });
+    </script>
+
+    
+    <script>
+        $(document).ready(function () {
+            // Open modal when "Add New Vehicle" is selected
+            $("#vehicle_id").on("change", function () {
+                if ($(this).val() === "add_new") {
+                    $("#addVehicleModal").modal("show");
+                }
+            });
+
+            // Handle form submission
+            $("#addVehicleForm").on("submit", function (e) {
+                e.preventDefault();
+
+                let formData = $(this).serialize();
+
+                $.ajax({
+                    url: "<?php echo e(route('vehicle.store')); ?>", // your store route
+                    type: "POST",
+                    data: formData,
+                    success: function (response) {
+                        if (response.success) {
+                            // Insert new option before "Add New"
+                            let newOption = $("<option>")
+                                .val(response.vehicle.id)
+                                .text(response.vehicle.name + " | " + response.vehicle.vehicle_number);
+
+                            $("#vehicle_id option[value='add_new']").before(newOption);
+
+                            // Select the newly added vehicle
+                            $("#vehicle_id").val(response.vehicle.id);
+
+                            // Close modal & reset form
+                            $("#addVehicleModal").modal("hide");
+                            $("#addVehicleForm")[0].reset();
+                        } else {
+                            alert("Error: " + response.message);
+                        }
+                    },
+                    error: function (xhr) {
+                        alert("Something went wrong!");
+                    }
+                });
+            });
+        });
+
+    </script>
+
+    
+    <script>
+        $(document).ready(function () {
+            // Open modal when "Add New Driver" is selected
+            $("#driver_id").on("change", function () {
+                if ($(this).val() === "add_new") {
+                    $("#addDriverModal").modal("show");
+                }
+            });
+
+            // Handle form submission
+            $("#addDriverForm").on("submit", function (e) {
+                e.preventDefault();
+
+                let formData = $(this).serialize();
+
+                $.ajax({
+                    url: "<?php echo e(route('driver.store')); ?>", // your store route
+                    type: "POST",
+                    data: formData,
+                    success: function (response) {
+                        if (response.success) {
+                            // Insert new option before "Add New"
+                            let newOption = $("<option>")
+                                .val(response.driver.id)
+                                .text(response.driver.name + " (" + response.driver.phone + ")");
+
+                            $("#driver_id option[value='add_new']").before(newOption);
+
+                            // Select the newly added vehicle
+                            $("#driver_id").val(response.driver.id);
+
+                            // Close modal & reset form
+                            $("#addDriverModal").modal("hide");
+                            $("#addDriverForm")[0].reset();
+                        } else {
+                            alert("Error: " + response.message);
+                        }
+                    },
+                    error: function (xhr) {
+                        if (xhr.status === 422) {
+                            // Validation error messages from Laravel
+                            let errors = xhr.responseJSON.errors;
+                            $.each(errors, function (field, messages) {
+                                $.each(messages, function (index, message) {
+                                    round_warning_noti(message); // show each error message
+                                });
+                            });
+                        } else {
+                            // Other errors
+                            round_warning_noti(xhr.responseJSON.message || "Something went wrong!");
+                        }
+                    }
+                });
+            });
+        });
+
     </script>
 
     <script>
@@ -924,153 +1374,29 @@
 
 
 
-
-
-
-
     <script src="https://maps.gomaps.pro/maps/api/js?key=AlzaSyC7RSr791vm_29LJiUOPJO-sLnBZg6qiGl&libraries=places,geometry">
     </script>
+
     <script>
-        // let map, routeLine;
-        // let selectedShops = [];
-        // let driverLat = 22.5059365;
-        // let driverLng = 88.3716779;
-        // let shopMarkers = [];
-
-        // function initializeMap() {
-        //     map = new google.maps.Map(document.getElementById("shopMap"), {
-        //         center: {
-        //             lat: driverLat,
-        //             lng: driverLng
-        //         },
-        //         zoom: 12,
-        //     });
-
-        //     const driverMarker = new google.maps.Marker({
-        //         position: {
-        //             lat: driverLat,
-        //             lng: driverLng
-        //         },
-        //         map,
-        //         title: "Driver",
-        //         icon: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
-        //     });
-        // }
-
-        // async function drawMultiStopRoute() {
-        //     if (selectedShops.length === 0) return;
-
-        //     const body = {
-        //         origin: {
-        //             location: {
-        //                 latLng: {
-        //                     latitude: driverLat,
-        //                     longitude: driverLng
-        //                 }
-        //             }
-        //         },
-        //         destination: {
-        //             location: {
-        //                 latLng: {
-        //                     latitude: selectedShops[selectedShops.length - 1].lat,
-        //                     longitude: selectedShops[selectedShops.length - 1].lng
-        //                 }
-        //             }
-        //         },
-        //         intermediates: selectedShops.slice(0, -1).map(shop => ({
-        //             location: {
-        //                 latLng: {
-        //                     latitude: shop.lat,
-        //                     longitude: shop.lng
-        //                 }
-        //             }
-        //         })),
-        //         travelMode: "DRIVE",
-        //         routingPreference: "TRAFFIC_AWARE",
-        //         computeAlternativeRoutes: false,
-        //         polylineEncoding: "ENCODED_POLYLINE",
-        //         languageCode: "en-US",
-        //         units: "METRIC"
-        //     };
-
-        //     try {
-        //         const res = await fetch("https://routes.gomaps.pro/directions/v2:computeRoute", {
-        //             method: "POST",
-        //             headers: {
-        //                 "Content-Type": "application/json",
-        //                 "X-Goog-Api-Key": "AlzaSyC7RSr791vm_29LJiUOPJO-sLnBZg6qiGl",
-        //                 "X-Goog-FieldMask": "*"
-        //             },
-        //             body: JSON.stringify(body)
-        //         });
-
-        //         const json = await res.json();
-        //         if (!json.routes || !json.routes.length) return alert("No route found.");
-
-        //         const route = json.routes[0];
-        //         const polyline = route.polyline.encodedPolyline;
-        //         const path = google.maps.geometry.encoding.decodePath(polyline);
-
-        //         // Remove old route and markers
-        //         if (routeLine) routeLine.setMap(null);
-        //         shopMarkers.forEach(m => m.setMap(null));
-        //         shopMarkers = [];
-
-        //         // Draw polyline
-        //         routeLine = new google.maps.Polyline({
-        //             path,
-        //             geodesic: true,
-        //             strokeColor: "#28a745",
-        //             strokeOpacity: 1,
-        //             strokeWeight: 4
-        //         });
-        //         routeLine.setMap(map);
-
-        //         const bounds = new google.maps.LatLngBounds();
-        //         path.forEach(p => bounds.extend(p));
-        //         map.fitBounds(bounds);
-
-        //         // Add markers
-        //         const allPoints = [{
-        //             lat: driverLat,
-        //             lng: driverLng,
-        //             label: "Driver"
-        //         }, ...selectedShops];
-
-        //         allPoints.forEach(point => {
-        //             const marker = new google.maps.Marker({
-        //                 position: {
-        //                     lat: point.lat,
-        //                     lng: point.lng
-        //                 },
-        //                 map,
-        //                 icon: {
-        //                     path: google.maps.SymbolPath.CIRCLE,
-        //                     scale: 8,
-        //                     fillColor: "#28a745",
-        //                     fillOpacity: 1,
-        //                     strokeWeight: 2,
-        //                     strokeColor: "#fff"
-        //                 },
-        //                 title: point.label || "Shop"
-        //             });
-        //             shopMarkers.push(marker);
-        //         });
-
-        //     } catch (err) {
-        //         console.error("Route draw failed:", err);
-        //     }
-        // }
-
-
         let map;
         let routeLine;
         let selectedShops = [];
         let shopMarkers = [];
-        let driverLat = 22.5059365;
-        let driverLng = 88.3716779;
+        // let driverLat = 22.5059365;
+        // let driverLng = 88.3716779;
+
+        <?php if(auth()->user()->hasRole('Employee')): ?>
+            let driverLat = <?php echo e(auth()->user()->employee?->branch?->branch?->latitude); ?>;
+            let driverLng = <?php echo e(auth()->user()->employee?->branch?->branch?->longitude); ?>;
+        <?php endif; ?>
+
+        <?php if(auth()->user()->hasRole('Branch')): ?>
+            let driverLat = <?php echo e(auth()->user()->branch?->latitude); ?>;
+            let driverLng = <?php echo e(auth()->user()->branch?->longitude); ?>;
+        <?php endif; ?>
 
         function initializeMap() {
+            
             map = new google.maps.Map(document.getElementById("shopMap"), {
                 center: {
                     lat: driverLat,
@@ -1091,7 +1417,20 @@
         }
 
         async function drawMultiStopRoute() {
-            if (selectedShops.length === 0) return;
+            // if (selectedShops.length === 0) return;
+            if (selectedShops.length === 0) {
+                // Clear existing route line if any
+                if (routeLine) {
+                    routeLine.setMap(null);
+                    routeLine = null;
+                }
+
+                // Clear existing markers if any
+                shopMarkers.forEach(marker => marker.setMap(null));
+                shopMarkers = [];
+
+                return; // nothing else to do
+            }
 
             const body = {
                 origin: {
@@ -1160,6 +1499,10 @@
                 decodedPath.forEach(p => bounds.extend(p));
                 map.fitBounds(bounds);
 
+                google.maps.event.addListenerOnce(map, "bounds_changed", function () {
+                    map.setZoom(12); // closer view
+                });
+
                 // Clear old markers
                 shopMarkers.forEach(marker => marker.setMap(null));
                 shopMarkers = [];
@@ -1226,8 +1569,81 @@
             }
         }
 
+        function showLocationsOnly() {
+            if (selectedShops.length === 0) return;
+
+            // Clear old markers
+            shopMarkers.forEach(marker => marker.setMap(null));
+            shopMarkers = [];
+
+            const infoWindow = new google.maps.InfoWindow();
+
+            // const allPoints = [
+            //     {
+            //         lat: driverLat,
+            //         lng: driverLng,
+            //         label: "Driver",
+            //         address: ""
+            //     },
+            //     ...selectedShops.map(shop => ({
+            //         lat: shop.lat,
+            //         lng: shop.lng,
+            //         label: shop.name,
+            //         address: shop.address
+            //     }))
+            // ];
+
+            const allPoints = selectedShops.map(shop => ({
+                lat: shop.lat,
+                lng: shop.lng,
+                label: shop.name,
+                address: shop.address
+            }));
+
+            allPoints.forEach(point => {
+                const marker = new google.maps.Marker({
+                    position: { lat: point.lat, lng: point.lng },
+                    map,
+                    icon: {
+                        path: google.maps.SymbolPath.CIRCLE,
+                        scale: 8,
+                        fillColor: "#000000",
+                        fillOpacity: 1,
+                        strokeWeight: 2,
+                        strokeColor: "#fff"
+                    },
+                    title: point.label
+                });
+
+                marker.addListener("click", () => {
+                    const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${point.lat},${point.lng}`;
+                    const content = `
+                        <strong>${point.label}</strong><br>
+                        ${point.address || ''}<br>
+                        <a href="${mapsUrl}" target="_blank" style="color: #007bff; text-decoration: underline;">
+                            View on Google Maps
+                        </a>
+                    `;
+                    infoWindow.setContent(content);
+                    infoWindow.open(map, marker);
+                });
+
+                shopMarkers.push(marker);
+            });
+
+            // Fit map to show all points
+            const bounds = new google.maps.LatLngBounds();
+            allPoints.forEach(p => bounds.extend(new google.maps.LatLng(p.lat, p.lng)));
+            map.fitBounds(bounds);
+
+            google.maps.event.addListenerOnce(map, "bounds_changed", function () {
+                map.setZoom(12); // closer view
+            });
+        }
+
+
         $(document).ready(function() {
-            // initializeMap(); // Always initialize with driver's location
+            initializeMap(); // Always initialize with driver's location
             const $input = $('#search_shop_name');
             const $suggestions = $('#suggestions');
             const $sortableList = $('#sortable-shop-location');
@@ -1285,72 +1701,16 @@
             });
 
             // ✅ Step 3: Add selected shop to list
-            $suggestions.on('click', 'a', function(e) {
+            $suggestions.on('click', 'a', function (e) {
                 e.preventDefault();
                 const data = $(this).data();
+                $('#search_shop_name').val(data.name);
+                $('#shop_id').val(data.id);
+                $('#shop_name').val(data.name);
+                $('#shop_addresse').val(data.address);
+                $('#shop_latitude').val(data.lat);
+                $('#shop_longitude').val(data.lng);
 
-                // Prevent duplicate
-                if ($sortableList.find(`li[data-id="${data.id}"]`).length === 0) {
-                    const $li = $(`
-                        <li class="list-group-item d-flex flex-column" data-id="${data.id}">
-                            <div class="handle" style="cursor: grab;">
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <div>
-                                        <span class="sl-no"></span>
-                                        <span class="ms-2 fw-bold">${data.name}</span>
-                                    </div>
-                                    <div class="handle text-secondary" style="cursor: grab;">
-                                        <button type="button" class="btn btn-sm btn-outline-secondary toggle-details">
-                                            <i class="fa fa-chevron-down"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-danger btn-sm ms-2 remove-shop">
-                                            <i class="fa-solid fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <input type="hidden" name="shop_ids[]" value="${data.id}">
-                                <input type="hidden" name="shop_names[]" value="${data.name}">
-                                <input type="hidden" name="shop_addresses[]" value="${data.address}">
-                                <input type="hidden" name="shop_latitudes[]" value="${data.lat}">
-                                <input type="hidden" name="shop_longitudes[]" value="${data.lng}">
-
-                                <div class="shop-details mt-3" style="display: none;">
-                                    <div class="d-flex gap-3 mb-2">
-                                        <div style="width: 33%;">
-                                            <input type="text" class="form-control" name="invoice_no[]" placeholder="Enter invoice number">
-                                        </div>
-                                        <div style="width: 33%;">
-                                            <select class="form-select" name="payment_types[]">
-                                                <option value="" selected disabled>Select Type</option>
-                                                <option value="Pre-Paid">Pre-Paid</option>
-                                                <option value="COD">COD</option>
-                                            </select>
-                                        </div>
-                                        <div style="width: 33%;">
-                                            <input type="text" class="form-control" name="amounts[]" placeholder="Enter amount">
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <textarea class="form-control" name="delivery_notes[]" rows="2" placeholder="Enter delivery note"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                    `);
-
-                    //  Collapse all existing details
-                    $sortableList.find('.shop-details').slideUp(200);
-                    $sortableList.find('.toggle-details i').removeClass('fa-chevron-up').addClass(
-                        'fa-chevron-down');
-
-                    // Expand new one
-                    $li.find('.shop-details').show();
-                    $li.find('.toggle-details i').removeClass('fa-chevron-down').addClass('fa-chevron-up');
-
-
-                    $sortableList.append($li);
                     selectedShops.push({
                         id: data.id,
                         name: data.name,
@@ -1358,19 +1718,18 @@
                         lng: parseFloat(data.lng),
                         address: data.address
                     });
-                    drawMultiStopRoute();
-                    updateShopSerialNumbers();
-                    // drawRouteToShop(parseFloat(data.lat), parseFloat(data.lng));
-                }
-                const input = $(`
-                        <input type="text" class="form-control" id="search_shop_name"
-                                                    placeholder="Enter shop name">
-                `);
-                $sortableList.append($input);
-                $input.val('');
 
+                    // showLocationsOnly();
+                    drawMultiStopRoute();
+                //     updateShopSerialNumbers();
+                // }
+
+                // $('#search_shop_name').val('');
                 $suggestions.empty().hide();
             });
+
+            
+
 
             // ✅ Step 4: Remove shop from list
             $(document).on('click', '.remove-shop', function() {
@@ -1380,14 +1739,6 @@
                 updateShopSerialNumbers();
                 drawMultiStopRoute();
             });
-
-            // // ✅ Step 5: Sortable init
-            // $sortableList.sortable({
-            //     handle: '.handle',
-            //     update: function() {
-            //         setTimeout(updateShopSerialNumbers, 50);
-            //     }
-            // }).disableSelection();
 
             $sortableList.sortable({
                 handle: '.handle',
@@ -1419,8 +1770,12 @@
 
 
             function updateShopSerialNumbers() {
-                $sortableList.find('li').each(function(index) {
-                    $(this).find('.sl-no').text((index + 1) + ". ");
+                // $sortableList.find('li').each(function(index) {
+                //     $(this).find('.sl-no').text((index + 1) + ". ");
+                // });
+
+                $("#locations .location-item").each(function(index) {
+                    $(this).find(".rounded-circle p").text(index + 1);
                 });
             }
 
@@ -1432,7 +1787,7 @@
                 }
 
                 function getDistance(lat1, lon1, lat2, lon2) {
-                    const R = 6371;
+                    const R = 6371; // km
                     const dLat = (lat2 - lat1) * Math.PI / 180;
                     const dLon = (lon2 - lon1) * Math.PI / 180;
                     const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
@@ -1442,37 +1797,48 @@
                     return R * c;
                 }
 
-                const shopItems = $sortableList.children('li').map(function() {
-                    const $li = $(this);
-                    const lat = parseFloat($li.find('input[name="shop_latitudes[]"]').val());
-                    const lng = parseFloat($li.find('input[name="shop_longitudes[]"]').val());
+                // Get all location items with distance
+                const shopItems = $("#locations").find('.location-item').map(function() {
+                    const $item = $(this);
+                    const lat = parseFloat($item.find('input[name="shop_latitudes[]"]').val());
+                    const lng = parseFloat($item.find('input[name="shop_longitudes[]"]').val());
                     const distance = getDistance(currentLat, currentLng, lat, lng);
                     return {
-                        element: $li,
+                        element: $item,
                         distance
                     };
                 }).get();
 
+                // Sort by distance
                 shopItems.sort((a, b) => a.distance - b.distance);
-                $sortableList.empty();
-                shopItems.forEach(item => $sortableList.append(item.element));
-                // 🟡 Update selectedShops array based on new DOM order
-                selectedShops = $sortableList.children('li').map(function() {
-                    const $li = $(this);
+
+                // Re-append in sorted order (keeps HTML intact)
+                const $container = $("#locations").empty();
+                shopItems.forEach(item => $container.append(item.element));
+
+                // Update numbering
+                $("#locations .location-item").each(function(index) {
+                    $(this).find(".bg-primary p").text(index + 1);
+                });
+
+                // Update selectedShops based on new order
+                selectedShops = $("#locations .location-item").map(function() {
+                    const $item = $(this);
                     return {
-                        id: $li.data('id'),
-                        name: $li.find('input[name="shop_names[]"]').val(),
-                        address: $li.find('input[name="shop_addresses[]"]').val(),
-                        lat: parseFloat($li.find('input[name="shop_latitudes[]"]').val()),
-                        lng: parseFloat($li.find('input[name="shop_longitudes[]"]').val())
+                        id: $item.data('shop-id'),
+                        name: $item.find('input[name="shop_names[]"]').val(),
+                        address: $item.find('input[name="shop_addresses[]"]').val(),
+                        lat: parseFloat($item.find('input[name="shop_latitudes[]"]').val()),
+                        lng: parseFloat($item.find('input[name="shop_longitudes[]"]').val())
                     };
                 }).get();
 
-                // ✅ Redraw route with new order
+                // Redraw route
                 drawMultiStopRoute();
-                updateShopSerialNumbers();
+
                 alert("Shop list sorted by nearest location.");
             });
+
 
             // Close suggestions when clicking outside
             $(document).on('click', function(e) {
@@ -1488,18 +1854,6 @@
                 // Rotate icon for feedback
                 $(this).find('i').toggleClass('fa-chevron-down fa-chevron-up');
             });
-
-            // Collapse all shop details if user clicks outside any shop block
-            // $(document).on('click', function(e) {
-            //     const $target = $(e.target);
-            //     const clickedInsideShop = $target.closest(
-            //         '.list-group-item, #suggestions, #search_shop_name').length > 0;
-
-            //     if (!clickedInsideShop) {
-            //         $('.shop-details').slideUp(200);
-            //         $('.toggle-details i').removeClass('fa-chevron-up').addClass('fa-chevron-down');
-            //     }
-            // });
             
             $(document).on('click', function(e) {
                 const $target = $(e.target);
@@ -1533,13 +1887,375 @@
         });
     </script>
 
+    <script>
+        $(document).ready(function () {
+
+        // Add Delivery Task
+        $("#task-form").on("submit", function (e) {
+            e.preventDefault();
+
+            let isValid = true;
+
+            // Reset invalid states
+            $("#task-form .form-control, #task-form .form-select").removeClass("is-invalid");
+
+            // Get values
+            let orderNo = $('input[name="invoice_no"]').val().trim();
+            let consignee = $('#search_shop_name').val().trim();
+            let paymentType = $('select[name="payment_type"]').val();
+            let amount = $('input[name="amount"]').val().trim();
+            let shop_id = $("#shop_id").val();
+            let shop_name = $("#shop_name").val();
+            let shop_addresse = $("#shop_addresse").val();
+            let shop_latitude = $("#shop_latitude").val();
+            let shop_longitude = $("#shop_longitude").val();
+            let branch_id = $("#branch_id").val();
+
+            // Validate fields
+            if (orderNo === "") {
+                $('input[name="invoice_no"]').addClass("is-invalid");
+                isValid = false;
+            }
+            if (consignee === "") {
+                $('#search_shop_name').addClass("is-invalid");
+                isValid = false;
+            }
+            if (!paymentType) {
+                $('select[name="payment_type"]').addClass("is-invalid");
+                isValid = false;
+            }
+            if (amount === "") {
+                $('input[name="amount"]').addClass("is-invalid");
+                isValid = false;
+            }
+
+            $(".product-title").each(function () {
+                if ($.trim($(this).val()) === "") {
+                    $(this).addClass("is-invalid");
+                    isValid = false;
+                } else {
+                    $(this).removeClass("is-invalid");
+                }
+            });
+
+            // Validate product rows
+            let hasValidProduct = false;
+            $("#product-container .product-row").each(function () {
+                let title = $(this).find(".product-title").val().trim();
+                let qty = $(this).find(".product-qty").val();
+                let unit = $(this).find(".product-unit").val();
+
+                if (title !== "" && qty > 0 && unit !== "") {
+                    hasValidProduct = true;
+                } else {
+                    if (title === "") $(this).find(".product-title").addClass("is-invalid");
+                    if (qty <= 0 || qty === "") $(this).find(".product-qty").addClass("is-invalid");
+                    if (unit === "") $(this).find(".product-unit").addClass("is-invalid");
+                }
+            });
+
+            if (!hasValidProduct) {
+                isValid = false;
+            }
+
+            // If invalid, stop here (don’t close offcanvas)
+            if (!isValid) {
+                return false;
+            }
+
+            // ✅ If valid → close offcanvas
+            $(".btn-close[data-bs-dismiss='offcanvas']").trigger("click");
+
+            // Count locations
+            let locationCount = $("#locations .location-box").length + 1;
+
+            // Products HTML
+            let productsHTML = "";
+            let productInputs = "";
+            $("#product-container .product-row").each(function () {
+                let title = $(this).find(".product-title").val().trim();
+                let qty = $(this).find(".product-qty").val();
+                let unit = $(this).find(".product-unit").val();
+
+                productsHTML += `<div class="item-row">${title} - ${qty} ${unit}</div>`;
+                productInputs += `
+                    <input type="hidden" name="product_titles[${locationCount}][]" value="${title}">
+                    <input type="hidden" name="product_qtys[${locationCount}][]" value="${qty}">
+                    <input type="hidden" name="product_units[${locationCount}][]" value="${unit}">
+                `;
+            });
+
+            // Location HTML
+            let locationHTML = `
+            <div class="d-flex w-100 align-items-start gap-3 mb-3 location-item" data-shop-id="${shop_id}">
+                <div class="bg-primary d-flex align-items-center justify-content-center rounded-circle flex-shrink-0"
+                    style="width: 30px; height: 30px;">
+                    <p class="text-white m-0 fw-bold">${locationCount}</p>
+                </div>
+
+                <div class="location-box flex-grow-1 w-100">
+                    <div class="location-header p-2 d-flex justify-content-between align-items-center"
+                        data-bs-toggle="collapse" data-bs-target="#location${locationCount}" style="cursor: pointer;">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-geo-alt-fill me-2 text-primary"></i>
+                            ${consignee || 'Location ' + locationCount}
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="bi bi-chevron-down toggle-icon"></i>
+                            <button type="button" class="btn-icon p-0 remove-location"><i class="bi bi-trash-fill"></i></button>
+                            <i class="bi bi-pencil-square edit-location"></i>
+                        </div>
+                    </div>
+
+                    <input type="hidden" name="shop_ids[]" value="${shop_id}">
+                    <input type="hidden" name="shop_names[]" value="${shop_name}">
+                    <input type="hidden" name="shop_addresses[]" value="${shop_addresse}">
+                    <input type="hidden" name="shop_latitudes[]" value="${shop_latitude}">
+                    <input type="hidden" name="shop_longitudes[]" value="${shop_longitude}">
+                    <input type="hidden" name="invoice_nos[]" value="${orderNo}">
+                    <input type="hidden" name="payment_types[]" value="${paymentType}">
+                    <input type="hidden" name="amounts[]" value="${amount}">
+                    <input type="hidden" name="branch_id[]" value="${branch_id}">
+                    ${productInputs}
+                    <div class="collapse" id="location${locationCount}">
+                        <div class="location-content">
+                            <div class="row g-2 mb-2">
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control" value="${orderNo}" placeholder="Enter Invoice">
+                                </div>
+                                <div class="col-md-4">
+                                    <select class="form-select">
+                                        <option ${paymentType === 'Pre-Paid' ? 'selected' : ''}>Pre-Paid</option>
+                                        <option ${paymentType === 'COD' ? 'selected' : ''}>COD</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="number" class="form-control" value="${amount}" placeholder="0.0">
+                                </div>
+                            </div>
+                            ${productsHTML}
+                        </div>
+                    </div>
+                </div>
+
+                <a href="javascript:void(0);" data-bs-toggle="offcanvas" data-bs-target="#deliveryNote"
+                    class="btn-add text-decoration-none">
+                    <i class="bi bi-plus-circle me-1" style="font-size:30px;"></i>
+                </a>
+            </div>`;
+
+            // Append to locations
+            $("#locations").append(locationHTML);
+
+            toggleSearchBar();
+
+            // Reset form
+            this.reset();
+            $("#product-container").html(`
+                <div class="product-row">
+                    <input type="text" placeholder="Product Title" class="product-title form-control custom-input">
+                    <select class="product-unit form-select custom-input">
+                        <option value="unit">Unit</option>
+                        <option value="box">Box</option>
+                    </select>
+                    <input type="number" min="1" value="1" class="product-qty form-control custom-input">
+                    <button type="button" class="remove-row btn btn-sm btn-danger" onclick="removeRow(this)">
+                        <i class="material-icons-outlined">delete</i>
+                    </button>
+                    <button type="button" class="add-row btn btn-sm btn-success" onclick="addRow()">
+                        <i class="material-icons-outlined">add</i>
+                    </button>
+                </div>
+            `);
+            bindEvents(document.querySelector('.product-row'));
+        });
+
+        // Remove invalid state on change
+        $(document).on("input change", ".form-control, .form-select", function () {
+            $(this).removeClass("is-invalid");
+        });
+
+
+        $(document).on("click", ".remove-location", function () {
+            const id = $(this).closest(".d-flex.w-100.align-items-start")
+                            .find("input[name='shop_ids[]']").val();
+            
+            $(this).closest(".d-flex.w-100.align-items-start").remove();
+            
+            selectedShops = selectedShops.filter(s => s.id != id);
+            // updateShopSerialNumbers();
+            drawMultiStopRoute();
+        });
+
+
+        $(document).on("click", ".edit-location", function () {
+            let locationBox = $(this).closest(".location-box");
+
+            // Get data from inside the location
+            let orderNo = locationBox.find('input[placeholder="Enter Invoice"]').val();
+            let paymentType = locationBox.find("select.form-select").val();
+            let amount = locationBox.find('input[type="number"]').val();
+
+            let consignor = locationBox.find(".location-header div:first").text().trim();
+            let shop_id = locationBox.find('input[name="shop_ids[]"]').val();
+
+            // Populate back to form
+            $('input[name="invoice_no"]').val(orderNo);
+            $("#search_shop_name").val(consignor);
+            $('select[name="payment_type"]').val(paymentType);
+            $('input[name="amount"]').val(amount);
+            $("#shop_id").val(shop_id);
+
+            // Products
+            let productContainer = $("#product-container").empty();
+            locationBox.find(".item-row").each(function () {
+                let parts = $(this).text().trim().split(" - ");
+                let title = parts[0];
+                let qtyUnit = parts[1].split(" ");
+                let qty = qtyUnit[0];
+                let unit = qtyUnit[1];
+
+                productContainer.append(`
+                    <div class="product-row">
+                        <input type="text" value="${title}" placeholder="Product Title" class="product-title form-control custom-input">
+                        <select class="product-unit form-select custom-input">
+                            <option value="unit" ${unit === 'Unit' ? 'selected' : ''}>Unit</option>
+                            <option value="box" ${unit === 'Box' ? 'selected' : ''}>Box</option>
+                        </select>
+                        <input type="number" min="1" value="${qty}" class="product-qty form-control custom-input">
+                        <button type="button" class="remove-row btn btn-sm btn-danger" onclick="removeRow(this)">
+                            <i class="material-icons-outlined">delete</i>
+                        </button>
+                        <button type="button" class="add-row btn btn-sm btn-success" onclick="addRow()">
+                            <i class="material-icons-outlined">add</i>
+                        </button>
+                    </div>
+                `);
+            });
+
+            // Remove the old location (we'll re-add after form submit)
+            locationBox.closest(".d-flex.w-100.align-items-start").remove();
+            // ✅ Change button text
+            $("#ofcanvus-submit-btn button[type='submit']").text("Edit Delivery Task");
+
+            // ✅ Change close button to submit
+            $(".btn-close[data-bs-dismiss='offcanvas']").hide();
+                // .attr("data-bs-dismiss", "") // remove dismiss attribute
+                // .attr("type", "submit")      // make it submit button
+                // .attr("id", "editSubmitBtn") // optional: give ID for tracking
+                // .off("click");               // remove default close behavior
+
+            $("#edit-submit-close-btn").show();
+
+            // ✅ Prevent closing on backdrop
+            var deliveryNote = new bootstrap.Offcanvas('#deliveryNote', {
+                backdrop: 'static',
+                keyboard: false
+            });
+            deliveryNote.show();
+
+            // var deliveryNote = new bootstrap.Offcanvas('#deliveryNote');
+            // deliveryNote.show();
+            updateTotal();
+        });
 
 
 
+        // Add Product Row
+        // window.addRow = function () {
+        //     $("#product-container").append(`
+        //         <div class="product-row">
+        //             <input type="text" placeholder="Product Title" class="product-title form-control custom-input">
+        //             <select class="product-unit form-select custom-input">
+        //                 <option value="unit">Unit</option>
+        //                 <option value="box">Box</option>
+        //             </select>
+        //             <input type="number" min="1" value="1" class="product-qty form-control custom-input">
+        //             <button type="button" class="remove-row btn btn-sm btn-danger" onclick="removeRow(this)">
+        //                 <i class="material-icons-outlined">delete</i>
+        //             </button>
+        //             <button type="button" class="add-row btn btn-sm btn-success" onclick="addRow()">
+        //                 <i class="material-icons-outlined">add</i>
+        //             </button>
+        //         </div>
+        //     `);
+        // };
+
+        // Remove Location
+        $(document).on("click", ".remove-location", function () {
+            $(this).closest(".d-flex").remove();
+        });
+
+        $("#locations").sortable({
+            items: ".location-item",                // Make only location-item draggable
+            handle: ".location-header",             // Only drag from the header area
+            placeholder: "sortable-placeholder",    // Placeholder style
+            tolerance: "pointer",
+            start: function (e, ui) {
+                ui.placeholder.height(ui.item.height());
+            },
+            stop: function () {
+                // Update the numbering after reorder
+                $("#locations .location-item").each(function (index) {
+                    $(this).find(".bg-primary p").text(index + 1);
+                });
+
+                // Rebuild selectedShops array based on new order
+                let newOrder = [];
+                $("#locations .location-item").each(function () {
+                    const id = $(this).data("shop-id");
+                    const shop = selectedShops.find(s => s.id == id);
+                    if (shop) newOrder.push(shop);
+                });
+                selectedShops = newOrder;
+
+                // Redraw route based on the new order
+                drawMultiStopRoute();
+            }
+        });
 
 
+    });
+    </script>
 
     
+    <script>
+        $(document).ready(function () {
+            // Show search bar only if #locations is not empty
+            toggleSearchBar();
+
+            // When typing in the search box
+            $("#searchShop").on("keyup", function () {
+                let searchText = $(this).val().toLowerCase();
+                // console.log(searchText);
+
+                $("#locations > .d-flex").each(function () {
+                    let shopName = $(this).find(".location-header div.d-flex:first").text().toLowerCase();
+
+                    if (shopName.indexOf(searchText) > -1) {
+                        // console.log(shopName);
+                        $(this).removeClass("hide-important").addClass("show-important");
+                    } else {
+                        // console.log("hide" + shopName);
+                        $(this).removeClass("show-important").addClass("hide-important");
+                    }
+
+
+                });
+            });
+        });
+
+        // Function to toggle search visibility
+        function toggleSearchBar() {
+            if ($("#locations").children().length > 0) {
+                $("#searchWrapper").show();
+            } else {
+                $("#searchWrapper").hide();
+            }
+        }
+
+    </script>
+
 <?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH /home/u697667486/domains/delivery.flexcellents.com/public_html/resources/views/admin/delivery_schedules/create.blade.php ENDPATH**/ ?>

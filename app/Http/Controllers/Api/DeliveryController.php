@@ -65,6 +65,7 @@ class DeliveryController extends Controller
         }else{
             $driver_id = $request->user()->id;
         }
+        
         $deliveries = DeliverySchedule::where('driver_id', $driver_id)
             ->whereDate('delivery_date', date('Y-m-d'))
             ->with([
@@ -73,6 +74,7 @@ class DeliveryController extends Controller
                 'deliveryScheduleShops.media' // Load media relation for delivery image and signature
             ])
             ->get();
+        // return $deliveries;
     
         // Enhance response to include image URLs
         $deliveries = $deliveries->map(function ($delivery) {
@@ -104,23 +106,23 @@ class DeliveryController extends Controller
             'otp' => 'required_if:status,Delivered',
             'status' => 'required|in:Delivered,Pending',
      
-            'delivery_image' => ['nullable', function ($attribute, $value, $fail) {
-                if (!empty($value)) {
-                    $size = (int)(strlen($value) * 3 / 4); // estimate size in bytes
-                    if ($size > 10 * 1024 * 1024) { // 10 MB
-                        $fail('The Delivery Image must not be larger than 10 MB.');
-                    }
-                }
-            }],
+            // 'delivery_image' => ['nullable', function ($attribute, $value, $fail) {
+            //     if (!empty($value)) {
+            //         $size = (int)(strlen($value) * 3 / 4); // estimate size in bytes
+            //         if ($size > 10 * 1024 * 1024) { // 10 MB
+            //             $fail('The Delivery Image must not be larger than 10 MB.');
+            //         }
+            //     }
+            // }],
             
-            'signature' => ['nullable', function ($attribute, $value, $fail) {
-                if (!empty($value)) {
-                    $size = (int)(strlen($value) * 3 / 4); // estimate size in bytes
-                    if ($size > 10 * 1024 * 1024) { // 10 MB
-                        $fail('The Delivery Image must not be larger than 10 MB.');
-                    }
-                }
-            }],
+            // 'signature' => ['nullable', function ($attribute, $value, $fail) {
+            //     if (!empty($value)) {
+            //         $size = (int)(strlen($value) * 3 / 4); // estimate size in bytes
+            //         if ($size > 10 * 1024 * 1024) { // 10 MB
+            //             $fail('The Delivery Image must not be larger than 10 MB.');
+            //         }
+            //     }
+            // }],
         ]);
 
         if ($validator->fails()) {
@@ -156,7 +158,7 @@ class DeliveryController extends Controller
        
 
                 $delivery->save();
-
+                
                 $this->is_all_delivery_completed($delivery->delivery_schedule_id);
 
                 return response()->json([
@@ -172,9 +174,8 @@ class DeliveryController extends Controller
                 return response()->json(['error' => 'Invalid OTP'], 400);
             }
         }
-
     }
-
+    
     private function is_all_delivery_completed($delivery_schedule_id){
         $delivery_schedule_count = DeliveryScheduleShop::where('delivery_schedule_id',$delivery_schedule_id)->count();
         $delivery_schedule_completed_count = DeliveryScheduleShop::where('delivery_schedule_id',$delivery_schedule_id)->where('is_delivered',1)->count();
@@ -374,7 +375,7 @@ class DeliveryController extends Controller
         return response()->json(['response' => true,'message' => 'Serial numbers updated successfully.']);
     }
     
-    public function sendMessage($mobile, $trackingUrl)
+     public function sendMessage($mobile, $trackingUrl)
     {
         $shortUrl = shortenUrl($trackingUrl);
         
@@ -470,125 +471,125 @@ class DeliveryController extends Controller
     
     public function delivery_history(Request $request)
     {
-        $userId = $request->user()->id;
-        $status = $request->status; // e.g., 'accepted', 'rejected', 'delivered', etc.
-        $dateFilter = $request->date_filter;
-        $fromDate = $request->from_date;
-        $toDate = $request->to_date;
-        $search = $request->search;
-        $query = DeliveryScheduleShop::with([
-            'shop',
-            'media',
-            'deliverySchedule.vehicle'
-        ])
-        ->whereHas('deliverySchedule', function ($q) use ($userId) {
-            $q->where('driver_id', $userId);
-        });
+    $userId = $request->user()->id;
+    $status = $request->status; // e.g., 'accepted', 'rejected', 'delivered', etc.
+    $dateFilter = $request->date_filter;
+    $fromDate = $request->from_date;
+    $toDate = $request->to_date;
+   $search = $request->search;
+    $query = DeliveryScheduleShop::with([
+        'shop',
+        'media',
+        'deliverySchedule.vehicle'
+    ])
+    ->whereHas('deliverySchedule', function ($q) use ($userId) {
+        $q->where('driver_id', $userId);
+    });
 
 
-        if ($status === 'delivered') {
-            $query->where('is_delivered', 1);
-        } elseif ($status === 'cancelled') {
-            $query->where('is_cancelled', 1);
-        } elseif (!empty($status)) {
-            $query->where('status', $status);
-        } else {
-            // Default: exclude 'pending'
-            $query->where('status', '!=', 'pending');
-        }
-        
-        // ✅ Filter by shop name (search)
-        if (!empty($search)) {
-            $query->whereHas('shop', function ($q) use ($search) {
-                $q->where('shop_name', 'like', '%' . $search . '%');
-            });
-        }
-        
-            // ✅ Date filter
-        if ($dateFilter === 'today') {
-            $query->whereDate('created_at', Carbon::today());
-        } elseif ($dateFilter === 'yesterday') {
-            $query->whereDate('created_at', Carbon::yesterday());
-        } elseif ($dateFilter === 'last_15_days') {
-            $query->whereBetween('created_at', [Carbon::now()->subDays(15), Carbon::now()]);
-        } elseif ($dateFilter === 'last_month') {
-            $query->whereBetween('created_at', [Carbon::now()->subMonth()->startOfMonth(), Carbon::now()->subMonth()->endOfMonth()]);
-        } elseif ($dateFilter === 'custom' && $fromDate && $toDate) {
-            $query->whereBetween('created_at', [Carbon::parse($fromDate)->startOfDay(), Carbon::parse($toDate)->endOfDay()]);
-        }
-
-        $deliveryShops = $query->orderByDesc('id')->get();
-
-        $data = $deliveryShops->map(function ($shop) {
-            return [
-                'id' => $shop->id,
-                'delivery_schedule_id' => $shop->delivery_schedule_id,
-                'shop_id' => $shop->shop_id,
-                'order_serial' => $shop->order_serial,
-                'otp' => $shop->otp,
-                'status' => $shop->status,
-                'is_delivered' => $shop->is_delivered,
-                'delivered_at' => $shop->delivered_at,
-                'is_cancelled' => $shop->is_cancelled,
-                'cancelled_at' => $shop->cancelled_at,
-                'cancel_reason' => $shop->cancel_reason,
-                'created_at' => $shop->created_at,
-                'updated_at' => $shop->updated_at,
-                'delivery_image_url' => $shop->getFirstMediaUrl('delivery-image') ?? '',
-                'signature_url' => $shop->getFirstMediaUrl('signature') ?? '',
-                'shop' => $shop->shop,
-                'vehicle' => $shop->deliverySchedule?->vehicle,
-                'media' => $shop->getMedia()->map(function ($media) {
-                    return [
-                        'id' => $media->id,
-                        'url' => $media->getUrl(),
-                        'file_name' => $media->file_name,
-                        'mime_type' => $media->mime_type,
-                    ];
-                }),
-            ];
-        });
-
-        return response()->json([
-            'response' => true,
-            'message' => 'Delivery schedule shops fetched successfully.',
-            'data' => [
-                'delivery_schedule_shops' => $data,
-            ]
-        ]);
+    if ($status === 'delivered') {
+        $query->where('is_delivered', 1);
+    } elseif ($status === 'cancelled') {
+        $query->where('is_cancelled', 1);
+    } elseif (!empty($status)) {
+        $query->where('status', $status);
+    } else {
+        // Default: exclude 'pending'
+        $query->where('status', '!=', 'pending');
     }
-
-
-    public function genrateBill(Request $request)
-    {
-        $request->validate([
-            'delivery_id' => 'required|exists:delivery_schedule_shops,id'
-        ]);
-
-        $userId = $request->user()->id;
-        $delivery = DeliveryScheduleShop::with('shop')->find($request->delivery_id);
-        $delivery_schedule = DeliverySchedule::with('vehicle')->find($delivery->delivery_schedule_id);
-        $driver_details = User::with('driver')->find($userId);
-        
-        $super_admin = User::role('Super Admin')->first(); // adjust if multiple admins
     
-
-        return response()->json([
-            'response' => true,
-            'message' => 'Delivery details fetched successfully.',
-            'data' => [
-                'delivery' => $delivery,
-                'delivery_image' => $delivery->getFirstMediaUrl('delivery-image'),
-                'signature' => $delivery->getFirstMediaUrl('signature'),
-                'delivery_schedule' => $delivery_schedule,
-                'driver_details' => $driver_details,
-                'shop' => $delivery->shop ?? null,
-                'vehicle' => $delivery_schedule->vehicle ?? null,
-                'admin' => $super_admin,
-                'setting'=> settings(),
-            ],
-        ]);
+       // ✅ Filter by shop name (search)
+    if (!empty($search)) {
+        $query->whereHas('shop', function ($q) use ($search) {
+            $q->where('shop_name', 'like', '%' . $search . '%');
+        });
     }
+    
+        // ✅ Date filter
+    if ($dateFilter === 'today') {
+        $query->whereDate('created_at', Carbon::today());
+    } elseif ($dateFilter === 'yesterday') {
+        $query->whereDate('created_at', Carbon::yesterday());
+    } elseif ($dateFilter === 'last_15_days') {
+        $query->whereBetween('created_at', [Carbon::now()->subDays(15), Carbon::now()]);
+    } elseif ($dateFilter === 'last_month') {
+        $query->whereBetween('created_at', [Carbon::now()->subMonth()->startOfMonth(), Carbon::now()->subMonth()->endOfMonth()]);
+    } elseif ($dateFilter === 'custom' && $fromDate && $toDate) {
+        $query->whereBetween('created_at', [Carbon::parse($fromDate)->startOfDay(), Carbon::parse($toDate)->endOfDay()]);
+    }
+
+    $deliveryShops = $query->orderByDesc('id')->get();
+
+    $data = $deliveryShops->map(function ($shop) {
+        return [
+            'id' => $shop->id,
+            'delivery_schedule_id' => $shop->delivery_schedule_id,
+            'shop_id' => $shop->shop_id,
+            'order_serial' => $shop->order_serial,
+            'otp' => $shop->otp,
+            'status' => $shop->status,
+            'is_delivered' => $shop->is_delivered,
+            'delivered_at' => $shop->delivered_at,
+            'is_cancelled' => $shop->is_cancelled,
+            'cancelled_at' => $shop->cancelled_at,
+            'cancel_reason' => $shop->cancel_reason,
+            'created_at' => $shop->created_at,
+            'updated_at' => $shop->updated_at,
+            'delivery_image_url' => $shop->getFirstMediaUrl('delivery-image') ?? '',
+            'signature_url' => $shop->getFirstMediaUrl('signature') ?? '',
+            'shop' => $shop->shop,
+            'vehicle' => $shop->deliverySchedule?->vehicle,
+            'media' => $shop->getMedia()->map(function ($media) {
+                return [
+                    'id' => $media->id,
+                    'url' => $media->getUrl(),
+                    'file_name' => $media->file_name,
+                    'mime_type' => $media->mime_type,
+                ];
+            }),
+        ];
+    });
+
+    return response()->json([
+        'response' => true,
+        'message' => 'Delivery schedule shops fetched successfully.',
+        'data' => [
+            'delivery_schedule_shops' => $data,
+        ]
+    ]);
+}
+
+
+public function genrateBill(Request $request)
+{
+    $request->validate([
+        'delivery_id' => 'required|exists:delivery_schedule_shops,id'
+    ]);
+
+    $userId = $request->user()->id;
+    $delivery = DeliveryScheduleShop::with('shop')->find($request->delivery_id);
+    $delivery_schedule = DeliverySchedule::with('vehicle')->find($delivery->delivery_schedule_id);
+    $driver_details = User::with('driver')->find($userId);
+    
+    $super_admin = User::role('Super Admin')->first(); // adjust if multiple admins
+   
+
+    return response()->json([
+        'response' => true,
+        'message' => 'Delivery details fetched successfully.',
+        'data' => [
+            'delivery' => $delivery,
+            'delivery_image' => $delivery->getFirstMediaUrl('delivery-image'),
+            'signature' => $delivery->getFirstMediaUrl('signature'),
+            'delivery_schedule' => $delivery_schedule,
+            'driver_details' => $driver_details,
+            'shop' => $delivery->shop ?? null,
+            'vehicle' => $delivery_schedule->vehicle ?? null,
+            'admin' => $super_admin,
+            'setting'=> settings(),
+        ],
+    ]);
+}
 
 
 
@@ -688,5 +689,9 @@ class DeliveryController extends Controller
             ]
         ], 200);
     }
+
+
+
+
 
 }

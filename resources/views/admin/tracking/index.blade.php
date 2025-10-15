@@ -248,12 +248,7 @@
                         <!-- Vehicle List (initially visible) -->
                         <div class="vehicle-list-container" id="vehicle-list">
                             @foreach ($drivers as $driver)
-                            {{-- @php $driver_vehicle = getDriverDetails($driver->id)->vehicle; @endphp --}}
-                            @php 
-                                $driverDetails = getDriverDetails($driver->id);
-                                $driver_vehicle = $driverDetails ? $driverDetails->vehicle : null;
-                                dd($driver_vehicle);
-                            @endphp
+                            @php $driver_vehicle = getDriverDetails($driver->id)->vehicle; @endphp
                             <div class="list-group-item list-group-item-action flex-column align-items-start mb-2 vehicle-item" 
                                  data-id="{{ $driver_vehicle->id }}"
                                  data-driver-id="{{ $driver->id }}"

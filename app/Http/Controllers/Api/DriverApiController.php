@@ -88,8 +88,8 @@ class DriverApiController extends Controller
             'driver_license_image' => ['nullable', function ($attribute, $value, $fail) {
                 if (!empty($value)) {
                     $size = (int)(strlen($value) * 3 / 4);
-                    if ($size > 2 * 1024 * 1024) {
-                        $fail('The Driver License Image must not be larger than 2 MB.');
+                    if ($size > 10 * 1024 * 1024) {
+                        $fail('The Driver License Image must not be larger than 10 MB.');
                     }
                 }
             }],
@@ -275,6 +275,13 @@ class DriverApiController extends Controller
                 return $this->sendNewOTP($user->phone);
             }
         } else {
+            return response()->json([
+                'response' => false,
+                'message' => 'Please register your account.',
+                'data' => [
+                    
+                ],
+            ]);
   
             if ($request->otp) {
                 // return response()->json(['error' => 'Unauthorized: Please register your account.'], 401);

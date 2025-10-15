@@ -332,7 +332,7 @@
                             <div class="menu-title d-flex align-items-center">Tasks</div>
                         </a>
                     </li>
-
+                    
                     @canany([
                         'Trip Summary Report Show', 
                         'Route History Report Show', 
@@ -422,7 +422,6 @@
                         </ul>
                     </li>
                     @endcanany
-
 
                    
 

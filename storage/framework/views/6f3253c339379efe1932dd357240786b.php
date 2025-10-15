@@ -42,41 +42,11 @@
                         
                     </li>
 
-                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->any(['Role Show', 'Permission Show'])): ?>
-                        <!--<li class="nav-item dropdown">-->
-                        <!--    <a class="nav-link dropdown-toggle dropdown-toggle-nocaret" href="javascript:;"-->
-                        <!--        data-bs-toggle="dropdown">-->
-                        <!--        <div class="parent-icon"><i class='material-icons-outlined'>manage_accounts</i></div>-->
-                        <!--        <div class="menu-title d-flex align-items-center">Settings</div>-->
-                        <!--        <div class="ms-auto dropy-icon"><i class='material-icons-outlined'>expand_more</i></div>-->
-                        <!--    </a>-->
-                        <!--    <ul class="dropdown-menu">-->
-                        <!--        <li><a class="dropdown-item" href="<?php echo e(route('profile.edit')); ?>"><i class='material-icons-outlined'>person_outline</i>Profile</a></li>-->
-                        <!--        <li><a class="dropdown-item" href="<?php echo e(route('settings')); ?>"><i class='material-icons-outlined'>settings</i>General Settings</a></li>-->
-                        <!--        <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('Role Show')): ?>-->
-                        <!--            <li><a class="dropdown-item" href="<?php echo e(route('roles')); ?>"><i class='material-icons-outlined'>supervisor_account</i>Roles</a></li>-->
-                        <!--        <?php endif; ?>-->
-                        <!--        <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('Permission Show')): ?>-->
-                        <!--            <li><a class="dropdown-item" href="<?php echo e(route('permission')); ?>"><i class='material-icons-outlined'>lock</i>Permission</a></li>-->
-                        <!--        <?php endif; ?>-->
-                        <!--        <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('Permission Show')): ?>-->
-                                    <!--<li><a class="dropdown-item" href="<?php echo e(route('sos_alert.index')); ?>"><i class='material-icons-outlined'>supervisor_account</i>SOS alerts</a></li>-->
-                        <!--        <?php endif; ?>-->
-                        <!--        <li class="nav-item ms-auto">-->
-                        <!--            <form method="POST" action="<?php echo e(route('logout')); ?>" style="display: inline;">-->
-                        <!--                <?php echo csrf_field(); ?>-->
-                        <!--                <a class="dropdown-item d-flex align-items-center gap-2 py-2" href="javascript:void(0);"-->
-                        <!--                    onclick="event.preventDefault(); this.closest('form').submit();">-->
-                        <!--                    <i class="material-icons-outlined text-danger">power_settings_new</i> Logout-->
-                        <!--                </a>-->
-                        <!--            </form>-->
-                        <!--        </li>-->
-                        <!--    </ul>-->
-                        <!--</li>-->
-                    <?php endif; ?>
+                    
+                    
                     <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->any(['System User Show', 'Driver Show', 'User Show'])): ?>
                         <li class="nav-item dropdown">
-                            <a class="nav-link <?php echo e(request()->segment(2) == 'drivers' ? 'active' : ''); ?> dropdown-toggle dropdown-toggle-nocaret" href="javascript:;"
+                            <a class="nav-link <?php echo e(in_array(request()->segment(2), ['drivers','companys','branchs','employees']) ? 'active' : ''); ?> dropdown-toggle dropdown-toggle-nocaret" href="javascript:;"
                                 data-bs-toggle="dropdown">
                                 <div class="parent-icon"><i class='material-icons-outlined'>admin_panel_settings</i></div>
                                 <div class="menu-title d-flex align-items-center">Users</div>
@@ -89,6 +59,22 @@
                                     <li><a class="dropdown-item" href="<?php echo e(route('driver.index')); ?>"><i
                                                 class='material-icons-outlined'>drive_eta</i>Driver</a></li>
                                 <?php endif; ?>
+
+                                <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('Company Show')): ?>
+                                    <li><a class="dropdown-item" href="<?php echo e(route('company.index')); ?>"><i
+                                                class='material-icons-outlined'>business</i>Company</a></li>
+                                <?php endif; ?>
+
+                                <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('Branch Show')): ?>
+                                    <li><a class="dropdown-item" href="<?php echo e(route('branch.index')); ?>"><i
+                                                class='material-icons-outlined'>account_tree</i>Branch</a></li>
+                                <?php endif; ?>
+
+                                <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('Employee Show')): ?>
+                                    <li><a class="dropdown-item" href="<?php echo e(route('employee.index')); ?>"><i
+                                                class='material-icons-outlined'>groups</i>Employees</a></li>
+                                <?php endif; ?>
+
                                 
                             </ul>
                         </li>
@@ -281,6 +267,96 @@
                             <div class="menu-title d-flex align-items-center">Tasks</div>
                         </a>
                     </li>
+                    
+                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->any([
+                        'Trip Summary Report Show', 
+                        'Route History Report Show', 
+                        'Run Idle Report Show', 
+                        'Distance Report Show',
+                        'Geo Fence Report Show',
+                        'Overstay Report Show',
+                        'Attendance Report Show',
+                        'Login Logout Report Show',
+                        'Login Time Report Show',
+                        'Emergency SOS Report Show'
+                    ])): ?>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link <?php echo e(in_array(request()->segment(2), [
+                            'reports', 'trip-summary', 'route-history', 'run-idle', 
+                            'distance', 'geofence', 'overstay', 'attendance', 
+                            'login-logout', 'login-time', 'emergency-sos'
+                        ]) ? 'active' : ''); ?> dropdown-toggle dropdown-toggle-nocaret" href="javascript:;" data-bs-toggle="dropdown">
+                            <div class="parent-icon"><i class='material-icons-outlined'>bar_chart</i></div>
+                            <div class="menu-title d-flex align-items-center">Reports</div>
+                            <div class="ms-auto dropy-icon"><i class='material-icons-outlined'>expand_more</i></div>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('Trip Summary Report Show')): ?>
+                                <li><a class="dropdown-item" href="<?php echo e(route('reports.tripSummary')); ?>">
+                                    <i class='material-icons-outlined'>map</i>Trip Summary
+                                </a></li>
+                            <?php endif; ?>
+
+                            <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('Route History Report Show')): ?>
+                                <li><a class="dropdown-item" href="<?php echo e(route('reports.routeHistory')); ?>">
+                                    <i class='material-icons-outlined'>timeline</i>Route History
+                                </a></li>
+                            <?php endif; ?>
+
+                            <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('Run Idle Report Show')): ?>
+                                <li><a class="dropdown-item" href="<?php echo e(route('reports.runIdle')); ?>">
+                                    <i class='material-icons-outlined'>speed</i>Run & Idle
+                                </a></li>
+                            <?php endif; ?>
+
+                            <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('Distance Report Show')): ?>
+                                <li><a class="dropdown-item" href="<?php echo e(route('reports.distance')); ?>">
+                                    <i class='material-icons-outlined'>alt_route</i>Distance
+                                </a></li>
+                            <?php endif; ?>
+
+                            <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('Geo Fence Report Show')): ?>
+                                <li><a class="dropdown-item" href="<?php echo e(route('reports.geofence')); ?>">
+                                    <i class='material-icons-outlined'>my_location</i>Geo-fence
+                                </a></li>
+                            <?php endif; ?>
+
+                            <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('Overstay Report Show')): ?>
+                                <li><a class="dropdown-item" href="<?php echo e(route('reports.overstay')); ?>">
+                                    <i class='material-icons-outlined'>schedule</i>Overstay
+                                </a></li>
+                            <?php endif; ?>
+
+                            <li><hr class="dropdown-divider"></li>
+
+                            <li class="dropdown-header text-muted px-3 small">Driver Behaviour & Safety</li>
+
+                            <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('Attendance Report Show')): ?>
+                                <li><a class="dropdown-item" href="<?php echo e(route('reports.attendance')); ?>">
+                                    <i class='material-icons-outlined'>event_available</i>Monthly Attendance
+                                </a></li>
+                            <?php endif; ?>
+
+                            <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('Login Logout Report Show')): ?>
+                                <li><a class="dropdown-item" href="<?php echo e(route('reports.loginLogout')); ?>">
+                                    <i class='material-icons-outlined'>login</i>Login/Logout
+                                </a></li>
+                            <?php endif; ?>
+
+                            <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('Login Time Report Show')): ?>
+                                <li><a class="dropdown-item" href="<?php echo e(route('reports.loginTime')); ?>">
+                                    <i class='material-icons-outlined'>access_time</i>Login Time
+                                </a></li>
+                            <?php endif; ?>
+
+                            <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('Emergency SOS Report Show')): ?>
+                                <li><a class="dropdown-item" href="<?php echo e(route('reports.emergencySos')); ?>">
+                                    <i class='material-icons-outlined'>emergency</i>Emergency SOS
+                                </a></li>
+                            <?php endif; ?>
+                        </ul>
+                    </li>
+                    <?php endif; ?>
 
                    
 
@@ -294,37 +370,32 @@
                     <!--        </a>-->
                     <!--    </form>-->
                     <!--</li>-->
-                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->any(['Role Show', 'Permission Show'])): ?>
-                        <li class="nav-item dropdown ms-auto">
-                            <a class="nav-link dropdown-toggle dropdown-toggle-nocaret" href="javascript:;" data-bs-toggle="dropdown">
-                                <div class="parent-icon"><i class='material-icons-outlined'>manage_accounts</i></div>
-                                <!--<div class="menu-title d-flex align-items-center"></div>-->
-                                <!--<div class="ms-auto dropy-icon"><i class='material-icons-outlined'>expand_more</i></div>-->
-                            </a>
-                            <ul class="dropdown-menu" style="left:-100px;">
-                                <li><a class="dropdown-item" href="<?php echo e(route('profile.edit')); ?>"><i class='material-icons-outlined'>person_outline</i>Profile</a></li>
-                                <li><a class="dropdown-item" href="<?php echo e(route('settings')); ?>"><i class='material-icons-outlined'>settings</i>General Settings</a></li>
-                                <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('Role Show')): ?>
-                                    <li><a class="dropdown-item" href="<?php echo e(route('roles')); ?>"><i class='material-icons-outlined'>supervisor_account</i>Roles</a></li>
-                                <?php endif; ?>
-                                <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('Permission Show')): ?>
-                                    <li><a class="dropdown-item" href="<?php echo e(route('permission')); ?>"><i class='material-icons-outlined'>lock</i>Permission</a></li>
-                                <?php endif; ?>
-                                <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('Permission Show')): ?>
-                                    <!--<li><a class="dropdown-item" href="<?php echo e(route('sos_alert.index')); ?>"><i class='material-icons-outlined'>supervisor_account</i>SOS alerts</a></li>-->
-                                <?php endif; ?>
-                                <li class="nav-item ms-auto">
-                                    <form method="POST" action="<?php echo e(route('logout')); ?>" style="display: inline;">
-                                        <?php echo csrf_field(); ?>
-                                        <a class="dropdown-item d-flex align-items-center gap-2 py-2" href="javascript:void(0);"
-                                            onclick="event.preventDefault(); this.closest('form').submit();">
-                                            <i class="material-icons-outlined text-danger">power_settings_new</i> Logout
-                                        </a>
-                                    </form>
-                                </li>
-                            </ul>
-                        </li>
-                    <?php endif; ?>
+                    <li class="nav-item dropdown ms-auto">
+                        <a class="nav-link <?php echo e(in_array(request()->segment(2), ['role', 'permission','profile','settings']) ? 'active' : ''); ?> dropdown-toggle dropdown-toggle-nocaret" href="javascript:;" data-bs-toggle="dropdown">
+                            <div class="parent-icon"><i class='material-icons-outlined'>manage_accounts</i></div>
+                            <!--<div class="menu-title d-flex align-items-center"></div>-->
+                            <!--<div class="ms-auto dropy-icon"><i class='material-icons-outlined'>expand_more</i></div>-->
+                        </a>
+                        <ul class="dropdown-menu" style="left:-100px;">
+                            <li><a class="dropdown-item" href="<?php echo e(route('profile.edit')); ?>"><i class='material-icons-outlined'>person_outline</i>Profile</a></li>
+                            <li><a class="dropdown-item" href="<?php echo e(route('settings')); ?>"><i class='material-icons-outlined'>settings</i>General Settings</a></li>
+                            <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('Role Show')): ?>
+                                <li><a class="dropdown-item" href="<?php echo e(route('roles')); ?>"><i class='material-icons-outlined'>supervisor_account</i>Roles</a></li>
+                            <?php endif; ?>
+                            <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('Permission Show')): ?>
+                                <li><a class="dropdown-item" href="<?php echo e(route('permission')); ?>"><i class='material-icons-outlined'>lock</i>Permission</a></li>
+                            <?php endif; ?>
+                            <li class="nav-item ms-auto">
+                                <form method="POST" action="<?php echo e(route('logout')); ?>" style="display: inline;">
+                                    <?php echo csrf_field(); ?>
+                                    <a class="dropdown-item d-flex align-items-center gap-2 py-2" href="javascript:void(0);"
+                                        onclick="event.preventDefault(); this.closest('form').submit();">
+                                        <i class="material-icons-outlined text-danger">power_settings_new</i> Logout
+                                    </a>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
                 </ul>
             </div>
         </div>

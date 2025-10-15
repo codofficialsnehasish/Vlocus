@@ -22,6 +22,14 @@
         background: linear-gradient(45deg,#FF5370,#ff869a);
     }
 
+    .bg-c-red {
+        background: linear-gradient(45deg, #FF5370, #ff869a);
+    }
+
+    .bg-c-purple {
+        background: linear-gradient(45deg, #a56bf0, #c39df6);
+    }
+
 
     .card {
         border-radius: 5px;
@@ -47,6 +55,11 @@
 
     .f-right {
         float: right;
+    }
+
+    canvas {
+        width: 100% !important;
+        height: 250px !important;
     }
 </style>
 <?php $__env->stopSection(); ?>
@@ -268,51 +281,71 @@
         <!--        </a>-->
         <!--    </div>-->
         <!--</div>-->
-        
-         <div class="col-md-4 col-xl-3">
-            <div class="card bg-c-blue order-card">
-                <a href="<?php echo e(route('shop.index')); ?>">
-                    <div class="card-block">
-                        <div class="row align-items-center">
-                            <div class="col-md-8">
-                                <h6 class="m-b-20 text-light">Shop</h6>
-                            <h2 class="text-right text-light"><span><?php echo e($shop ?? 0); ?></span></h2>
-                            </div>
-                            <div class="col-md-4">
-                                <i class='material-icons-outlined fs-1 text-light'>admin_panel_settings</i>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            </div>
-        </div>
-        
-         <div class="col-md-4 col-xl-3">
-            <div class="card bg-c-blue order-card">
-                <a href="<?php echo e(route('delivery-schedule.index')); ?>">
-                    <div class="card-block">
-                        <div class="row align-items-center">
-                            <div class="col-md-8">
-                                <h6 class="m-b-20 text-light">Delivery</h6>
-                            <h2 class="text-right text-light"><span><?php echo e($delivery_schedule ?? 0); ?></span></h2>
-                            </div>
-                            <div class="col-md-4">
-                                <i class='material-icons-outlined fs-1 text-light'>admin_panel_settings</i>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            </div>
-        </div>
-        
+
+        <!-- Company & Structure Section -->
         <div class="col-md-4 col-xl-3">
-            <div class="card bg-c-green order-card">
+            <div class="card bg-c-purple order-card">
+                <a href="<?php echo e(route('company.index')); ?>">
+                    <div class="card-block">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <h6 class="m-b-20 text-light">Total Company</h6>
+                                <h2 class="text-right text-light"><span><?php echo e($company ?? 0); ?></span></h2>
+                            </div>
+                            <div class="col-md-4">
+                                <i class='material-icons-outlined fs-1 text-light'>business</i>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <div class="col-md-4 col-xl-3">
+            <div class="card bg-c-purple order-card">
+                <a href="<?php echo e(route('branch.index')); ?>">
+                    <div class="card-block">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <h6 class="m-b-20 text-light">Total Branch</h6>
+                                <h2 class="text-right text-light"><span><?php echo e($branch ?? 0); ?></span></h2>
+                            </div>
+                            <div class="col-md-4">
+                                <i class='material-icons-outlined fs-1 text-light'>corporate_fare</i>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- People Section -->
+        <div class="col-md-4 col-xl-3">
+            <div class="card bg-c-blue order-card">
+                <a href="<?php echo e(route('employee.index')); ?>">
+                    <div class="card-block">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <h6 class="m-b-20 text-light">Total Employee</h6>
+                                <h2 class="text-right text-light"><span><?php echo e($employee ?? 0); ?></span></h2>
+                            </div>
+                            <div class="col-md-4">
+                                <i class='material-icons-outlined fs-1 text-light'>badge</i>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <div class="col-md-4 col-xl-3">
+            <div class="card bg-c-blue order-card">
                 <a href="<?php echo e(route('driver.index')); ?>">
                     <div class="card-block">
                         <div class="row align-items-center">
                             <div class="col-md-8">
-                                <h6 class="m-b-20 text-light">Driver</h6>
-                            <h2 class="text-right text-light"><span><?php echo e($driver ?? 0); ?></span></h2>
+                                <h6 class="m-b-20 text-light">Total Driver</h6>
+                                <h2 class="text-right text-light"><span><?php echo e($driver ?? 0); ?></span></h2>
                             </div>
                             <div class="col-md-4">
                                 <i class='material-icons-outlined fs-1 text-light'>drive_eta</i>
@@ -322,26 +355,137 @@
                 </a>
             </div>
         </div>
-        
-  
-        
 
-
+        <!-- Assets Section -->
         <div class="col-md-4 col-xl-3">
             <div class="card bg-c-green order-card">
                 <a href="<?php echo e(route('vehicle.index')); ?>">
                     <div class="card-block">
                         <div class="row align-items-center">
                             <div class="col-md-8">
-                                <h6 class="m-b-20 text-light">Vehicles</h6>
-                            <h2 class="text-right text-light"><span><?php echo e($vehicle ?? 0); ?></span></h2>
+                                <h6 class="m-b-20 text-light">Total Vehicles</h6>
+                                <h2 class="text-right text-light"><span><?php echo e($vehicle ?? 0); ?></span></h2>
                             </div>
                             <div class="col-md-4">
-                                <i class='material-icons-outlined fs-1 text-light'>directions_bus</i>
+                                <i class='material-icons-outlined fs-1 text-light'>local_shipping</i>
                             </div>
                         </div>
                     </div>
                 </a>
+            </div>
+        </div>
+
+        <!-- Business Operations Section -->
+        <div class="col-md-4 col-xl-3">
+            <div class="card bg-c-yellow order-card">
+                <a href="<?php echo e(route('shop.index')); ?>">
+                    <div class="card-block">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <h6 class="m-b-20 text-light">Total Shop</h6>
+                                <h2 class="text-right text-light"><span><?php echo e($shop ?? 0); ?></span></h2>
+                            </div>
+                            <div class="col-md-4">
+                                <i class='material-icons-outlined fs-1 text-light'>store</i>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Delivery & Tasks Section -->
+        <div class="col-md-4 col-xl-3">
+            <div class="card bg-c-red order-card">
+                <a href="<?php echo e(route('delivery-schedule.index')); ?>">
+                    <div class="card-block">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <h6 class="m-b-20 text-light">Total Delivery</h6>
+                                <h2 class="text-right text-light"><span><?php echo e($delivery_schedule ?? 0); ?></span></h2>
+                            </div>
+                            <div class="col-md-4">
+                                <i class='material-icons-outlined fs-1 text-light'>assignment</i>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <div class="col-md-4 col-xl-3">
+            <div class="card bg-c-red order-card">
+                <a href="<?php echo e(route('delivery-schedule.index')); ?>">
+                    <div class="card-block">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <h6 class="m-b-20 text-light">Total Task</h6>
+                                <h2 class="text-right text-light"><span><?php echo e($delivery_schedule_task ?? 0); ?></span></h2>
+                            </div>
+                            <div class="col-md-4">
+                                <i class='material-icons-outlined fs-1 text-light'>list_alt</i>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <div class="col-md-4 col-xl-3">
+            <div class="card bg-c-green order-card">
+                <a href="<?php echo e(route('delivery-schedule.index')); ?>">
+                    <div class="card-block">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <h6 class="m-b-20 text-light">Total Complete Task</h6>
+                                <h2 class="text-right text-light"><span><?php echo e($total_completed_task ?? 0); ?></span></h2>
+                            </div>
+                            <div class="col-md-4">
+                                <i class='material-icons-outlined fs-1 text-light'>check_circle</i>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <div class="col-md-4 col-xl-3">
+            <div class="card bg-c-red order-card">
+                <a href="<?php echo e(route('delivery-schedule.index')); ?>">
+                    <div class="card-block">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <h6 class="m-b-20 text-light">Total Cancelled Task</h6>
+                                <h2 class="text-right text-light"><span><?php echo e($total_cancelled_task ?? 0); ?></span></h2>
+                            </div>
+                            <div class="col-md-4">
+                                <i class='material-icons-outlined fs-1 text-light'>cancel</i>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-4 col-xl-3">
+                    <div class="card order-card h-100">
+                        <canvas id="userRoleChart"></canvas>
+                    </div>
+                </div>
+        
+                <div class="col-md-4 col-xl-5">
+                    <div class="card order-card h-100">
+                        <canvas id="taskOverview"></canvas>
+                    </div>
+                </div>
+        
+                <div class="col-md-4 col-xl-4">
+                    <div class="card order-card h-100">
+                        <canvas id="growthChart"></canvas>
+                    </div>
+                </div>
             </div>
         </div>
     <?php endif; ?>
@@ -493,6 +637,93 @@
                 }
             }
         });
+    });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const userRoleChart = new Chart(document.getElementById('userRoleChart'), {
+        type: 'pie',
+        data: {
+            labels: ['Company', 'Branch', 'Employee', 'Driver', 'System User'],
+            datasets: [{
+                data: [
+                    <?php echo e($company); ?>,
+                    <?php echo e($branch); ?>,
+                    <?php echo e($employee); ?>,
+                    <?php echo e($driver); ?>,
+                    <?php echo e($system_user); ?>
+
+                ],
+                backgroundColor: ['#4caf50', '#2196f3', '#ff9800', '#f44336', '#9c27b0']
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'User Role Distribution'
+                }
+            }
+        }
+    });
+</script>
+
+<script>
+    const taskOverview = new Chart(document.getElementById('taskOverview'), {
+        type: 'bar',
+        data: {
+            labels: ['Total Tasks', 'Completed', 'Cancelled'],
+            datasets: [{
+                label: 'Task Count',
+                data: [
+                    <?php echo e($delivery_schedule_task); ?>,
+                    <?php echo e($total_completed_task); ?>,
+                    <?php echo e($total_cancelled_task); ?>
+
+                ],
+                backgroundColor: ['#2196f3', '#4caf50', '#f44336']
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: { display: true, text: 'Task Summary' }
+            }
+        }
+    });
+</script>
+
+<script>
+    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+    const growthChart = new Chart(document.getElementById('growthChart'), {
+        type: 'line',
+        data: {
+            labels: months,
+            datasets: [
+                {
+                    label: 'Vehicles Added',
+                    data: [<?php $__currentLoopData = range(1,12); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $m): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?> <?php echo e($vehicleGrowth[$m] ?? 0); ?>, <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>],
+                    borderColor: '#4caf50',
+                    tension: 0.3
+                },
+                {
+                    label: 'Deliveries Created',
+                    data: [<?php $__currentLoopData = range(1,12); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $m): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?> <?php echo e($deliveryGrowth[$m] ?? 0); ?>, <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>],
+                    borderColor: '#2196f3',
+                    tension: 0.3
+                }
+            ]
+        },
+        options: {
+            plugins: {
+                title: { display: true, text: 'Monthly Growth Trends' }
+            },
+            responsive: true
+        }
     });
 </script>
 <?php $__env->stopSection(); ?>

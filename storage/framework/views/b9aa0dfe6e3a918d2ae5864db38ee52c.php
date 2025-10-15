@@ -17,11 +17,13 @@
             </nav>
         </div>
         <div class="ms-auto">
-            <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('Delivery Schedule Create')): ?>
+            
+            <?php if (\Illuminate\Support\Facades\Blade::check('role', ['Employee'])): ?>
                 <div class="d-flex align-items-center gap-2 justify-content-lg-end">
                     <a class="btn btn-primary px-4" href="<?php echo e(route('delivery-schedule.create')); ?>"><i class="bi bi-plus-lg me-2"></i>Add New</a>
                 </div>
             <?php endif; ?>
+            
         </div>
     </div>
     <!--end breadcrumb-->
@@ -55,12 +57,16 @@
 
                                     <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->any(['Delivery Schedule Edit', 'Delivery Schedule Delete'])): ?>
                                         <td class="d-flex">
-                                            <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('Delivery Schedule Edit')): ?>
+                                            
+                                            <?php if (\Illuminate\Support\Facades\Blade::check('role', ['Employee'])): ?>
                                                 <a class="btn" href="<?php echo e(route('delivery-schedule.edit', $item->id)); ?>" alt="edit"><i
                                                         class="text-primary" data-feather="edit"></i></a>
                                             <?php endif; ?>
-                                            <a class="btn" href="<?php echo e(route('delivery-schedule.show', $item->id)); ?>" alt="edit"><i class="text-primary" data-feather="eye"></i></a>
-                                            <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('Delivery Schedule Delete')): ?>
+                                            
+                                            <a class="btn" href="<?php echo e(route('track.delivery', ['delivery_id' => $item->id])); ?>" alt="edit"><i class="text-primary" data-feather="eye"></i></a>
+                                            
+                                            
+                                            <?php if (\Illuminate\Support\Facades\Blade::check('role', ['Employee'])): ?>
                                                 <a class="btn" href="javascript:void(0);" onclick="deleteItem(this)"
                                                     data-url="<?php echo e(route('delivery-schedule.destroy',$item->id)); ?>" data-item="Delivery Schedule"
                                                     alt="delete"><i

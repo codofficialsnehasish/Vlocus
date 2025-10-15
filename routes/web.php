@@ -278,9 +278,6 @@ Route::prefix('admin')->group(function (){
         });
 
 
-            
-
-
         Route::controller(ContactUSController::class)->group(function () {
             Route::get("/contact-us",'index')->name('contact-us.index');
             Route::prefix('contact-us')->name('contact-us.')->group(function () {
@@ -309,7 +306,7 @@ Route::middleware(['auth', 'user-access:User'])->group(function () {
     });
  
 });
-Route::get('/', [HomeController::class, 'index'])->name('home.index');
+// Route::get('/', [HomeController::class, 'index'])->name('home.index');
 Route::get('/faq', [HomeFAQController::class, 'index'])->name('home.faq');
 
 Route::post('/contact-us-store', [ContactUSController::class, 'store'])->name('web.contact-us.store');

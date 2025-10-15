@@ -19,13 +19,13 @@
                     </ol>
                 </nav>
             </div>
-            <div class="ms-auto">
+            {{-- <div class="ms-auto">
                 @can('Users Create')
                 <div class="d-flex align-items-center gap-2 justify-content-lg-end">
                     <a class="btn btn-primary px-4" href="{{ route('user.create') }}"><i class="bi bi-plus-lg me-2"></i>Add New Users</a>
                 </div>
                 @endcan
-            </div>
+            </div> --}}
         </div>
     <!--end breadcrumb-->
 
