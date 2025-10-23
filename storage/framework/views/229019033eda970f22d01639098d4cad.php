@@ -267,7 +267,7 @@
                             <div class="menu-title d-flex align-items-center">Tasks</div>
                         </a>
                     </li>
-
+                    
                     <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->any([
                         'Trip Summary Report Show', 
                         'Route History Report Show', 
@@ -357,7 +357,6 @@
                         </ul>
                     </li>
                     <?php endif; ?>
-
 
                    
 

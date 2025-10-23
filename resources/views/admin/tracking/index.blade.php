@@ -243,6 +243,12 @@
                             
                             <input type="radio" class="btn-check" name="statusFilter" id="filterOffline" autocomplete="off">
                             <label class="btn btn-outline-primary" for="filterOffline">Offline</label>
+
+                            <input type="radio" class="btn-check" name="statusFilter" id="filterIdle" autocomplete="off">
+                            <label class="btn btn-outline-primary" for="filterIdle">Idle</label>
+
+                            <input type="radio" class="btn-check" name="statusFilter" id="filterRunning" autocomplete="off">
+                            <label class="btn btn-outline-primary" for="filterRunning">Running</label>
                         </div>
                         
                         <!-- Vehicle List (initially visible) -->

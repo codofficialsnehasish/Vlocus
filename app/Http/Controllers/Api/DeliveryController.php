@@ -139,6 +139,8 @@ class DeliveryController extends Controller
                 $delivery->is_delivered = 1;
                 $delivery->status = "delivered";
                 $delivery->delivered_at = now();
+                $delivery->deliver_lat = $request->latitude;
+                $delivery->deliver_long = $request->longitute;
 
                 if ($request->filled('delivery_image')) {
                     $base64Image = $request->input('delivery_image');

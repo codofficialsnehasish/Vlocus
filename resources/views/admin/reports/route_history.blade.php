@@ -15,27 +15,47 @@
 
 <div class="card mt-4">
     <div class="card-body">
+        <form method="GET" class="row g-2 mb-4">
+            <div class="col-md-3">
+                <input type="date" name="start_date" class="form-control" value="{{ request('start_date') }}">
+            </div>
+            <div class="col-md-3">
+                <input type="date" name="end_date" class="form-control" value="{{ request('end_date') }}">
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-primary w-100">Filter</button>
+            </div>
+        </form>
         <div class="table-responsive">
             <table id="example2" class="table table-striped table-bordered" style="width:100%">
                 <thead>
                     <tr>
                         <th>SL No.</th>
-                        <th>Shop Name</th>
-                        <th>Product</th>
-                        <th>Delivered Qty</th>
-                        <th>Delivery Date</th>
-                        <th>Branch</th>
+                        <th>Date</th>
+                        <th>Vehicle</th>
+                        <th>Driver</th>
+                        <th>Total Stops</th>
+                        <th>Total Distance</th>
+                        <th>View Route</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($reports as $report)
+                    @foreach($schedules as $key => $schedule)
                         <tr>
-                            <td>{{ $loop->iteration }}</td>
-                            <td>{{ $report->shop->name ?? 'N/A' }}</td>
-                            <td>{{ $report->product_name ?? 'N/A' }}</td>
-                            <td>{{ $report->delivered_qty ?? rand(1,10) }}</td>
-                            <td>{{ $report->created_at->format('d M Y') }}</td>
-                            <td>{{ $report->shop->branch->name ?? 'N/A' }}</td>
+                            <td>{{ $key + 1 }}</td>
+                            <td>{{ \Carbon\Carbon::parse($schedule->delivery_date)->format('d-m-Y') }}</td>
+                            <td>{{ $schedule->vehicle->vehicle_number ?? 'N/A' }}</td>
+                            <td>{{ $schedule->driver->name ?? 'N/A' }}</td>
+                            <td>{{ $schedule->shops->count() }}</td>
+                            <td>{{ $schedule->total_distance }}</td>
+                            <td>
+                                @if($schedule->route_polyline)
+                                    <a href="https://www.google.com/maps/dir/?api=1&origin={{ $schedule->deliveryScheduleShops->first()->accepted_lat }},{{ $schedule->deliveryScheduleShops->first()->accepted_long }}&destination={{ $schedule->deliveryScheduleShops->last()->deliver_lat }},{{ $schedule->deliveryScheduleShops->last()->deliver_long }}&travelmode=driving"
+                                    class="btn btn-sm btn-success" target="_blank">View Map</a>
+                                @else
+                                    N/A
+                                @endif
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>

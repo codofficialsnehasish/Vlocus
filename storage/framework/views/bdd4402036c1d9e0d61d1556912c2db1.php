@@ -15,27 +15,47 @@
 
 <div class="card mt-4">
     <div class="card-body">
+        <form method="GET" class="row g-2 mb-4">
+            <div class="col-md-3">
+                <input type="date" name="start_date" class="form-control" value="<?php echo e(request('start_date')); ?>">
+            </div>
+            <div class="col-md-3">
+                <input type="date" name="end_date" class="form-control" value="<?php echo e(request('end_date')); ?>">
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-primary w-100">Filter</button>
+            </div>
+        </form>
         <div class="table-responsive">
             <table id="example2" class="table table-striped table-bordered" style="width:100%">
                 <thead>
                     <tr>
                         <th>SL No.</th>
-                        <th>Shop Name</th>
-                        <th>Product</th>
-                        <th>Delivered Qty</th>
-                        <th>Delivery Date</th>
-                        <th>Branch</th>
+                        <th>Date</th>
+                        <th>Vehicle</th>
+                        <th>Driver</th>
+                        <th>Total Stops</th>
+                        <th>Total Distance</th>
+                        <th>View Route</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php $__currentLoopData = $reports; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $report): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <?php $__currentLoopData = $schedules; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $schedule): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <tr>
-                            <td><?php echo e($loop->iteration); ?></td>
-                            <td><?php echo e($report->shop->name ?? 'N/A'); ?></td>
-                            <td><?php echo e($report->product_name ?? 'N/A'); ?></td>
-                            <td><?php echo e($report->delivered_qty ?? rand(1,10)); ?></td>
-                            <td><?php echo e($report->created_at->format('d M Y')); ?></td>
-                            <td><?php echo e($report->shop->branch->name ?? 'N/A'); ?></td>
+                            <td><?php echo e($key + 1); ?></td>
+                            <td><?php echo e(\Carbon\Carbon::parse($schedule->delivery_date)->format('d-m-Y')); ?></td>
+                            <td><?php echo e($schedule->vehicle->vehicle_number ?? 'N/A'); ?></td>
+                            <td><?php echo e($schedule->driver->name ?? 'N/A'); ?></td>
+                            <td><?php echo e($schedule->shops->count()); ?></td>
+                            <td><?php echo e($schedule->total_distance); ?></td>
+                            <td>
+                                <?php if($schedule->route_polyline): ?>
+                                    <a href="https://www.google.com/maps/dir/?api=1&origin=<?php echo e($schedule->deliveryScheduleShops->first()->accepted_lat); ?>,<?php echo e($schedule->deliveryScheduleShops->first()->accepted_long); ?>&destination=<?php echo e($schedule->deliveryScheduleShops->last()->deliver_lat); ?>,<?php echo e($schedule->deliveryScheduleShops->last()->deliver_long); ?>&travelmode=driving"
+                                    class="btn btn-sm btn-success" target="_blank">View Map</a>
+                                <?php else: ?>
+                                    N/A
+                                <?php endif; ?>
+                            </td>
                         </tr>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </tbody>

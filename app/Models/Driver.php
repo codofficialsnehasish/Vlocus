@@ -21,9 +21,8 @@ class Driver extends Model implements HasMedia
         'ride_mode',
         'latitude',
         'longitude',
-
-
     ];
+    
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');

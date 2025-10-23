@@ -27,6 +27,7 @@ use App\Models\BusStop;
 use App\Models\Brand;
 use App\Models\Models;
 use App\Models\BookingRequest;
+use App\Models\DriverLocation;
 
 use Illuminate\Support\Facades\DB;
 
@@ -388,9 +389,8 @@ class DriverApiController extends Controller
 
     protected function sendNewOTP($phoneNumber)
     {
-
-        $otp = 1234;
-        // $otp = rand(1000, 9999);
+        // $otp = 1234;
+        $otp = rand(1000, 9999);
         $user = User::where('phone', $phoneNumber)->first();
         $user->tokens()->delete(); 
         $token = $user->createToken('AuthToken')->plainTextToken; 
@@ -1529,6 +1529,15 @@ public function getAllBookingRequest(Request $request)
         $driver->latitude = $request->latitude;
         $driver->longitude = $request->longitude;
         $driver->save();
+
+        DriverLocation::create([
+            'driver_id' => $driver->id,
+            'vehicle_id' => null,
+            'latitude' => $request->latitude,
+            'longitude' => $request->longitude,
+            'speed' => null,
+            'timestamp' => now(),
+        ]);
 
 
         return response()->json([

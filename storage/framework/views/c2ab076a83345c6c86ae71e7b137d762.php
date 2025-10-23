@@ -13,6 +13,8 @@
     </div>
 </div>
 
+<?php echo e($reports); ?>
+
 <div class="card mt-4">
     <div class="card-body">
         <div class="table-responsive">
@@ -20,31 +22,78 @@
                 <thead>
                     <tr>
                         <th>SL No.</th>
-                        <th>Branch</th>
-                        <th>Shop Name</th>
-                        <th>Vehicle No</th>
-                        <th>Trip Date</th>
-                        <th>Total Stops</th>
-                        <th>Total Deliveries</th>
+                        <th>Date</th>
+                        <th>Vehicle</th>
+                        <th>Driver</th>
+                        <th>Start Location</th>
+                        <th>End Location</th>
+                        <th>Distance (km)</th>
+                        <th>Start Time</th>
+                        <th>End Time</th>
+                        <th>Duration</th>
+                        <th>Stops</th>
+                        <th>Status</th>
+                        <th>Remarks</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php $__currentLoopData = $reports; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $report): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <?php $__currentLoopData = $reports; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $report): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <tr>
-                            <td><?php echo e($loop->iteration); ?></td>
-                            <td><?php echo e($report->branch->name ?? 'N/A'); ?></td>
-                            <td><?php echo e($report->shop_name ?? 'N/A'); ?></td>
-                            <td><?php echo e($report->vehicle_no ?? 'N/A'); ?></td>
-                            <td><?php echo e($report->created_at->format('d M Y')); ?></td>
-                            <td><?php echo e(rand(3,8)); ?></td>
-                            <td><?php echo e(rand(10,25)); ?></td>
+                            
+                            <td><?php echo e($key + 1); ?></td>
+
+                            
+                            <td><?php echo e(optional($report->deliverySchedule)->delivery_date ?? '-'); ?></td>
+
+                            
+                            <td><?php echo e(optional($report->deliverySchedule->vehicle)->vehicle_number ?? 'N/A'); ?></td>
+
+                            
+                            <td><?php echo e(optional($report->deliverySchedule->driver)->name ?? 'N/A'); ?></td>
+
+                            
+                            <td><?php echo e($report->accepted_lat); ?>,<?php echo e($report->accepted_long); ?></td>
+
+                            
+                            <td><?php echo e($report->deliverd_lat); ?>,<?php echo e($report->deliverd_long); ?></td>
+
+                            
+                            <td><?php echo e($report->distance ?? 'N/A'); ?></td>
+
+                            
+                            <td><?php echo e($report->accepted_at ? \Carbon\Carbon::parse($report->accepted_at)->format('H:i:s') : '-'); ?></td>
+
+                            
+                            <td><?php echo e($report->delivered_at ? \Carbon\Carbon::parse($report->delivered_at)->format('H:i:s') : '-'); ?></td>
+
+                            
+                            <td>
+                                <?php if($report->accepted_at && $report->delivered_at): ?>
+                                    <?php
+                                        $start = \Carbon\Carbon::parse($report->accepted_at);
+                                        $end = \Carbon\Carbon::parse($report->delivered_at);
+                                        $duration = $end->diff($start);
+                                    ?>
+                                    <?php echo e($duration->format('%d days %H:%I:%S')); ?>
+
+                                <?php else: ?>
+                                    -
+                                <?php endif; ?>
+                            </td>
+
+                            
+                            <td><?php echo e($reports->where('delivery_schedule_id', $report->delivery_schedule_id)->count()); ?></td>
+
+                            
+                            <td><?php echo e(optional($report->deliverySchedule)->status ?? '-'); ?></td>
+
+                            
+                            <td><?php echo e($report->remarks ?? '-'); ?></td>
                         </tr>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </tbody>
             </table>
         </div>
-        <?php echo e($reports->links()); ?>
-
     </div>
 </div>
 <?php $__env->stopSection(); ?>

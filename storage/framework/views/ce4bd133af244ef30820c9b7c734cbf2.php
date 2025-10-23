@@ -234,12 +234,7 @@
                         <!-- Vehicle List (initially visible) -->
                         <div class="vehicle-list-container" id="vehicle-list">
                             <?php $__currentLoopData = $drivers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $driver): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            
-                            <?php 
-                                $driverDetails = getDriverDetails($driver->id);
-                                $driver_vehicle = $driverDetails ? $driverDetails->vehicle : null;
-                                dd($driver_vehicle);
-                            ?>
+                            <?php $driver_vehicle = getDriverDetails($driver->id)->vehicle; ?>
                             <div class="list-group-item list-group-item-action flex-column align-items-start mb-2 vehicle-item" 
                                  data-id="<?php echo e($driver_vehicle->id); ?>"
                                  data-driver-id="<?php echo e($driver->id); ?>"

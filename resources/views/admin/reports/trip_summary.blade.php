@@ -20,30 +20,128 @@
                 <thead>
                     <tr>
                         <th>SL No.</th>
-                        <th>Branch</th>
-                        <th>Shop Name</th>
-                        <th>Vehicle No</th>
-                        <th>Trip Date</th>
-                        <th>Total Stops</th>
-                        <th>Total Deliveries</th>
+                        <th>Date</th>
+                        <th>Vehicle</th>
+                        <th>Driver</th>
+                        <th>Start Location</th>
+                        <th>End Location</th>
+                        <th>Distance (km)</th>
+                        <th>Start Time</th>
+                        <th>End Time</th>
+                        <th>Duration</th>
+                        <th>Stops</th>
+                        <th>Total Amount</th>
+                        <th>Total QTY</th>
+                        <th>Status</th>
+                        <th>Remarks</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($reports as $report)
+                    @foreach($reports as $key => $report)
                         <tr>
-                            <td>{{ $loop->iteration }}</td>
-                            <td>{{ $report->branch->name ?? 'N/A' }}</td>
-                            <td>{{ $report->shop_name ?? 'N/A' }}</td>
-                            <td>{{ $report->vehicle_no ?? 'N/A' }}</td>
-                            <td>{{ $report->created_at->format('d M Y') }}</td>
-                            <td>{{ rand(3,8) }}</td>
-                            <td>{{ rand(10,25) }}</td>
+                            {{-- SL No. --}}
+                            <td>{{ $key + 1 }}</td>
+
+                            {{-- Date (from delivery_schedule) --}}
+                            <td>{{ optional($report->deliverySchedule)->delivery_date 
+                                ? \Carbon\Carbon::parse($report->deliverySchedule->delivery_date)->format('d-m-Y') 
+                                : '-' }}
+                            </td>
+
+                            {{-- Vehicle --}}
+                            <td>{{ optional($report->deliverySchedule->vehicle)->vehicle_number ?? 'N/A' }}</td>
+
+                            {{-- Driver --}}
+                            <td>{{ optional($report->deliverySchedule->driver)->name ?? 'N/A' }}</td>
+
+                            {{-- Start Location --}}
+                            <td>
+                                @if($report->accepted_lat && $report->accepted_long)
+                                    <a href="https://www.google.com/maps?q={{ $report->accepted_lat }},{{ $report->accepted_long }}" target="_blank">
+                                        {{ $report->origin_address }}
+                                    </a>
+                                @elseif($report->accepted_lat)
+                                    {{ $report->accepted_lat }}
+                                @elseif($report->accepted_long)
+                                    {{ $report->accepted_long }}
+                                @else
+                                    -
+                                @endif
+                            </td>
+
+                            {{-- End Location (Shop) --}}
+                            <td>
+                                @if($report->deliver_lat && $report->deliver_long)
+                                    <a href="https://www.google.com/maps?q={{ $report->deliver_lat }},{{ $report->deliver_long }}" target="_blank">
+                                        {{ $report->destination_address }}
+                                    </a>
+                                @elseif($report->deliver_lat)
+                                    {{ $report->deliver_lat }}
+                                @elseif($report->deliver_long)
+                                    {{ $report->deliver_long }}
+                                @else
+                                    -
+                                @endif
+                            </td>
+
+                            {{-- Distance (if you calculate or store it) --}}
+                            <td>{{ $report->calculated_distance ?? 'N/A' }}</td>
+
+                            {{-- Start Time --}}
+                            <td>
+                                {{ $report->accepted_at 
+                                    ? \Carbon\Carbon::parse($report->accepted_at)->format('h:i A') 
+                                    : '-' }}
+                            </td>
+
+                            {{-- End Time --}}
+                            <td>
+                                {{ $report->delivered_at 
+                                    ? \Carbon\Carbon::parse($report->delivered_at)->format('h:i A') 
+                                    : '-' }}
+                            </td>
+
+                            {{-- Duration --}}
+                            <td>
+                                @if($report->accepted_at && $report->delivered_at)
+                                    @php
+                                        $start = \Carbon\Carbon::parse($report->accepted_at);
+                                        $end = \Carbon\Carbon::parse($report->delivered_at);
+                                        $diff = $end->diff($start);
+                                        $hours = $diff->h;
+                                        $minutes = $diff->i;
+                                        $seconds = $diff->s;
+                                        $days = $diff->d;
+                                    @endphp
+                                    @if($days > 0)
+                                        {{ $days }} day{{ $days > 1 ? 's' : '' }} {{ sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds) }}
+                                    @else
+                                        {{ sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds) }}
+                                    @endif
+                                @else
+                                    -
+                                @endif
+                            </td>
+
+                            {{-- Stops (number of shops under this schedule) --}}
+                            <td>{{ $reports->where('delivery_schedule_id', $report->delivery_schedule_id)->count() }}</td>
+
+                            {{-- Total Amount --}}
+                            <td>{{ $report->amount ?? 0.00 }}</td>
+
+                            {{-- Total QTY --}}
+                            <td>{{ $report->products->count() ?? 0 }}</td>
+
+                            {{-- Status --}}
+                            <td>{{ ucfirst($report->status) ?? '-' }}</td>
+
+                            {{-- Remarks --}}
+                            <td>{{ $report->remarks ?? '-' }}</td>
                         </tr>
                     @endforeach
                 </tbody>
             </table>
         </div>
-        {{ $reports->links() }}
     </div>
 </div>
 @endsection

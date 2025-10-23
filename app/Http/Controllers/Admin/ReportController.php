@@ -6,56 +6,127 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Vehicle;
 use App\Models\Branch;
+use App\Models\DeliverySchedule;
 use App\Models\DeliveryScheduleShop;
 use App\Models\DeliveryScheduleShopProduct;
 use App\Models\SOSAlert;
 use App\Models\LoginLog;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Http;
 
 class ReportController extends Controller
 {
     // 1. Trip Summary Report
     public function tripSummary()
     {
-        $reports = DeliveryScheduleShop::with('branch')
-            ->orderBy('created_at', 'desc')
-            ->paginate(20);
+        $reports = DeliveryScheduleShop::with(['deliverySchedule','shop','products'])
+            ->get();
+
+        foreach ($reports as $report) {
+            if ($report->accepted_lat && $report->accepted_long && $report->deliver_lat && $report->deliver_long) {
+                $origin = $report->accepted_lat . ',' . $report->accepted_long;
+                $destination = $report->deliver_lat . ',' . $report->deliver_long;
+                $apiKey = env('GOOGLE_MAPS_API_KEY');
+
+                $response = Http::get("https://maps.gomaps.pro/maps/api/distancematrix/json", [
+                    'origins' => $origin,
+                    'destinations' => $destination,
+                    'key' => $apiKey
+                ]);
+
+                $data = $response->json();
+
+                // Distance
+                $report->calculated_distance = $data['rows'][0]['elements'][0]['distance']['text'] ?? 'N/A';
+
+                // Addresses
+                $report->origin_address = $data['origin_addresses'][0] ?? null;
+                $report->destination_address = $data['destination_addresses'][0] ?? null;
+
+            } else {
+                $report->calculated_distance = 'N/A';
+                $report->destination_address = null;
+                $apiKey = env('GOOGLE_MAPS_API_KEY');
+                $latitude = $report->accepted_lat;
+                $longitude = $report->accepted_long;
+
+                $response = Http::withHeaders([
+                    'Accept' => 'application/json'
+                ])->get('https://maps.gomaps.pro/maps/api/geocode/json', [
+                    'latlng' => "$latitude,$longitude",
+                    'key' => $apiKey,
+                ]);
+
+                $data = $response->json();
+                if (!empty($data['results'][0]['formatted_address'])) {
+                    $report->origin_address = $data['results'][0]['formatted_address'];
+                } else {
+                    $report->origin_address = null;
+                }
+            }
+        }
 
         return view('admin.reports.trip_summary', compact('reports'));
     }
 
     // 2. Route History Report
-    public function routeHistory()
+
+    public function routeHistory(Request $request)
     {
-        // Dummy data for liquor shops
-        $shopNames = ['The Wine Cellar', 'Spirits Hub', 'Cheers Liquor', 'Royal Drinks', 'Bottle House', 'Liquor Lane'];
-        $products = ['Whiskey', 'Vodka', 'Rum', 'Beer', 'Wine', 'Gin', 'Tequila'];
+        $query = DeliverySchedule::with([
+            'vehicle',
+            'driver',
+            'deliveryScheduleShops' => function ($q) {
+                $q->with('products');
+            }
+        ]);
 
-        $reports = collect();
-
-        for ($i = 1; $i <= 20; $i++) {
-            $shopName = $shopNames[array_rand($shopNames)];
-            $branchName = ['North Branch', 'South Branch', 'East Branch', 'West Branch'][array_rand(['North Branch','South Branch','East Branch','West Branch'])];
-            $product = $products[array_rand($products)];
-            $reports->push((object)[
-                'shop' => (object)['name' => $shopName, 'branch' => (object)['name' => $branchName]],
-                'product_name' => $product,
-                'delivered_qty' => rand(1, 50),
-                'created_at' => now()->subDays(rand(0, 30)),
-            ]);
+        // Optional filter by date range
+        if ($request->filled('start_date') && $request->filled('end_date')) {
+            $query->whereBetween('delivery_date', [$request->start_date, $request->end_date]);
         }
 
-        // Paginate dummy data
-        $reports = new \Illuminate\Pagination\LengthAwarePaginator(
-            $reports,
-            $reports->count(),
-            10,
-            1,
-            ['path' => request()->url(), 'query' => request()->query()]
-        );
+        $schedules = $query->orderBy('delivery_date', 'desc')->get();
 
-        return view('admin.reports.route_history', compact('reports'));
+        $apiKey = env('GOOGLE_MAPS_API_KEY');
+
+        foreach ($schedules as $schedule) {
+            $points = [];
+
+            // collect all coordinates (accepted + delivered)
+            foreach ($schedule->deliveryScheduleShops as $shop) {
+                if ($shop->accepted_lat && $shop->accepted_long) {
+                    $points[] = "{$shop->accepted_lat},{$shop->accepted_long}";
+                }
+                if ($shop->deliver_lat && $shop->deliver_long) {
+                    $points[] = "{$shop->deliver_lat},{$shop->deliver_long}";
+                }
+            }
+
+            // build route using snapped path API or Distance Matrix
+            if (count($points) >= 2) {
+                $path = implode('|', $points);
+
+                $response = Http::get("https://maps.gomaps.pro/maps/api/directions/json", [
+                    'origin' => $points[0],
+                    'destination' => end($points),
+                    'waypoints' => implode('|', array_slice($points, 1, -1)),
+                    'key' => $apiKey
+                ]);
+
+                $data = $response->json();
+
+                $schedule->total_distance = $data['routes'][0]['legs'][0]['distance']['text'] ?? 'N/A';
+                $schedule->route_polyline = $data['routes'][0]['overview_polyline']['points'] ?? null;
+            } else {
+                $schedule->total_distance = 'N/A';
+                $schedule->route_polyline = null;
+            }
+        }
+
+        return view('admin.reports.route_history', compact('schedules'));
     }
+
 
 
     // 3. Run & Idle Report
