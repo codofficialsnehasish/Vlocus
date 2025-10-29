@@ -35,4 +35,8 @@ class Driver extends Model implements HasMedia
     {
         return $this->belongsTo(Vehicle::class, 'vehicle_id','id');
     }
+    public function locations()
+    {
+        return $this->hasMany(DriverLocation::class, 'driver_id');
+    }
 }

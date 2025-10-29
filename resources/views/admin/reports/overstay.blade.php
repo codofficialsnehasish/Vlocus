@@ -23,21 +23,31 @@
                     <tr>
                         <th>SL No.</th>
                         <th>Vehicle Number</th>
+                        <th>Driver</th>
+                        <th>Date</th>
                         <th>Location</th>
-                        <th>Allowed Time</th>
-                        <th>Actual Time</th>
+                        <th>Start Time</th>
+                        <th>End Time</th>
+                        <th>Duration</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($reports as $report)
+                    @forelse ($reports as $report)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $report['vehicle'] }}</td>
+                            <td>{{ $report['driver'] }}</td>
+                            <td>{{ \Carbon\Carbon::parse($report['date'])->format('d M Y') }}</td>
                             <td>{{ $report['location'] }}</td>
-                            <td><span class="badge bg-primary">{{ $report['allowed_time'] }}</span></td>
-                            <td><span class="badge bg-danger">{{ $report['actual_time'] }}</span></td>
+                            <td><span class="badge bg-primary">{{ $report['start_time'] }}</span></td>
+                            <td><span class="badge bg-warning">{{ $report['end_time'] }}</span></td>
+                            <td><span class="badge bg-danger">{{ $report['duration'] }}</span></td>
                         </tr>
-                    @endforeach
+                    @empty
+                        <tr>
+                            <td colspan="8" class="text-center text-muted">No Overstay Data Found</td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>

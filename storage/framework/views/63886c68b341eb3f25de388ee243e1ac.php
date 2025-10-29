@@ -1,3 +1,5 @@
+
+
 <?php $__env->startSection('title'); ?> Shop <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('content'); ?>

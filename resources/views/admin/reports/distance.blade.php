@@ -23,19 +23,35 @@
                     <tr>
                         <th>SL No.</th>
                         <th>Vehicle Number</th>
+                        <th>Driver</th>
                         <th>Date</th>
+                        <th>Start Time</th>
+                        <th>End Time</th>
                         <th>Distance Travelled</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($reports as $report)
+                    @forelse ($reports as $report)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $report['vehicle'] }}</td>
-                            <td>{{ \Carbon\Carbon::parse($report['day'])->format('d M Y') }}</td>
-                            <td><span class="badge bg-info">{{ $report['distance'] }}</span></td>
+                            <td>{{ $report['driver'] }}</td>
+                            <td>{{ \Carbon\Carbon::parse($report['date'])->format('d M Y') }}</td>
+                            <td>
+                                {{ $report['start_time'] ? \Carbon\Carbon::parse($report['start_time'])->format('H:i') : '-' }}
+                            </td>
+                            <td>
+                                {{ $report['end_time'] ? \Carbon\Carbon::parse($report['end_time'])->format('H:i') : '-' }}
+                            </td>
+                            <td>
+                                <span class="badge bg-info">{{ $report['distance'] }}</span>
+                            </td>
                         </tr>
-                    @endforeach
+                    @empty
+                        <tr>
+                            <td colspan="7" class="text-center text-muted">No records found</td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>

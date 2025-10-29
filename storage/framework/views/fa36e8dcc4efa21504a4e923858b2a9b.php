@@ -17,30 +17,59 @@
 
 <div class="card mt-4">
     <div class="card-body">
+
+        <!-- Filter Form -->
+        <form method="GET" action="<?php echo e(route('reports.runIdle')); ?>" class="row g-2 mb-3">
+            <div class="col-md-3">
+                <label>Start Date</label>
+                <input type="date" name="start_date" class="form-control" value="<?php echo e(request('start_date')); ?>">
+            </div>
+            <div class="col-md-3">
+                <label>End Date</label>
+                <input type="date" name="end_date" class="form-control" value="<?php echo e(request('end_date')); ?>">
+            </div>
+            <div class="col-md-2 align-self-end">
+                <button type="submit" class="btn btn-primary w-100">Filter</button>
+            </div>
+        </form>
+
         <div class="table-responsive">
             <table id="example2" class="table table-striped table-bordered" style="width:100%">
                 <thead>
                     <tr>
                         <th>SL No.</th>
-                        <th>Vehicle Number</th>
+                        <th>Date</th>
+                        <th>Vehicle</th>
+                        <th>Driver Name</th>
+                        <th>Start Time</th>
+                        <th>End Time</th>
                         <th>Run Time</th>
                         <th>Idle Time</th>
                         <th>Total Stops</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php $__currentLoopData = $reports; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $report): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <?php $__empty_1 = true; $__currentLoopData = $reports; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $report): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                         <tr>
                             <td><?php echo e($loop->iteration); ?></td>
-                            <td><?php echo e($report['vehicle']); ?></td>
+                            <td><?php echo e($report['date'] ?? '-'); ?></td>
+                            <td><?php echo e($report['vehicle'] ?? '-'); ?></td>
+                            <td><?php echo e($report['driver']); ?></td>
+                            <td><?php echo e($report['start_time'] ?? '-'); ?></td>
+                            <td><?php echo e($report['end_time'] ?? '-'); ?></td>
                             <td><span class="badge bg-success"><?php echo e($report['run_time']); ?></span></td>
                             <td><span class="badge bg-warning text-dark"><?php echo e($report['idle_time']); ?></span></td>
                             <td><?php echo e($report['stops']); ?></td>
                         </tr>
-                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                        <tr>
+                            <td colspan="9" class="text-center">No data available for this period</td>
+                        </tr>
+                    <?php endif; ?>
                 </tbody>
             </table>
         </div>
+
     </div>
 </div>
 <?php $__env->stopSection(); ?>

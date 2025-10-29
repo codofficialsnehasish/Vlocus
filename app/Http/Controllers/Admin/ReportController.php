@@ -11,6 +11,7 @@ use App\Models\DeliveryScheduleShop;
 use App\Models\DeliveryScheduleShopProduct;
 use App\Models\SOSAlert;
 use App\Models\LoginLog;
+use App\Models\Driver;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
 
@@ -70,7 +71,6 @@ class ReportController extends Controller
     }
 
     // 2. Route History Report
-
     public function routeHistory(Request $request)
     {
         $query = DeliverySchedule::with([
@@ -127,26 +127,200 @@ class ReportController extends Controller
         return view('admin.reports.route_history', compact('schedules'));
     }
 
-
-
     // 3. Run & Idle Report
-    public function runIdle()
+    // public function runIdle()
+    // {
+    //     $reports = [
+    //         ['vehicle' => 'WB01AB1234', 'run_time' => '3h 45m', 'idle_time' => '1h 10m', 'stops' => 4],
+    //         ['vehicle' => 'WB02XY5678', 'run_time' => '5h 10m', 'idle_time' => '0h 25m', 'stops' => 2],
+    //     ];
+    //     return view('admin.reports.run_idle', compact('reports'));
+    // }
+
+    public function runIdle(Request $request)
     {
-        $reports = [
-            ['vehicle' => 'WB01AB1234', 'run_time' => '3h 45m', 'idle_time' => '1h 10m', 'stops' => 4],
-            ['vehicle' => 'WB02XY5678', 'run_time' => '5h 10m', 'idle_time' => '0h 25m', 'stops' => 2],
-        ];
-        return view('admin.reports.run_idle', compact('reports'));
+        $startDate = $request->start_date ?? null;
+        $endDate   = $request->end_date ?? null;
+        
+        $schedulesQuery = DeliverySchedule::with(['driver', 'vehicle', 'shops'])
+                        ->orderBy('delivery_date');
+        
+        if ($startDate && $endDate) {
+            $schedulesQuery->whereDate('delivery_date', '>=', $startDate)
+                            ->whereDate('delivery_date', '<=', $endDate);
+        }
+        
+        $schedules = $schedulesQuery->get();
+        $reports = [];
+    
+        foreach ($schedules as $schedule) {
+            $locations = $schedule->driver?->driver?->locations
+                        ?->filter(function ($location) use ($schedule) {
+                            return \Carbon\Carbon::parse($location->created_at)->isSameDay($schedule->delivery_date);
+                        })
+                        ->sortBy('created_at') ?? collect();
+                        
+            // 🕒 Get first accepted and last delivered shop times
+            $firstAcceptTime = $schedule->deliveryScheduleShops
+                ->whereNotNull('accepted_at')
+                ->sortBy('accepted_at')
+                ->first()?->accepted_at;
+            // dd($schedule->shops);
+            
+            $lastDeliveredTime = $schedule->deliveryScheduleShops
+                ->whereNotNull('delivered_at')
+                ->sortByDesc('delivered_at')
+                ->first()?->delivered_at;
+    
+            if ($locations->isEmpty()) {
+                $reports[] = [
+                    'date' => $schedule->delivery_date,
+                    'driver' => $schedule->driver?->name ?? 'Unknown',
+                    'vehicle' => $schedule->vehicle?->vehicle_number ?? 'Unknown',
+                    'start_time' => $firstAcceptTime ? Carbon::parse($firstAcceptTime)->format('H:i') : null,
+                    'end_time' => $lastDeliveredTime ? Carbon::parse($lastDeliveredTime)->format('H:i') : null,
+                    'run_time' => '0h 0m',
+                    'idle_time' => '0h 0m',
+                    'stops' => 0,
+                ];
+                continue;
+            }
+    
+            $runTime = 0;
+            $idleTime = 0;
+            $stops = 0;
+            $previous = null;
+            $idleSegmentStart = null;
+    
+            foreach ($locations as $location) {
+                // dd($location);
+                if ($previous) {
+                    $timeDiff = Carbon::parse($previous->created_at)->diffInMinutes($location->created_at);
+                    $distance = $this->calculateDistance(
+                        $previous->latitude,
+                        $previous->longitude,
+                        $location->latitude,
+                        $location->longitude
+                    );
+    
+                    if ($distance < 30) {
+                        $idleTime += $timeDiff;
+                        if (!$idleSegmentStart) {
+                            $idleSegmentStart = Carbon::parse($previous->created_at);
+                        }
+                        if ($idleSegmentStart->diffInMinutes($location->created_at) >= 5) {
+                            $stops++;
+                            $idleSegmentStart = null;
+                        }
+                    } else {
+                        $runTime += $timeDiff;
+                        $idleSegmentStart = null;
+                    }
+                }
+                $previous = $location;
+            }
+    
+            $reports[] = [
+                'date' => $schedule->delivery_date,
+                'driver' => $schedule->driver?->name ?? 'Unknown',
+                'vehicle' => $schedule->vehicle?->vehicle_number ?? 'Unknown',
+                'start_time' => $firstAcceptTime ? Carbon::parse($firstAcceptTime)->format('H:i') : ($locations->first()?->created_at ? Carbon::parse($locations->first()->created_at)->format('H:i') : null),
+                'end_time' => $lastDeliveredTime ? Carbon::parse($lastDeliveredTime)->format('H:i') : ($locations->last()?->created_at ? Carbon::parse($locations->last()->created_at)->format('H:i') : null),
+                'run_time' => floor($runTime / 60) . 'h ' . ($runTime % 60) . 'm',
+                'idle_time' => floor($idleTime / 60) . 'h ' . ($idleTime % 60) . 'm',
+                'stops' => $stops,
+            ];
+        }
+        
+        // dd($reports);
+    
+        return view('admin.reports.run_idle', compact('reports', 'startDate', 'endDate'));
+    }
+
+    /**
+     * Calculate distance between two lat/long points (Haversine formula)
+     */
+    private function calculateDistance($lat1, $lon1, $lat2, $lon2)
+    {
+        $earthRadius = 6371000; // meters
+
+        $latFrom = deg2rad($lat1);
+        $lonFrom = deg2rad($lon1);
+        $latTo = deg2rad($lat2);
+        $lonTo = deg2rad($lon2);
+
+        $latDelta = $latTo - $latFrom;
+        $lonDelta = $lonTo - $lonFrom;
+
+        $angle = 2 * asin(sqrt(pow(sin($latDelta / 2), 2) +
+                cos($latFrom) * cos($latTo) * pow(sin($lonDelta / 2), 2)));
+
+        return $earthRadius * $angle; // meters
     }
 
     // 4. Distance Report
-    public function distance()
+    public function distance(Request $request)
     {
-        $reports = [
-            ['vehicle' => 'WB01AB1234', 'day' => '2025-10-13', 'distance' => '185 km'],
-            ['vehicle' => 'WB02XY5678', 'day' => '2025-10-13', 'distance' => '210 km'],
-        ];
-        return view('admin.reports.distance', compact('reports'));
+        $startDate = $request->start_date ?? null;
+        $endDate   = $request->end_date ?? null;
+
+        $schedulesQuery = DeliverySchedule::with(['driver.driver.locations', 'vehicle'])
+                            ->orderBy('delivery_date');
+
+        if ($startDate && $endDate) {
+            $schedulesQuery->whereDate('delivery_date', '>=', $startDate)
+                        ->whereDate('delivery_date', '<=', $endDate);
+        }
+
+        $schedules = $schedulesQuery->get();
+        $reports = [];
+
+        foreach ($schedules as $schedule) {
+            $locations = $schedule->driver?->driver?->locations
+                ?->filter(function ($location) use ($schedule) {
+                    return \Carbon\Carbon::parse($location->created_at)
+                        ->isSameDay($schedule->delivery_date);
+                })
+                ->sortBy('created_at') ?? collect();
+
+            if ($locations->count() < 2) {
+                $reports[] = [
+                    'date' => $schedule->delivery_date,
+                    'driver' => $schedule->driver?->name ?? 'Unknown',
+                    'vehicle' => $schedule->vehicle?->vehicle_number ?? 'Unknown',
+                    'start_time' => $locations->first()?->created_at ? \Carbon\Carbon::parse($locations->first()->created_at)->format('H:i') : null,
+                    'end_time' => $locations->last()?->created_at ? \Carbon\Carbon::parse($locations->last()->created_at)->format('H:i') : null,
+                    'distance' => '0 km',
+                ];
+                continue;
+            }
+
+            $totalDistance = 0;
+            $previous = null;
+
+            foreach ($locations as $location) {
+                if ($previous) {
+                    $totalDistance += $this->calculateDistance(
+                        $previous->latitude,
+                        $previous->longitude,
+                        $location->latitude,
+                        $location->longitude
+                    );
+                }
+                $previous = $location;
+            }
+
+            $reports[] = [
+                'date' => $schedule->delivery_date,
+                'driver' => $schedule->driver?->name ?? 'Unknown',
+                'vehicle' => $schedule->vehicle?->vehicle_number ?? 'Unknown',
+                'start_time' => \Carbon\Carbon::parse($locations->first()->created_at)->format('H:i'),
+                'end_time' => \Carbon\Carbon::parse($locations->last()->created_at)->format('H:i'),
+                'distance' => number_format($totalDistance / 1000, 2) . ' km', // meters → km
+            ];
+        }
+
+        return view('admin.reports.distance', compact('reports', 'startDate', 'endDate'));
     }
 
     // 5. Geo-fence Report
@@ -160,14 +334,97 @@ class ReportController extends Controller
     }
 
     // 6. Overstay Report
-    public function overstay()
+    public function overstay(Request $request)
     {
-        $reports = [
-            ['vehicle' => 'WB01AB1234', 'location' => 'Kolkata Depot', 'allowed_time' => '30 min', 'actual_time' => '1h 15m'],
-            ['vehicle' => 'WB02XY5678', 'location' => 'Howrah Site', 'allowed_time' => '20 min', 'actual_time' => '45 min'],
-        ];
-        return view('admin.reports.overstay', compact('reports'));
+        $startDate = $request->start_date ?? null;
+        $endDate   = $request->end_date ?? null;
+
+        $schedulesQuery = DeliverySchedule::with(['driver.driver.locations', 'vehicle'])
+                            ->orderBy('delivery_date');
+
+        if ($startDate && $endDate) {
+            $schedulesQuery->whereDate('delivery_date', '>=', $startDate)
+                        ->whereDate('delivery_date', '<=', $endDate);
+        }
+
+        $schedules = $schedulesQuery->get();
+        $reports = [];
+
+        foreach ($schedules as $schedule) {
+            $locations = $schedule->driver?->driver?->locations
+                ?->filter(function ($location) use ($schedule) {
+                    return \Carbon\Carbon::parse($location->created_at)
+                        ->isSameDay($schedule->delivery_date);
+                })
+                ->sortBy('created_at') ?? collect();
+
+            if ($locations->count() < 2) continue;
+
+            $previous = null;
+            $idleStart = null;
+
+            foreach ($locations as $location) {
+                if ($previous) {
+                    $distance = $this->calculateDistance(
+                        $previous->latitude,
+                        $previous->longitude,
+                        $location->latitude,
+                        $location->longitude
+                    );
+
+                    // If vehicle is staying at same spot (less than 30 meters)
+                    if ($distance < 30) {
+                        if (!$idleStart) {
+                            $idleStart = $previous->created_at;
+                        }
+                    } else {
+                        // Vehicle moved — so record overstay if duration was significant
+                        if ($idleStart) {
+                            $idleEnd = $previous->created_at;
+                            $durationMinutes = \Carbon\Carbon::parse($idleStart)->diffInMinutes($idleEnd);
+
+                            // Log only if stay lasted more than 10 minutes (to ignore GPS noise)
+                            if ($durationMinutes > 10) {
+                                $reports[] = [
+                                    'vehicle' => $schedule->vehicle?->vehicle_number ?? 'Unknown',
+                                    'driver' => $schedule->driver?->name ?? 'Unknown',
+                                    'date' => $schedule->delivery_date,
+                                    'location' => '(' . number_format($previous->latitude, 5) . ', ' . number_format($previous->longitude, 5) . ')',
+                                    'start_time' => \Carbon\Carbon::parse($idleStart)->format('H:i:s'),
+                                    'end_time' => \Carbon\Carbon::parse($idleEnd)->format('H:i:s'),
+                                    'duration' => floor($durationMinutes / 60) . 'h ' . ($durationMinutes % 60) . 'm',
+                                ];
+                            }
+
+                            $idleStart = null;
+                        }
+                    }
+                }
+
+                $previous = $location;
+            }
+
+            // If still idle at end of day
+            if ($idleStart && $previous) {
+                $idleEnd = $previous->created_at;
+                $durationMinutes = \Carbon\Carbon::parse($idleStart)->diffInMinutes($idleEnd);
+                if ($durationMinutes > 10) {
+                    $reports[] = [
+                        'vehicle' => $schedule->vehicle?->vehicle_number ?? 'Unknown',
+                        'driver' => $schedule->driver?->name ?? 'Unknown',
+                        'date' => $schedule->delivery_date,
+                        'location' => '(' . number_format($previous->latitude, 5) . ', ' . number_format($previous->longitude, 5) . ')',
+                        'start_time' => \Carbon\Carbon::parse($idleStart)->format('H:i:s'),
+                        'end_time' => \Carbon\Carbon::parse($idleEnd)->format('H:i:s'),
+                        'duration' => floor($durationMinutes / 60) . 'h ' . ($durationMinutes % 60) . 'm',
+                    ];
+                }
+            }
+        }
+
+        return view('admin.reports.overstay', compact('reports', 'startDate', 'endDate'));
     }
+
 
     // Driver Behaviour & Safety Reports
 

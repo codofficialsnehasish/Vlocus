@@ -6,10 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+
 class DeliveryScheduleShop extends Model implements HasMedia
 {
     use InteractsWithMedia ;
-    protected $fillable = ['lr_no','delivery_schedule_id','shop_id','sender_branch_id','order_serial','invoice_no','delivery_note','payment_type','amount','otp','status','is_delivered','delivered_at','is_cancelled','cancelled_at'];
+
+    protected $fillable = ['lr_no','delivery_schedule_id','shop_id','sender_branch_id','order_serial','invoice_no','delivery_note','payment_type','amount','otp','status','is_delivered','delivered_at','deliver_lat','deliver_long','is_cancelled','cancelled_at'];
 
     public function deliverySchedule()
     {

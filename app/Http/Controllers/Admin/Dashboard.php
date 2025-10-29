@@ -48,33 +48,36 @@ class Dashboard extends Controller
             $data['totalPending'] = $data['totalAssignedShops'] - $data['totalDelivered'];
             
         }else{
-            $data['system_user'] = User::whereDoesntHave('roles', function($query) {
-                $query->whereIn('name', ['Super Admin','Driver']);
-            })->count();
+            // $data['system_user'] = User::whereDoesntHave('roles', function($query) {
+            //     $query->whereIn('name', ['Super Admin','Driver']);
+            // })->count();
     
-            $data['driver'] = User::role('Driver')->count();
-            $data['company'] = User::role('Company')->count();
-            $data['branch'] = User::role('Branch')->count();
-            $data['employee'] = User::role('Employee')->count();
-        
-            $data['vehicle'] = Vehicle::all()->count();
+            // $data['company'] = User::role('Company')->count();
+            // $data['branch'] = User::role('Branch')->count();
+            // $data['employee'] = User::role('Employee')->count();
 
-            $data['shop'] = Shop::all()->count();
-            $data['delivery_schedule'] = DeliverySchedule::all()->count();
-            $data['delivery_schedule_task'] = DeliveryScheduleShop::all()->count();
+            // $data['driver'] = User::role('Driver')->count();
+            // $data['vehicle'] = Vehicle::all()->count();
 
-            $data['total_completed_task'] = DeliveryScheduleShop::where('is_delivered',1)->count();
-            $data['total_cancelled_task'] = DeliveryScheduleShop::where('is_cancelled',1)->count();
+            // $data['shop'] = Shop::all()->count();
+            // $data['delivery_schedule'] = DeliverySchedule::all()->count();
+            // $data['delivery_schedule_task'] = DeliveryScheduleShop::all()->count();
 
-            $data['vehicleGrowth'] = Vehicle::selectRaw('MONTH(created_at) as month, COUNT(*) as total')
-                ->groupBy('month')
-                ->pluck('total', 'month');
+            // $data['total_completed_task'] = DeliveryScheduleShop::where('is_delivered',1)->count();
+            // $data['total_cancelled_task'] = DeliveryScheduleShop::where('is_cancelled',1)->count();
 
-            $data['deliveryGrowth'] = DeliverySchedule::selectRaw('MONTH(created_at) as month, COUNT(*) as total')
-                ->groupBy('month')
-                ->pluck('total', 'month');
+            // $data['vehicleGrowth'] = Vehicle::selectRaw('MONTH(created_at) as month, COUNT(*) as total')
+            //     ->groupBy('month')
+            //     ->pluck('total', 'month');
+
+            // $data['deliveryGrowth'] = DeliverySchedule::selectRaw('MONTH(created_at) as month, COUNT(*) as total')
+            //     ->groupBy('month')
+            //     ->pluck('total', 'month');
 
             // $data['branchStats'] = Branch::withCount('shops')->get();
+
+            $data['driver'] = User::role('Driver')->get();
+            $data['vehicle'] = Vehicle::all();
         }
 
         return view('dashboard')->with($data);

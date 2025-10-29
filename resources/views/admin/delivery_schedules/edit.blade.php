@@ -705,7 +705,7 @@
         </div>
     </form>
 
-    <div class="modal fade" id="quickShopAddModal">
+    <div class="modal fade" id="quickShopAddModal" style="z-index: 999999;">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
             <div class="modal-content">
                 <div class="modal-header border-bottom-0 bg-grd-primary py-2">
@@ -730,8 +730,7 @@
                                                 name="shop_name" id="shop_name" placeholder="Enter shop name" required>
                                             <div class="valid-feedback">Looks good!</div>
                                             <div class="invalid-feedback">Please enter shop name.</div>
-                                            <div id="shop_suggestions"
-                                                class="list-group position-absolute w-100 z-index-3">
+                                            <div id="shop_suggestions" class="list-group position-absolute w-100 z-index-3">
                                             </div>
                                         </div>
 
