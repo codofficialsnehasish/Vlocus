@@ -34,6 +34,7 @@
                         <th>Total QTY</th>
                         <th>Status</th>
                         <th>Remarks</th>
+                        <th>Route</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -137,6 +138,14 @@
 
                             {{-- Remarks --}}
                             <td>{{ $report->remarks ?? '-' }}</td>
+                            <td>
+                                <a href="{{ route('route.playback', ['driver_id' =>$report->deliverySchedule->driver?->driver->id, 'date' => $report->deliverySchedule->delivery_date]) }}" 
+                                    class="btn btn-sm btn-success" 
+                                    target="_blank">
+                                    Route Playback
+                                </a>
+
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>

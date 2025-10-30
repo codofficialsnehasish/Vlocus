@@ -25,6 +25,7 @@ use App\Http\Controllers\Admin\{
     BranchController,
     EmployeeController,
     ReportController,
+    RoutePlaybackController,
 };
 use App\Http\Controllers\{
     HomeController,
@@ -235,7 +236,7 @@ Route::prefix('admin')->group(function (){
         
         // Route::resource('delivery-schedule', DeliveryScheduleController::class);
         
-       Route::prefix('delivery-schedule')->controller(DeliveryScheduleController::class)->group(function () {
+        Route::prefix('delivery-schedule')->controller(DeliveryScheduleController::class)->group(function () {
             Route::get('/search', 'search')->name('shop.search');
             Route::get('/', 'index')->name('delivery-schedule.index');
             Route::get('/create', 'create')->name('delivery-schedule.create');
@@ -288,6 +289,9 @@ Route::prefix('admin')->group(function (){
             });
         });
 
+        Route::get('/route-playback', [RoutePlaybackController::class, 'index'])->name('route.playback');
+        Route::post('/route-playback/data', [RoutePlaybackController::class, 'getRouteData'])->name('route.playback.data');
+        // Route::match(['get', 'post'], '/route-playback/data', [RoutePlaybackController::class, 'getRouteData'])->name('route.playback.data');
     });
 });
 

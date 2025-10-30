@@ -49,12 +49,19 @@
                             <td>{{ $schedule->shops->count() }}</td>
                             <td>{{ $schedule->total_distance }}</td>
                             <td>
-                                @if($schedule->route_polyline)
+                                {{-- @if($schedule->route_polyline)
                                     <a href="https://www.google.com/maps/dir/?api=1&origin={{ $schedule->deliveryScheduleShops->first()->accepted_lat }},{{ $schedule->deliveryScheduleShops->first()->accepted_long }}&destination={{ $schedule->deliveryScheduleShops->last()->deliver_lat }},{{ $schedule->deliveryScheduleShops->last()->deliver_long }}&travelmode=driving"
                                     class="btn btn-sm btn-success" target="_blank">View Map</a>
                                 @else
                                     N/A
-                                @endif
+                                @endif --}}
+
+                                <a href="{{ route('route.playback', ['driver_id' => $schedule->driver?->driver->id, 'date' => $schedule->delivery_date]) }}" 
+                                    class="btn btn-sm btn-success" 
+                                    target="_blank">
+                                    Route Playback
+                                </a>
+
                             </td>
                         </tr>
                     @endforeach
