@@ -128,15 +128,94 @@ class ReportController extends Controller
     }
 
     // 3. Run & Idle Report
-    // public function runIdle()
-    // {
-    //     $reports = [
-    //         ['vehicle' => 'WB01AB1234', 'run_time' => '3h 45m', 'idle_time' => '1h 10m', 'stops' => 4],
-    //         ['vehicle' => 'WB02XY5678', 'run_time' => '5h 10m', 'idle_time' => '0h 25m', 'stops' => 2],
-    //     ];
-    //     return view('admin.reports.run_idle', compact('reports'));
-    // }
+    /*public function runIdle(Request $request)
+    {
+        // Optional filters (date range)
+        $startDate = $request->start_date ?? now()->startOfDay();
+        $endDate = $request->end_date ?? now()->endOfDay();
 
+        // Fetch all drivers (or filter by driver_id if passed)
+        $drivers = Driver::with(['locations' => function ($query) use ($startDate, $endDate) {
+            $query->whereBetween('timestamp', [$startDate, $endDate])
+                ->orderBy('timestamp');
+        }])->get();
+        
+        $drivers = Driver::with('locations')->orderBy('created_at')->get();
+
+        $reports = [];
+
+        foreach ($drivers as $driver) {
+            $locations = $driver->locations;
+        
+            if ($locations->isEmpty()) {
+                $reports[] = [
+                    'driver' => $driver->user?->name ?? 'Unknown',
+                    'date' => null,
+                    'run_time' => '0h 0m',
+                    'idle_time' => '0h 0m',
+                    'stops' => 0,
+                ];
+                continue;
+            }
+        
+            // ✅ Group locations by date
+            $groupedByDate = $locations->groupBy(function ($item) {
+                return Carbon::parse($item->created_at)->toDateString(); // 'Y-m-d'
+            });
+        
+            foreach ($groupedByDate as $date => $dailyLocations) {
+                $runTime = 0;
+                $idleTime = 0;
+                $stops = 0;
+        
+                $previous = null;
+                $idleSegmentStart = null;
+        
+                foreach ($dailyLocations as $location) {
+                    if ($previous) {
+                        $timeDiff = Carbon::parse($previous->created_at)->diffInMinutes($location->created_at);
+        
+                        // Calculate distance moved (in meters)
+                        $distance = $this->calculateDistance(
+                            $previous->latitude,
+                            $previous->longitude,
+                            $location->latitude,
+                            $location->longitude
+                        );
+        
+                        if ($distance < 30) {
+                            $idleTime += $timeDiff;
+        
+                            if (!$idleSegmentStart) {
+                                $idleSegmentStart = Carbon::parse($previous->created_at);
+                            }
+        
+                            if ($idleSegmentStart->diffInMinutes($location->created_at) >= 5) {
+                                $stops++;
+                                $idleSegmentStart = null;
+                            }
+                        } else {
+                            $runTime += $timeDiff;
+                            $idleSegmentStart = null;
+                        }
+                    }
+        
+                    $previous = $location;
+                }
+        
+                $reports[] = [
+                    'driver' => $driver->user?->name ?? 'Unknown',
+                    'date' => $date,
+                    'run_time' => floor($runTime / 60) . 'h ' . ($runTime % 60) . 'm',
+                    'idle_time' => floor($idleTime / 60) . 'h ' . ($idleTime % 60) . 'm',
+                    'stops' => $stops,
+                ];
+            }
+        }
+
+        return view('admin.reports.run_idle', compact('reports', 'startDate', 'endDate'));
+    }*/
+    
     public function runIdle(Request $request)
     {
         $startDate = $request->start_date ?? null;
@@ -236,6 +315,7 @@ class ReportController extends Controller
     
         return view('admin.reports.run_idle', compact('reports', 'startDate', 'endDate'));
     }
+
 
     /**
      * Calculate distance between two lat/long points (Haversine formula)
@@ -424,7 +504,6 @@ class ReportController extends Controller
 
         return view('admin.reports.overstay', compact('reports', 'startDate', 'endDate'));
     }
-
 
     // Driver Behaviour & Safety Reports
 

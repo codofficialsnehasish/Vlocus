@@ -3,79 +3,228 @@
 @section('title','Dashboard')
 
 @section('css')
-    <!-- Chart.js CDN (v4) -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<!-- Chart.js CDN (v4) -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
-    <style>
-        :root{
-            --bg:#f6f8fb;
-            --card:#ffffff;
-            --muted:#6b7280;
-            --primary:#2563eb;
-            --accent:#06b6d4;
-            --radius:12px;
+<style>
+    :root {
+        --bg: #f6f8fb;
+        --card: #ffffff;
+        --muted: #6b7280;
+        --primary: #2563eb;
+        --accent: #06b6d4;
+        --radius: 12px;
+    }
+
+    * {
+        box-sizing: border-box
+    }
+
+    body {
+        margin: 0;
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+        color: #0f172a;
+        background: linear-gradient(180deg, #fbfdff, var(--bg));
+        padding: 20px
+    }
+
+    .wrap {
+        margin: 0 auto
+    }
+
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 12px;
+        margin-bottom: 18px
+    }
+
+    .brand {
+        display: flex;
+        gap: 12px;
+        align-items: center
+    }
+
+    .logo {
+        width: 56px;
+        height: 56px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    .logo img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        border-radius: 10px;
+    }
+
+    h1 {
+        margin: 0;
+        font-size: 20px
+    }
+
+    .subtitle {
+        margin: 0;
+        color: var(--muted);
+        font-size: 13px
+    }
+
+    /* controls */
+    .controls {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        flex-wrap: wrap
+    }
+
+    .control {
+        background: var(--card);
+        padding: 8px;
+        border-radius: 10px;
+        border: 1px solid rgba(15, 23, 42, 0.05);
+        display: flex;
+        gap: 8px;
+        align-items: center
+    }
+
+    input[type=date],
+    select {
+        border: 0;
+        background: transparent;
+        font-size: 13px
+    }
+
+    button.btn {
+        background: var(--primary);
+        color: #fff;
+        border: 0;
+        padding: 8px 12px;
+        border-radius: 10px;
+        cursor: pointer
+    }
+
+    button.ghost {
+        background: transparent;
+        border: 1px solid rgba(15, 23, 42, 0.06);
+        padding: 8px 10px;
+        border-radius: 10px;
+        cursor: pointer
+    }
+
+    /* layout */
+    .layout {
+        display: grid;
+        grid-template-columns: 300px 1fr;
+        gap: 16px
+    }
+
+    @media (max-width:980px) {
+        .layout {
+            grid-template-columns: 1fr;
         }
-        *{box-sizing:border-box}
-        body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;color:#0f172a;background:linear-gradient(180deg,#fbfdff,var(--bg));padding:20px}
-        .wrap{/*max-width:1220px;*/margin:0 auto}
-        header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:18px}
-        .brand{display:flex;gap:12px;align-items:center}
-        .logo {
-            width: 56px;
-            height: 56px;
-            border-radius: 10px;
-            /*background: linear-gradient(135deg, var(--primary), var(--accent));*/
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden; /* ensures image stays inside rounded box */
-        }
+    }
 
-        .logo img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain; /* or "cover" depending on look */
-            border-radius: 10px;
-        }
-        h1{margin:0;font-size:20px}
-        .subtitle{margin:0;color:var(--muted);font-size:13px}
+    .sidebar {
+        background: var(--card);
+        padding: 12px;
+        border-radius: var(--radius);
+        box-shadow: 0 8px 20px rgba(15, 23, 42, 0.04)
+    }
 
-        /* controls */
-        .controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-        .control {background:var(--card);padding:8px;border-radius:10px;border:1px solid rgba(15,23,42,0.05);display:flex;gap:8px;align-items:center}
-        input[type=date], select {border:0;background:transparent;font-size:13px}
-        button.btn {background:var(--primary);color:#fff;border:0;padding:8px 12px;border-radius:10px;cursor:pointer}
-        button.ghost {background:transparent;border:1px solid rgba(15,23,42,0.06);padding:8px 10px;border-radius:10px;cursor:pointer}
+    .tabs {
+        display: flex;
+        gap: 6px;
+        margin-bottom: 10px
+    }
 
-        /* layout */
-        .layout{display:grid;grid-template-columns:300px 1fr;gap:16px}
-        @media (max-width:980px){.layout{grid-template-columns:1fr;}}
-        .sidebar{background:var(--card);padding:12px;border-radius:var(--radius);box-shadow:0 8px 20px rgba(15,23,42,0.04)}
-        .tabs{display:flex;gap:6px;margin-bottom:10px}
-        .tab{padding:8px 10px;border-radius:8px;font-size:14px;cursor:pointer;color:var(--muted);background:transparent;border:1px solid transparent}
-        .tab.active{background:linear-gradient(90deg,rgba(37,99,235,0.08),rgba(6,182,212,0.03));color:var(--primary);border:1px solid rgba(37,99,235,0.08)}
-        .card-list{display:flex;flex-direction:column;gap:8px}
-        .menu-card{display:flex;gap:10px;align-items:center;padding:10px;border-radius:10px;cursor:pointer}
-        .menu-icon{width:40px;height:40px;border-radius:8px;background:#fff;display:flex;align-items:center;justify-content:center;border:1px solid rgba(15,23,42,0.04)}
-        .muted{color:var(--muted);font-size:13px}
+    .tab {
+        padding: 8px 10px;
+        border-radius: 8px;
+        font-size: 14px;
+        cursor: pointer;
+        color: var(--muted);
+        background: transparent;
+        border: 1px solid transparent
+    }
 
-        .content{display:flex;flex-direction:column;gap:12px}
-        .panel{background:var(--card);padding:12px;border-radius:var(--radius);box-shadow:0 10px 30px rgba(15,23,42,0.04)}
-        .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-        @media (max-width:720px){.grid-2{grid-template-columns:1fr}}
-        .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
-        @media (max-width:1100px){.grid-3{grid-template-columns:1fr 1fr}}
-        @media (max-width:720px){.grid-3{grid-template-columns:1fr}}
+    .tab.active {
+        background: linear-gradient(90deg, rgba(37, 99, 235, 0.08), rgba(6, 182, 212, 0.03));
+        color: var(--primary);
+        border: 1px solid rgba(37, 99, 235, 0.08)
+    }
 
-        .route-area{height:320px;border-radius:10px;background:linear-gradient(180deg,#f7fbff,#ffffff);display:flex;flex-direction:column}
-        .route-canvas{flex:1;border-radius:10px;padding:8px}
+    .card-list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px
+    }
 
-        .controls-small{display:flex;gap:8px;align-items:center}
-        .small{font-size:13px;color:var(--muted)}
-        .legend{display:flex;gap:8px;align-items:center}
-        .sw{width:10px;height:10px;border-radius:2px;display:inline-block}
-        footer{color:var(--muted);font-size:13px;text-align:center;margin-top:10px}
-    </style>
+    .menu-card {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        padding: 10px;
+        border-radius: 10px;
+        cursor: pointer
+    }
+
+    .menu-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        background: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid rgba(15, 23, 42, 0.04)
+    }
+
+    .muted {
+        color: var(--muted);
+        font-size: 13px
+    }
+
+    .content {
+        display: flex;
+        flex-direction: column;
+        gap: 12px
+    }
+
+    .panel {
+        background: var(--card);
+        padding: 12px;
+        border-radius: var(--radius);
+        box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04)
+    }
+
+    footer {
+        color: var(--muted);
+        font-size: 13px;
+        text-align: center;
+        margin-top: 10px
+    }
+    .bg-purple { background-color: #6f42c1 !important; }
+    .bg-orange { background-color: #fd7e14 !important; }
+    .text-purple { color: #6f42c1 !important; }
+    .text-orange { color: #fd7e14 !important; }
+
+    .apexcharts-tooltip-box {
+        background: #fff;
+        padding: 8px;
+        border-radius: 4px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .apexcharts-tooltip-box.bg-danger {
+        background: #dc3545 !important;
+        color: white !important;
+    }
+</style>
 @endsection
 
 @section('content')
@@ -86,7 +235,6 @@
             <div class="logo"><img src="{{ asset('assets/logo.png') }}" alt=""></div>
             <div>
                 <h1>Dashboard</h1>
-                {{-- <p class="subtitle">Chart.js charts + Route playback — demo/sample data • Light theme</p> --}}
             </div>
         </div>
 
@@ -101,11 +249,19 @@
             </div>
             <div class="control">
                 <label class="small" for="vehicleSelect">Vehicle</label>
-                <select id="vehicleSelect"></select>
+                <select id="vehicleSelect">
+                    @foreach($vehicle as $v)
+                    <option value="{{$v->id}}">{{$v->vehicle_number}}</option>
+                    @endforeach
+                </select>
             </div>
             <div class="control">
                 <label class="small" for="driverSelect">Driver</label>
-                <select id="driverSelect"></select>
+                <select id="driverSelect">
+                    @foreach($driver as $dr)
+                    <option value="{{$dr->id}}">{{$dr->name}}</option>
+                    @endforeach
+                </select>
             </div>
             <button class="btn" id="applyFilters">Apply</button>
             <button class="ghost" id="resetFilters">Reset</button>
@@ -114,85 +270,1121 @@
 
     <div class="layout">
         <aside class="sidebar" aria-label="report menu">
+            <!-- Static nav tabs (same design) -->
             <div class="tabs" role="tablist">
                 <div class="tab active" data-tab="reports" role="tab">Reports</div>
                 <div class="tab" data-tab="safety" role="tab">Driver Behaviour</div>
             </div>
 
+            <!-- Reports List -->
             <div id="reportsList" class="card-list">
-                <!-- populated by JS -->
+                <div class="menu-card" data-report="trip">
+                    <div class="menu-icon">🗺️</div>
+                    <div><strong>Trip Summary</strong>
+                        <div class="muted">Overview of trips, durations, and stops.</div>
+                    </div>
+                </div>
+                <div class="menu-card" data-report="route">
+                    <div class="menu-icon">📈</div>
+                    <div><strong>Route History</strong>
+                        <div class="muted">Playback and route taken over time.</div>
+                    </div>
+                </div>
+                <div class="menu-card" data-report="runidle">
+                    <div class="menu-icon">⏱️</div>
+                    <div><strong>Run & Idle</strong>
+                        <div class="muted">Engine run vs idle analysis.</div>
+                    </div>
+                </div>
+                <div class="menu-card" data-report="distance">
+                    <div class="menu-icon">📏</div>
+                    <div><strong>Distance</strong>
+                        <div class="muted">Distance traveled per vehicle.</div>
+                    </div>
+                </div>
+                <div class="menu-card" data-report="geofence">
+                    <div class="menu-icon">🎯</div>
+                    <div><strong>Geo-fence</strong>
+                        <div class="muted">Geofence enter/exit events & alerts.</div>
+                    </div>
+                </div>
+                <div class="menu-card" data-report="overstay">
+                    <div class="menu-icon">⏳</div>
+                    <div><strong>Overstay</strong>
+                        <div class="muted">Time spent beyond thresholds.</div>
+                    </div>
+                </div>
             </div>
+
+            <!-- Safety List -->
             <div id="safetyList" class="card-list" style="display:none;margin-top:12px">
-                <!-- populated by JS -->
+                <div class="menu-card" data-report="attendance">
+                    <div class="menu-icon">📅</div>
+                    <div><strong>Monthly Attendance</strong>
+                        <div class="muted">Driver attendance calendar.</div>
+                    </div>
+                </div>
+                <div class="menu-card" data-report="loginlogout">
+                    <div class="menu-icon">🔐</div>
+                    <div><strong>Login/Logout</strong>
+                        <div class="muted">Driver login and logout records.</div>
+                    </div>
+                </div>
+                <div class="menu-card" data-report="logintime">
+                    <div class="menu-icon">🕒</div>
+                    <div><strong>Login Time</strong>
+                        <div class="muted">Login durations and trends.</div>
+                    </div>
+                </div>
+                <div class="menu-card" data-report="sos">
+                    <div class="menu-icon">🆘</div>
+                    <div><strong>Emergency SOS</strong>
+                        <div class="muted">SOS events and response history.</div>
+                    </div>
+                </div>
             </div>
         </aside>
 
         <main class="content">
-            <div class="panel">
-                <div style="display:flex;justify-content:space-between;align-items:center">
-                    <div>
-                        <strong id="activeReportTitle">Trip Summary</strong>
-                        <div class="small" id="activeReportSub">Overview of trips, durations and stops</div>
+            <div class="panel" style="max-width:1100px;" id="trip">
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <div class="card bg-primary text-white text-center border-0 shadow-sm">
+                            <div class="card-body">
+                                <h6>Total Trips</h6>
+                                <h2 class="fw-bold">{{ $trip_summary['totalTrips']->sum() }}</h2>
+                            </div>
+                        </div>
                     </div>
-                    <div class="controls-small">
-                        <div class="legend">
-                            <div><span class="sw" style="background:var(--primary)"></span> <span class="small">Moving</span></div>
-                            <div><span class="sw" style="background:var(--accent)"></span> <span class="small">Idle</span></div>
+                    <div class="col-md-4">
+                        <div class="card bg-success text-white text-center border-0 shadow-sm">
+                            <div class="card-body">
+                                <h6>Total Distance</h6>
+                                <h2 class="fw-bold">{{ number_format($trip_summary['totalDistance']->sum(), 2) }} km</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card bg-warning text-white text-center border-0 shadow-sm">
+                            <div class="card-body">
+                                <h6>Total Amount</h6>
+                                <h2 class="fw-bold">₹{{ number_format($trip_summary['totalAmount']->sum(), 2) }}</h2>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div style="margin-top:12px" class="grid-3">
-                    <div class="panel">
-                        <h3 style="margin:0 0 8px">Trips & Distance</h3>
-                        <canvas id="barChart" height="160"></canvas>
-                    </div>
-
-                    <div class="panel">
-                        <h3 style="margin:0 0 8px">Distance Trend</h3>
-                        <canvas id="lineChart" height="160"></canvas>
-                    </div>
-
-                    <div class="panel">
-                        <h3 style="margin:0 0 8px">Run vs Idle</h3>
-                        <canvas id="doughnutChart" height="160"></canvas>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="panel">
-                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-                    <div>
-                        <strong>Route Playback</strong>
-                        {{-- <div class="small">Abstract map grid + simulated vehicle movement</div> --}}
-                    </div>
-                    <div style="display:flex;gap:8px;align-items:center">
-                        <button class="ghost" id="playRoute" aria-pressed="false">Play</button>
-                        <button class="ghost" id="pauseRoute" aria-pressed="false">Pause</button>
-                        <button class="ghost" id="resetRoute">Reset</button>
-                    </div>
-                </div>
-
-                <div class="route-area">
-                    <canvas id="routeCanvas" class="route-canvas" aria-label="Route playback canvas"></canvas>
-                        <div style="padding:8px;display:flex;justify-content:space-between;align-items:center">
-                        <div class="small" id="routeStatus">Idle</div>
-                        <div class="small" id="routeTime">0 / 0</div>
+                <div class="card shadow-sm border-0">
+                    <div class="card-header fw-bold bg-transparent">Trip Summary Overview</div>
+                    <div class="card-body">
+                        <div id="tripSummaryChart" style="height:380px;"></div>
                     </div>
                 </div>
             </div>
 
-            <div class="panel" id="metricsPanel">
-                <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap">
-                    <div><strong>Total Trips</strong><div id="metricTrips" style="font-size:20px">—</div></div>
-                    <div><strong>Total Distance</strong><div id="metricDistance" style="font-size:20px">— km</div></div>
-                    <div><strong>Avg Speed</strong><div id="metricSpeed" style="font-size:20px">— km/h</div></div>
-                    <div><strong>Overstays</strong><div id="metricOverstay" style="font-size:20px">—</div></div>
+            <div class="panel" style="max-width:1100px;" id="route">
+                <!-- Summary Cards -->
+                <div class="row mb-4">
+                    <div class="col-xl-3 col-md-6">
+                        <div class="card bg-primary bg-opacity-10 border-0">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-grow-1">
+                                        <p class="text-muted mb-2">Total Distance</p>
+                                        <h4 class="mb-0">{{ number_format($routeHistory['summary']['total_distance'], 1) }} km</h4>
+                                    </div>
+                                    <div class="flex-shrink-0">
+                                        <i class="bx bx-map text-primary h1"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6">
+                        <div class="card bg-success bg-opacity-10 border-0">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-grow-1">
+                                        <p class="text-muted mb-2">Total Stops</p>
+                                        <h4 class="mb-0">{{ number_format($routeHistory['summary']['total_stops']) }}</h4>
+                                    </div>
+                                    <div class="flex-shrink-0">
+                                        <i class="bx bx-store text-success h1"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6">
+                        <div class="card bg-info bg-opacity-10 border-0">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-grow-1">
+                                        <p class="text-muted mb-2">Total Routes</p>
+                                        <h4 class="mb-0">{{ $routeHistory['summary']['total_routes'] }}</h4>
+                                    </div>
+                                    <div class="flex-shrink-0">
+                                        <i class="bx bx-trip text-info h1"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6">
+                        <div class="card bg-warning bg-opacity-10 border-0">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-grow-1">
+                                        <p class="text-muted mb-2">Avg Efficiency</p>
+                                        <h4 class="mb-0">{{ $routeHistory['summary']['avg_efficiency'] }} stops/km</h4>
+                                    </div>
+                                    <div class="flex-shrink-0">
+                                        <i class="bx bx-trending-up text-warning h1"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Chart -->
+                <div class="row">
+                    <div class="col-xl-8">
+                        <div class="card border-0 shadow-none">
+                            <div class="card-body">
+                                <h6 class="card-title mb-4">Route Performance Overview</h6>
+                                <div id="routeHistoryChart" style="min-height: 350px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4">
+                        <div class="card border-0 shadow-none">
+                            <div class="card-body">
+                                <h6 class="card-title mb-4">Efficiency Metrics</h6>
+                                <div id="efficiencyGauge" style="min-height: 350px;"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            {{-- <footer>Demo — charts use deterministic sample data so combination of filters yields repeatable results.</footer> --}}
+            <div class="panel" style="max-width:1100px;" id="runidle">
+                <!-- Run & Idle Analytics Section -->
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <!-- Summary Cards -->
+                                <div class="row mb-4">
+                                    <div class="col-xl-2 col-md-4 col-6">
+                                        <div class="card bg-success bg-opacity-10 border-0">
+                                            <div class="card-body text-center">
+                                                <i class="bx bx-run h3 text-success mb-2"></i>
+                                                <h5 class="mb-1">{{ $runIdleAnalytics['summary']['total_run_time'] }}</h5>
+                                                <p class="text-muted mb-0">Run Time</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-2 col-md-4 col-6">
+                                        <div class="card bg-warning bg-opacity-10 border-0">
+                                            <div class="card-body text-center">
+                                                <i class="bx bx-time h3 text-warning mb-2"></i>
+                                                <h5 class="mb-1">{{ $runIdleAnalytics['summary']['total_idle_time'] }}</h5>
+                                                <p class="text-muted mb-0">Idle Time</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-2 col-md-4 col-6">
+                                        <div class="card bg-info bg-opacity-10 border-0">
+                                            <div class="card-body text-center">
+                                                <i class="bx bx-station h3 text-info mb-2"></i>
+                                                <h5 class="mb-1">{{ $runIdleAnalytics['summary']['total_stops'] }}</h5>
+                                                <p class="text-muted mb-0">Total Stops</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-2 col-md-4 col-6">
+                                        <div class="card bg-primary bg-opacity-10 border-0">
+                                            <div class="card-body text-center">
+                                                <i class="bx bx-trending-up h3 text-primary mb-2"></i>
+                                                <h5 class="mb-1">{{ $runIdleAnalytics['summary']['overall_efficiency'] }}%</h5>
+                                                <p class="text-muted mb-0">Efficiency</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-2 col-md-4 col-6">
+                                        <div class="card bg-purple bg-opacity-10 border-0">
+                                            <div class="card-body text-center">
+                                                <i class="bx bx-user h3 text-purple mb-2"></i>
+                                                <h5 class="mb-1">{{ $runIdleAnalytics['summary']['total_drivers'] }}</h5>
+                                                <p class="text-muted mb-0">Drivers</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-2 col-md-4 col-6">
+                                        <div class="card bg-orange bg-opacity-10 border-0">
+                                            <div class="card-body text-center">
+                                                <i class="bx bx-car h3 text-orange mb-2"></i>
+                                                <h5 class="mb-1">{{ $runIdleAnalytics['summary']['total_vehicles'] }}</h5>
+                                                <p class="text-muted mb-0">Vehicles</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-xl-6">
+                                        <div class="card border-0 shadow-none mb-4">
+                                            <div class="card-body">
+                                                <h6 class="card-title mb-4">📈 Efficiency Trend</h6>
+                                                <div id="efficiencyTrendChart" style="min-height: 300px;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xl-6">
+                                        <div class="card border-0 shadow-none mb-4">
+                                            <div class="card-body">
+                                                <h6 class="card-title mb-4">⏱️ Time Distribution</h6>
+                                                <div id="timeDistributionChart" style="min-height: 300px;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-xl-6">
+                                        <div class="card border-0 shadow-none">
+                                            <div class="card-body">
+                                                <h6 class="card-title mb-4">🛑 Daily Stops Analysis</h6>
+                                                <div id="stopsAnalysisChart" style="min-height: 300px;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xl-6">
+                                        <div class="card border-0 shadow-none">
+                                            <div class="card-body">
+                                                <h6 class="card-title mb-4">🎯 Performance Score</h6>
+                                                <div id="performanceGauge" style="min-height: 300px;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- distance modal -->
+            <div class="panel" style="max-width:1100px;" id="distance">
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <!-- Summary Cards -->
+                                <div class="row mb-4">
+                                    <div class="col-xl-2 col-md-4 col-6">
+                                        <div class="card bg-primary bg-opacity-10 border-0">
+                                            <div class="card-body text-center">
+                                                <i class="bx bx-map h3 text-primary mb-2"></i>
+                                                <h5 class="mb-1">{{ $distanceAnalytics['summary']['total_distance'] }} km</h5>
+                                                <p class="text-muted mb-0">Total Distance</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-2 col-md-4 col-6">
+                                        <div class="card bg-success bg-opacity-10 border-0">
+                                            <div class="card-body text-center">
+                                                <i class="bx bx-trip h3 text-success mb-2"></i>
+                                                <h5 class="mb-1">{{ $distanceAnalytics['summary']['total_trips'] }}</h5>
+                                                <p class="text-muted mb-0">Total Trips</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-2 col-md-4 col-6">
+                                        <div class="card bg-info bg-opacity-10 border-0">
+                                            <div class="card-body text-center">
+                                                <i class="bx bx-tachometer h3 text-info mb-2"></i>
+                                                <h5 class="mb-1">{{ $distanceAnalytics['summary']['avg_speed'] }} km/h</h5>
+                                                <p class="text-muted mb-0">Avg Speed</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-2 col-md-4 col-6">
+                                        <div class="card bg-warning bg-opacity-10 border-0">
+                                            <div class="card-body text-center">
+                                                <i class="bx bx-car h3 text-warning mb-2"></i>
+                                                <h5 class="mb-1">{{ $distanceAnalytics['summary']['top_vehicle'] }}</h5>
+                                                <p class="text-muted mb-0">Top Vehicle</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-2 col-md-4 col-6">
+                                        <div class="card bg-purple bg-opacity-10 border-0">
+                                            <div class="card-body text-center">
+                                                <i class="bx bx-user h3 text-purple mb-2"></i>
+                                                <h5 class="mb-1">{{ Str::limit($distanceAnalytics['summary']['top_driver'], 12) }}</h5>
+                                                <p class="text-muted mb-0">Top Driver</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-2 col-md-4 col-6">
+                                        <div class="card bg-orange bg-opacity-10 border-0">
+                                            <div class="card-body text-center">
+                                                <i class="bx bx-calendar-star h3 text-orange mb-2"></i>
+                                                <h5 class="mb-1">{{ $distanceAnalytics['summary']['most_active_day'] }}</h5>
+                                                <p class="text-muted mb-0">Peak Day</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-xl-8">
+                                        <div class="card border-0 shadow-none mb-4">
+                                            <div class="card-body">
+                                                <h6 class="card-title mb-4">📊 Daily Distance Trend</h6>
+                                                <div id="distanceTrendChart" style="min-height: 350px;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xl-4">
+                                        <div class="card border-0 shadow-none mb-4">
+                                            <div class="card-body">
+                                                <h6 class="card-title mb-4">🚗 Top Vehicles by Distance</h6>
+                                                <div id="vehicleDistanceChart" style="min-height: 350px;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-xl-6">
+                                        <div class="card border-0 shadow-none">
+                                            <div class="card-body">
+                                                <h6 class="card-title mb-4">👨‍💼 Top Drivers by Distance</h6>
+                                                <div id="driverDistanceChart" style="min-height: 300px;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xl-6">
+                                        <div class="card border-0 shadow-none">
+                                            <div class="card-body">
+                                                <h6 class="card-title mb-4">⚡ Speed Analysis</h6>
+                                                <div id="speedAnalysisChart" style="min-height: 300px;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- geofence -->
+            <div class="panel" style="max-width:1100px;" id="geofence">
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row mb-4">
+                                    <div class="col-xl-2 col-md-4 col-6">
+                                        <div class="card bg-primary bg-opacity-10 border-0">
+                                            <div class="card-body text-center">
+                                                <i class="bx bx-map-pin h3 text-primary mb-2"></i>
+                                                <h5 class="mb-1" data-card="total-entries">{{ $geofenceAnalytics['summary']['total_entries'] }}</h5>
+                                                <p class="text-muted mb-0">Total Entries</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-2 col-md-4 col-6">
+                                        <div class="card bg-success bg-opacity-10 border-0">
+                                            <div class="card-body text-center">
+                                                <i class="bx bx-current-location h3 text-success mb-2"></i>
+                                                <h5 class="mb-1" data-card="unique-zones">{{ $geofenceAnalytics['summary']['unique_zones'] }}</h5>
+                                                <p class="text-muted mb-0">Zones</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-2 col-md-4 col-6">
+                                        <div class="card bg-info bg-opacity-10 border-0">
+                                            <div class="card-body text-center">
+                                                <i class="bx bx-time h3 text-info mb-2"></i>
+                                                <h5 class="mb-1" data-card="avg-duration">{{ $geofenceAnalytics['summary']['avg_duration'] }}m</h5>
+                                                <p class="text-muted mb-0">Avg Stay</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-2 col-md-4 col-6">
+                                        <div class="card bg-warning bg-opacity-10 border-0">
+                                            <div class="card-body text-center">
+                                                <i class="bx bx-car h3 text-warning mb-2"></i>
+                                                <h5 class="mb-1" data-card="active-vehicle">{{ $geofenceAnalytics['summary']['most_active_vehicle'] }}</h5>
+                                                <p class="text-muted mb-0">Top Vehicle</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-2 col-md-4 col-6">
+                                        <div class="card bg-purple bg-opacity-10 border-0">
+                                            <div class="card-body text-center">
+                                                <i class="bx bx-building h3 text-purple mb-2"></i>
+                                                <h5 class="mb-1" data-card="active-zone">{{ Str::limit($geofenceAnalytics['summary']['most_active_zone'], 12) }}</h5>
+                                                <p class="text-muted mb-0">Top Zone</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-2 col-md-4 col-6">
+                                        <div class="card bg-orange bg-opacity-10 border-0">
+                                            <div class="card-body text-center">
+                                                <i class="bx bx-trending-up h3 text-orange mb-2"></i>
+                                                <h5 class="mb-1" data-card="peak-hour">{{ $geofenceAnalytics['summary']['peak_hour'] }}</h5>
+                                                <p class="text-muted mb-0">Peak Hour</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-xl-8">
+                                        <div class="card border-0 shadow-none mb-4">
+                                            <div class="card-body">
+                                                <h6 class="card-title mb-4">📈 Daily Zone Entries (Stick Graph)</h6>
+                                                <div id="dailyEntriesStickChart" style="min-height: 350px;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xl-4">
+                                        <div class="card border-0 shadow-none mb-4">
+                                            <div class="card-body">
+                                                <h6 class="card-title mb-4">🏢 Zone Activity Heatmap</h6>
+                                                <div id="zoneActivityChart" style="min-height: 350px;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-xl-6">
+                                        <div class="card border-0 shadow-none">
+                                            <div class="card-body">
+                                                <h6 class="card-title mb-4">🚗 Vehicle Entry Frequency</h6>
+                                                <div id="vehicleActivityChart" style="min-height: 300px;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xl-6">
+                                        <div class="card border-0 shadow-none">
+                                            <div class="card-body">
+                                                <h6 class="card-title mb-4">🕒 Peak Hours Analysis</h6>
+                                                <div id="peakHoursChart" style="min-height: 300px;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- overstay -->
+            <div class="panel" style="max-width:1100px;" id="overstay">
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row mb-4">
+                                    <div class="col-xl-2 col-md-4 col-6">
+                                        <div class="card bg-danger bg-opacity-10 border-0">
+                                            <div class="card-body text-center">
+                                                <i class="bx bx-time-five h3 text-danger mb-2"></i>
+                                                <h5 class="mb-1" data-card="total-overstays">{{ $overstayAnalytics['summary']['total_overstays'] }}</h5>
+                                                <p class="text-muted mb-0">Total Overstays</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-2 col-md-4 col-6">
+                                        <div class="card bg-warning bg-opacity-10 border-0">
+                                            <div class="card-body text-center">
+                                                <i class="bx bx-timer h3 text-warning mb-2"></i>
+                                                <h5 class="mb-1" data-card="total-duration">{{ $overstayAnalytics['summary']['total_duration'] }}</h5>
+                                                <p class="text-muted mb-0">Total Duration</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-2 col-md-4 col-6">
+                                        <div class="card bg-info bg-opacity-10 border-0">
+                                            <div class="card-body text-center">
+                                                <i class="bx bx-stopwatch h3 text-info mb-2"></i>
+                                                <h5 class="mb-1" data-card="avg-duration">{{ $overstayAnalytics['summary']['avg_duration'] }}m</h5>
+                                                <p class="text-muted mb-0">Avg Duration</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-2 col-md-4 col-6">
+                                        <div class="card bg-primary bg-opacity-10 border-0">
+                                            <div class="card-body text-center">
+                                                <i class="bx bx-car h3 text-primary mb-2"></i>
+                                                <h5 class="mb-1" data-card="problem-vehicle">{{ $overstayAnalytics['summary']['most_problematic_vehicle'] }}</h5>
+                                                <p class="text-muted mb-0">Problem Vehicle</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-2 col-md-4 col-6">
+                                        <div class="card bg-purple bg-opacity-10 border-0">
+                                            <div class="card-body text-center">
+                                                <i class="bx bx-user h3 text-purple mb-2"></i>
+                                                <h5 class="mb-1" data-card="problem-driver">{{ Str::limit($overstayAnalytics['summary']['most_problematic_driver'], 12) }}</h5>
+                                                <p class="text-muted mb-0">Problem Driver</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-2 col-md-4 col-6">
+                                        <div class="card bg-orange bg-opacity-10 border-0">
+                                            <div class="card-body text-center">
+                                                <i class="bx bx-map-pin h3 text-orange mb-2"></i>
+                                                <h5 class="mb-1" data-card="peak-hour">{{ $overstayAnalytics['summary']['peak_overstay_hour'] }}</h5>
+                                                <p class="text-muted mb-0">Peak Hour</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-xl-8">
+                                        <div id="dailyOverstaysStickChart"></div>
+                                    </div>
+                                    <div class="col-xl-4">
+                                        <div id="vehicleOverstayChart"></div>
+                                    </div>
+                                </div>
+                                <div class="row mt-4">
+                                    <div class="col-xl-6">
+                                        <div id="driverOverstayChart"></div>
+                                    </div>
+                                    <div class="col-xl-6">
+                                        <div id="locationOverstayChart"></div>
+                                    </div>
+                                </div>
+                                <div class="row mt-4">
+                                    <div class="col-xl-6">
+                                        <div id="durationTrendChart"></div>
+                                    </div>
+                                    <div class="col-xl-6">
+                                        <div id="peakHoursChart"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- attendance -->
+            <div class="panel" style="max-width:1100px;" id="attendance">
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <!-- Summary Cards -->
+                                <div class="row mb-4">
+                                    <div class="col-xl-2 col-md-4 col-6">
+                                        <div class="card bg-primary bg-opacity-10 border-0">
+                                            <div class="card-body text-center">
+                                                <i class="bx bx-user h3 text-primary mb-2"></i>
+                                                <h5 class="mb-1" data-card="total-drivers">{{ $attendanceAnalytics['summary']['total_drivers'] }}</h5>
+                                                <p class="text-muted mb-0">Total Drivers</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-2 col-md-4 col-6">
+                                        <div class="card bg-success bg-opacity-10 border-0">
+                                            <div class="card-body text-center">
+                                                <i class="bx bx-calendar-check h3 text-success mb-2"></i>
+                                                <h5 class="mb-1" data-card="total-present">{{ $attendanceAnalytics['summary']['total_present_days'] }}</h5>
+                                                <p class="text-muted mb-0">Present Days</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-2 col-md-4 col-6">
+                                        <div class="card bg-danger bg-opacity-10 border-0">
+                                            <div class="card-body text-center">
+                                                <i class="bx bx-calendar-x h3 text-danger mb-2"></i>
+                                                <h5 class="mb-1" data-card="total-absent">{{ $attendanceAnalytics['summary']['total_absent_days'] }}</h5>
+                                                <p class="text-muted mb-0">Absent Days</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-2 col-md-4 col-6">
+                                        <div class="card bg-info bg-opacity-10 border-0">
+                                            <div class="card-body text-center">
+                                                <i class="bx bx-trending-up h3 text-info mb-2"></i>
+                                                <h5 class="mb-1" data-card="avg-attendance">{{ $attendanceAnalytics['summary']['avg_attendance_rate'] }}%</h5>
+                                                <p class="text-muted mb-0">Avg Attendance</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-2 col-md-4 col-6">
+                                        <div class="card bg-warning bg-opacity-10 border-0">
+                                            <div class="card-body text-center">
+                                                <i class="bx bx-star h3 text-warning mb-2"></i>
+                                                <h5 class="mb-1" data-card="best-driver">{{ Str::limit($attendanceAnalytics['summary']['best_driver'], 12) }}</h5>
+                                                <p class="text-muted mb-0">Best Driver</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-2 col-md-4 col-6">
+                                        <div class="card bg-purple bg-opacity-10 border-0">
+                                            <div class="card-body text-center">
+                                                <i class="bx bx-trending-down h3 text-purple mb-2"></i>
+                                                <h5 class="mb-1" data-card="worst-driver">{{ Str::limit($attendanceAnalytics['summary']['worst_driver'], 12) }}</h5>
+                                                <p class="text-muted mb-0">Needs Improvement</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Main Charts Row -->
+                                <div class="row">
+                                    <div class="col-xl-8">
+                                        <div class="card border-0 shadow-none mb-4">
+                                            <div class="card-body">
+                                                <h6 class="card-title mb-4">📈 Driver Attendance Overview (Stick Chart)</h6>
+                                                <div id="attendanceStickChart" style="min-height: 400px;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xl-4">
+                                        <div class="card border-0 shadow-none mb-4">
+                                            <div class="card-body">
+                                                <h6 class="card-title mb-4">🎯 Attendance Rate Distribution</h6>
+                                                <div id="attendanceRateChart" style="min-height: 400px;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-xl-6">
+                                        <div class="card border-0 shadow-none">
+                                            <div class="card-body">
+                                                <h6 class="card-title mb-4">📅 Monthly Attendance Trend</h6>
+                                                <div id="monthlyTrendChart" style="min-height: 350px;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xl-6">
+                                        <div class="card border-0 shadow-none">
+                                            <div class="card-body">
+                                                <h6 class="card-title mb-4">⚖️ Present vs Absent Days</h6>
+                                                <div id="presentAbsentChart" style="min-height: 350px;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--loginlogout  -->
+            <div class="panel" style="max-width:1100px;" id="loginlogout">
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <!-- Summary Cards -->
+                                <div class="row mb-4">
+                                    <div class="col-xl-2 col-md-4 col-6">
+                                        <div class="card bg-primary bg-opacity-10 border-0">
+                                            <div class="card-body text-center">
+                                                <i class="bx bx-log-in h3 text-primary mb-2"></i>
+                                                <h5 class="mb-1" data-card="total-logins">{{ $loginLogoutAnalytics['summary']['total_logins'] }}</h5>
+                                                <p class="text-muted mb-0">Total Logins</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-2 col-md-4 col-6">
+                                        <div class="card bg-success bg-opacity-10 border-0">
+                                            <div class="card-body text-center">
+                                                <i class="bx bx-log-out h3 text-success mb-2"></i>
+                                                <h5 class="mb-1" data-card="total-logouts">{{ $loginLogoutAnalytics['summary']['total_logouts'] }}</h5>
+                                                <p class="text-muted mb-0">Total Logouts</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-2 col-md-4 col-6">
+                                        <div class="card bg-info bg-opacity-10 border-0">
+                                            <div class="card-body text-center">
+                                                <i class="bx bx-time h3 text-info mb-2"></i>
+                                                <h5 class="mb-1" data-card="avg-session">{{ $loginLogoutAnalytics['summary']['avg_session_duration'] }}</h5>
+                                                <p class="text-muted mb-0">Avg Session</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-2 col-md-4 col-6">
+                                        <div class="card bg-warning bg-opacity-10 border-0">
+                                            <div class="card-body text-center">
+                                                <i class="bx bx-user h3 text-warning mb-2"></i>
+                                                <h5 class="mb-1" data-card="active-driver">{{ Str::limit($loginLogoutAnalytics['summary']['most_active_driver'], 12) }}</h5>
+                                                <p class="text-muted mb-0">Most Active</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-2 col-md-4 col-6">
+                                        <div class="card bg-purple bg-opacity-10 border-0">
+                                            <div class="card-body text-center">
+                                                <i class="bx bx-trending-up h3 text-purple mb-2"></i>
+                                                <h5 class="mb-1" data-card="peak-hour">{{ $loginLogoutAnalytics['summary']['peak_login_hour'] }}</h5>
+                                                <p class="text-muted mb-0">Peak Hour</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-2 col-md-4 col-6">
+                                        <div class="card bg-orange bg-opacity-10 border-0">
+                                            <div class="card-body text-center">
+                                                <i class="bx bx-mobile h3 text-orange mb-2"></i>
+                                                <h5 class="mb-1" data-card="used-device">{{ Str::limit($loginLogoutAnalytics['summary']['most_used_device'], 12) }}</h5>
+                                                <p class="text-muted mb-0">Top Device</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Main Charts Row -->
+                                <div class="row">
+                                    <div class="col-xl-8">
+                                        <div class="card border-0 shadow-none mb-4">
+                                            <div class="card-body">
+                                                <h6 class="card-title mb-4">📊 Daily Login/Logout Activity Timeline</h6>
+                                                <div id="loginActivityTimeline" style="min-height: 350px;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xl-4">
+                                        <div class="card border-0 shadow-none mb-4">
+                                            <div class="card-body">
+                                                <h6 class="card-title mb-4">🔥 Session Duration Heatmap</h6>
+                                                <div id="sessionHeatmap" style="min-height: 350px;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-xl-6">
+                                        <div class="card border-0 shadow-none mb-4">
+                                            <div class="card-body">
+                                                <h6 class="card-title mb-4">🎯 Driver Activity Radar</h6>
+                                                <div id="driverActivityRadar" style="min-height: 300px;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xl-6">
+                                        <div class="card border-0 shadow-none mb-4">
+                                            <div class="card-body">
+                                                <h6 class="card-title mb-4">🕒 24-Hour Login Distribution</h6>
+                                                <div id="loginTimeDistribution" style="min-height: 300px;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-xl-6">
+                                        <div class="card border-0 shadow-none">
+                                            <div class="card-body">
+                                                <h6 class="card-title mb-4">📱 Device Usage Breakdown</h6>
+                                                <div id="deviceUsagePie" style="min-height: 300px;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xl-6">
+                                        <div class="card border-0 shadow-none">
+                                            <div class="card-body">
+                                                <h6 class="card-title mb-4">📈 Active Sessions Trend</h6>
+                                                <div id="activeSessionsTrend" style="min-height: 300px;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- logintime -->
+            <div class="panel" style="max-width:1100px;" id="logintime">
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row mb-4">
+                                    <div class="col-xl-2 col-md-4 col-6">
+                                        <div class="card bg-primary bg-opacity-10 border-0">
+                                            <div class="card-body text-center">
+                                                <i class="bx bx-log-in h3 text-primary mb-2"></i>
+                                                <h5 class="mb-1" data-card="total-logins">{{ $loginTimeAnalytics['summary']['total_logins'] }}</h5>
+                                                <p class="text-muted mb-0">Total Logins</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-2 col-md-4 col-6">
+                                        <div class="card bg-success bg-opacity-10 border-0">
+                                            <div class="card-body text-center">
+                                                <i class="bx bx-user h3 text-success mb-2"></i>
+                                                <h5 class="mb-1" data-card="unique-drivers">{{ $loginTimeAnalytics['summary']['unique_drivers'] }}</h5>
+                                                <p class="text-muted mb-0">Unique Drivers</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-2 col-md-4 col-6">
+                                        <div class="card bg-info bg-opacity-10 border-0">
+                                            <div class="card-body text-center">
+                                                <i class="bx bx-trending-up h3 text-info mb-2"></i>
+                                                <h5 class="mb-1" data-card="peak-hour">{{ $loginTimeAnalytics['summary']['peak_login_hour'] }}</h5>
+                                                <p class="text-muted mb-0">Peak Hour</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-2 col-md-4 col-6">
+                                        <div class="card bg-warning bg-opacity-10 border-0">
+                                            <div class="card-body text-center">
+                                                <i class="bx bx-sun h3 text-warning mb-2"></i>
+                                                <h5 class="mb-1" data-card="earliest-driver">{{ Str::limit($loginTimeAnalytics['summary']['earliest_driver'], 12) }}</h5>
+                                                <p class="text-muted mb-0">Early Bird</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-2 col-md-4 col-6">
+                                        <div class="card bg-purple bg-opacity-10 border-0">
+                                            <div class="card-body text-center">
+                                                <i class="bx bx-moon h3 text-purple mb-2"></i>
+                                                <h5 class="mb-1" data-card="latest-driver">{{ Str::limit($loginTimeAnalytics['summary']['latest_driver'], 12) }}</h5>
+                                                <p class="text-muted mb-0">Night Owl</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-2 col-md-4 col-6">
+                                        <div class="card bg-orange bg-opacity-10 border-0">
+                                            <div class="card-body text-center">
+                                                <i class="bx bx-calendar-star h3 text-orange mb-2"></i>
+                                                <h5 class="mb-1" data-card="busy-day">{{ $loginTimeAnalytics['summary']['busiest_day'] }}</h5>
+                                                <p class="text-muted mb-0">Busiest Day</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Main Charts Row -->
+                                <div class="row">
+                                    <div class="col-xl-8">
+                                        <div class="card border-0 shadow-none mb-4">
+                                            <div class="card-body">
+                                                <h6 class="card-title mb-4">📊 Login Time Distribution (Candlestick Chart)</h6>
+                                                <div id="loginTimeCandlestick" style="min-height: 400px;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xl-4">
+                                        <div class="card border-0 shadow-none mb-4">
+                                            <div class="card-body">
+                                                <h6 class="card-title mb-4">🕒 24-Hour Login Pattern</h6>
+                                                <div id="hourlyLoginDistribution" style="min-height: 400px;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-xl-6">
+                                        <div class="card border-0 shadow-none mb-4">
+                                            <div class="card-body">
+                                                <h6 class="card-title mb-4">📈 Daily Login Activity</h6>
+                                                <div id="dailyLoginTrend" style="min-height: 350px;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xl-6">
+                                        <div class="card border-0 shadow-none mb-4">
+                                            <div class="card-body">
+                                                <h6 class="card-title mb-4">🌅 Early Birds & Night Owls</h6>
+                                                <div id="earlyNightComparison" style="min-height: 350px;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-xl-6">
+                                        <div class="card border-0 shadow-none">
+                                            <div class="card-body">
+                                                <h6 class="card-title mb-4">🎯 Login Consistency Score</h6>
+                                                <div id="loginConsistency" style="min-height: 350px;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xl-6">
+                                        <div class="card border-0 shadow-none">
+                                            <div class="card-body">
+                                                <h6 class="card-title mb-4">⏱️ Average Login Time Trend</h6>
+                                                <div id="avgLoginTimeTrend" style="min-height: 350px;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- sos -->
+            <div class="panel" style="max-width:1100px;" id="sos">
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row mb-4">
+                                    <div class="col-xl-2 col-md-4 col-6">
+                                        <div class="card bg-danger bg-opacity-10 border-0">
+                                            <div class="card-body text-center">
+                                                <i class="bx bx-first-aid h3 text-danger mb-2"></i>
+                                                <h5 class="mb-1" data-card="total-sos">{{ $sosAnalytics['summary']['total_sos_alerts'] }}</h5>
+                                                <p class="text-muted mb-0">Total SOS Alerts</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-2 col-md-4 col-6">
+                                        <div class="card bg-warning bg-opacity-10 border-0">
+                                            <div class="card-body text-center">
+                                                <i class="bx bx-user h3 text-warning mb-2"></i>
+                                                <h5 class="mb-1" data-card="unique-drivers">{{ $sosAnalytics['summary']['unique_drivers_affected'] }}</h5>
+                                                <p class="text-muted mb-0">Drivers Affected</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-2 col-md-4 col-6">
+                                        <div class="card bg-info bg-opacity-10 border-0">
+                                            <div class="card-body text-center">
+                                                <i class="bx bx-timer h3 text-info mb-2"></i>
+                                                <h5 class="mb-1" data-card="response-rate">{{ $sosAnalytics['summary']['response_rate'] }}%</h5>
+                                                <p class="text-muted mb-0">Response Rate</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-2 col-md-4 col-6">
+                                        <div class="card bg-primary bg-opacity-10 border-0">
+                                            <div class="card-body text-center">
+                                                <i class="bx bx-time h3 text-primary mb-2"></i>
+                                                <h5 class="mb-1" data-card="peak-hour">{{ $sosAnalytics['summary']['peak_sos_hour'] }}</h5>
+                                                <p class="text-muted mb-0">Peak SOS Hour</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-2 col-md-4 col-6">
+                                        <div class="card bg-purple bg-opacity-10 border-0">
+                                            <div class="card-body text-center">
+                                                <i class="bx bx-user-voice h3 text-purple mb-2"></i>
+                                                <h5 class="mb-1" data-card="frequent-driver">{{ Str::limit($sosAnalytics['summary']['most_frequent_driver'], 12) }}</h5>
+                                                <p class="text-muted mb-0">Frequent Reporter</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-2 col-md-4 col-6">
+                                        <div class="card bg-orange bg-opacity-10 border-0">
+                                            <div class="card-body text-center">
+                                                <i class="bx bx-map h3 text-orange mb-2"></i>
+                                                <h5 class="mb-1" data-card="common-location">{{ Str::limit($sosAnalytics['summary']['most_common_location'], 12) }}</h5>
+                                                <p class="text-muted mb-0">Hotspot Location</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Main Charts Row -->
+                                <div class="row">
+                                    <div class="col-xl-8">
+                                        <div class="card border-0 shadow-none mb-4">
+                                            <div class="card-body">
+                                                <h6 class="card-title mb-4">🚨 SOS Alert Timeline (Bubble Chart)</h6>
+                                                <div id="sosBubbleTimeline" style="min-height: 400px;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xl-4">
+                                        <div class="card border-0 shadow-none mb-4">
+                                            <div class="card-body">
+                                                <h6 class="card-title mb-4">⚠️ Alert Severity Distribution</h6>
+                                                <div id="severityDonut" style="min-height: 400px;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-xl-6">
+                                        <div class="card border-0 shadow-none mb-4">
+                                            <div class="card-body">
+                                                <h6 class="card-title mb-4">🔥 24-Hour SOS Heatmap</h6>
+                                                <div id="hourlyHeatmap" style="min-height: 350px;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xl-6">
+                                        <div class="card border-0 shadow-none mb-4">
+                                            <div class="card-body">
+                                                <h6 class="card-title mb-4">📊 Driver Alert Frequency (Treemap)</h6>
+                                                <div id="driverTreemap" style="min-height: 350px;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-xl-6">
+                                        <div class="card border-0 shadow-none">
+                                            <div class="card-body">
+                                                <h6 class="card-title mb-4">📍 SOS Location Clusters</h6>
+                                                <div id="locationRadar" style="min-height: 350px;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xl-6">
+                                        <div class="card border-0 shadow-none">
+                                            <div class="card-body">
+                                                <h6 class="card-title mb-4">⏱️ Response Time Trend</h6>
+                                                <div id="responseTimeTrend" style="min-height: 350px;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </main>
     </div>
 </div>
@@ -200,438 +1392,2506 @@
 @endsection
 
 @section('scripts')
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script> 
+
+
 <script>
-    /* --------------------------
-    Demo data + utilities
-    -------------------------- */
-    // const VEHICLES = [
-        //{id:'V-001', label:'Truck A (V-001)'},
-        //{id:'V-002', label:'Van B (V-002)'},
-        //{id:'V-003', label:'Car C (V-003)'}
-    // ];
 
-    const VEHICLES = [
-        // Static examples
-        // {id:'V-004', label:'Bus D (V-004)'},
 
-        @foreach($vehicle as $v)
-            {
-                id: '{{ $v->id }}',
-                label: '{{ $v->vehicle_number }}'
-            }@if(!$loop->last),@endif
-        @endforeach
-    ];
+    // Tab Switching Functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get all tab elements
+        const tabs = document.querySelectorAll('.tab');
+        const reportsList = document.getElementById('reportsList');
+        const safetyList = document.getElementById('safetyList');
 
-    const DRIVERS = [
-        // {id:'D-01', name:'Rahul'},
-        // {id:'D-02', name:'Priya'},
-        // {id:'D-03', name:'Arjun'}
-        @foreach($driver as $dr)
-            {
-                id: '{{ $dr->id }}',
-                name: '{{ $dr->name }}'
-            }@if(!$loop->last),@endif
-        @endforeach
-    ];
-
-    const REPORTS = [
-        {id:'trip', title:'Trip Summary', desc:'Overview of trips, durations, and stops.', icon:'🗺️'},
-        {id:'route', title:'Route History', desc:'Playback and route taken over time.', icon:'📈'},
-        {id:'runidle', title:'Run & Idle', desc:'Engine run vs idle analysis.', icon:'⏱️'},
-        {id:'distance', title:'Distance', desc:'Distance traveled per vehicle.', icon:'📏'},
-        {id:'geofence', title:'Geo-fence', desc:'Geofence enter/exit events & alerts.', icon:'🎯'},
-        {id:'overstay', title:'Overstay', desc:'Time spent beyond thresholds.', icon:'⏳'},
-    ];
-
-    const SAFETY = [
-        {id:'attendance', title:'Monthly Attendance', desc:'Driver attendance calendar.', icon:'📅'},
-        {id:'loginlogout', title:'Login/Logout', desc:'Driver login and logout records.', icon:'🔐'},
-        {id:'logintime', title:'Login Time', desc:'Login durations and trends.', icon:'🕒'},
-        {id:'sos', title:'Emergency SOS', desc:'SOS events and response history.', icon:'🆘'},
-    ];
-
-    /* seeded PRNG for deterministic samples */
-    function seededRand(seed){
-        let h = 2166136261 >>> 0;
-        for (let i=0;i<seed.length;i++) h = Math.imul(h ^ seed.charCodeAt(i), 16777619);
-        return function(){ h += 0x6D2B79F5; let t = Math.imul(h ^ (h >>> 15), 1 | h); t ^= t + Math.imul(t ^ (t >>> 7), 61 | t); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
-    }
-
-    /* produce sample dataset for given filters */
-    function generateSampleData({from, to, vehicle, driver}){
-        const days = 8;
-        const seed = `${from}|${to}|${vehicle}|${driver}`;
-        const rand = seededRand(seed);
-        const labels = [];
-        const trips = [], distances = [], speeds = [];
-        for(let i=0;i<days;i++){
-            labels.push(`T${i+1}`);
-            trips.push(Math.round(rand()*8 + 1));
-            distances.push(Math.round(rand()*180 + 30));
-            speeds.push(Math.round(25 + rand()*50));
-        }
-        const totalTrips = trips.reduce((a,b)=>a+b,0);
-        const totalDist = distances.reduce((a,b)=>a+b,0);
-        const avgSpeed = Math.round(speeds.reduce((a,b)=>a+b,0)/speeds.length);
-        const overstay = Math.round(rand()*8);
-        // route: array of normalized points
-        const routeLen = 24;
-        const base = Array.from({length:routeLen}, (_,i) => {
-            const x = i/(routeLen-1);
-            const noise = (rand()-0.5)*0.12;
-            const y = 0.2 + 0.6*Math.abs(Math.sin(i/3 + rand())) + noise;
-            return {x: Math.max(0, Math.min(1, x)), y: Math.max(0, Math.min(1, y))};
+        // Add click event listeners to all tabs
+        tabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                const tabType = this.getAttribute('data-tab');
+                
+                // Remove active class from all tabs
+                tabs.forEach(t => t.classList.remove('active'));
+                
+                // Add active class to clicked tab
+                this.classList.add('active');
+                
+                // Show/hide the appropriate list
+                if (tabType === 'reports') {
+                    reportsList.style.display = 'block';
+                    safetyList.style.display = 'none';
+                } else if (tabType === 'safety') {
+                    reportsList.style.display = 'none';
+                    safetyList.style.display = 'block';
+                }
+            });
         });
-        return {labels,trips,distances,speeds,totalTrips,totalDist,avgSpeed,overstay,route:base};
-    }
 
-    /* --------------------------
-    DOM refs + init filters
-    -------------------------- */
-    const vehicleSelect = document.getElementById('vehicleSelect');
-    const driverSelect = document.getElementById('driverSelect');
-    const dateFrom = document.getElementById('dateFrom');
-    const dateTo = document.getElementById('dateTo');
-    const applyBtn = document.getElementById('applyFilters');
-    const resetBtn = document.getElementById('resetFilters');
-
-    function populateFilters(){
-        VEHICLES.forEach(v=> {
-            const o = document.createElement('option'); o.value=v.id; o.textContent=v.label; vehicleSelect.appendChild(o);
-        });
-        DRIVERS.forEach(d=>{
-            const o = document.createElement('option'); o.value=d.id; o.textContent=d.name; driverSelect.appendChild(o);
-        });
-        const now = new Date();
-        const prior = new Date(now); prior.setDate(now.getDate()-7);
-        dateFrom.valueAsDate = prior;
-        dateTo.valueAsDate = now;
-    }
-    populateFilters();
-
-    /* populate menu */
-    const reportsList = document.getElementById('reportsList');
-    const safetyList = document.getElementById('safetyList');
-    function mkCard(it){
-        const el = document.createElement('div'); el.className='menu-card'; el.tabIndex=0;
-        el.innerHTML = `<div class="menu-icon">${it.icon}</div><div><strong>${it.title}</strong><div class="muted">${it.desc}</div></div>`;
-        el.addEventListener('click', ()=> selectReport(it));
-        el.addEventListener('keydown', (e)=>{ if(e.key==='Enter') selectReport(it); });
-        return el;
-    }
-    REPORTS.forEach(r=> reportsList.appendChild(mkCard(r)));
-    SAFETY.forEach(r=> safetyList.appendChild(mkCard(r)));
-
-    /* tabs */
-    document.querySelectorAll('.tab').forEach(t=>{
-        t.addEventListener('click', ()=>{
-            document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
-            t.classList.add('active');
-            const tab = t.dataset.tab;
-            document.getElementById('reportsList').style.display = tab==='reports' ? 'block' : 'none';
-            document.getElementById('safetyList').style.display = tab==='safety' ? 'block' : 'none';
+        // Add click event listeners to menu cards (optional - for navigation)
+        const menuCards = document.querySelectorAll('.menu-card');
+        menuCards.forEach(card => {
+            card.addEventListener('click', function() {
+                const reportType = this.getAttribute('data-report');
+                // You can add navigation logic here based on reportType
+                console.log('Clicked on:', reportType);
+                // Example: window.location.href = `/reports/${reportType}`;
+            });
         });
     });
+    // Open Every Tabs
+    document.addEventListener("DOMContentLoaded", function() {
+        const menuCards = document.querySelectorAll(".menu-card");
+        const panels = document.querySelectorAll(".panel");
 
-    /* --------------------------
-    Chart.js charts
-    -------------------------- */
-    let barChart, lineChart, doughnutChart;
+        function hideAllPanels() {
+            panels.forEach(panel => panel.style.display = "none");
+        }
 
-    function createCharts(sample){
-        // bar chart: trips + distances (dual axis)
-        const ctxBar = document.getElementById('barChart').getContext('2d');
-        if(barChart) barChart.destroy();
-        barChart = new Chart(ctxBar, {
-            type:'bar',
-            data:{
-            labels: sample.labels,
-            datasets:[
-                {label:'Trips', data: sample.trips, yAxisID:'y', backgroundColor:'rgba(37,99,235,0.9)'},
-                {label:'Distance (km)', data: sample.distances, yAxisID:'y1', backgroundColor:'rgba(6,182,212,0.85)'}
-            ]
-            },
-            options:{
-            responsive:true,
-            interaction:{mode:'index', intersect:false},
-            scales:{
-                y:{position:'left', title:{display:true, text:'Trips'}},
-                y1:{position:'right', grid:{drawOnChartArea:false}, title:{display:true, text:'Distance (km)'}}
-            },
-            plugins:{legend:{position:'bottom'}, tooltip:{mode:'index'}}
+        menuCards.forEach(card => {
+            card.addEventListener("click", function() {
+                const report = this.getAttribute("data-report");
+                const targetPanel = document.getElementById(report);
+
+                if (targetPanel) {
+                    hideAllPanels();
+                    targetPanel.style.display = "block";
+                }
+
+                menuCards.forEach(c => c.classList.remove("active"));
+                this.classList.add("active");
+            });
+        });
+
+        hideAllPanels();
+        const defaultPanel = document.getElementById("trip");
+        if (defaultPanel) defaultPanel.style.display = "block";
+        const defaultCard = document.querySelector('.menu-card[data-report="trip"]');
+        if (defaultCard) defaultCard.classList.add("active");
+    });
+
+
+    // Trip Summary Chart (ApexCharts)
+    let trip_summary = @json($trip_summary);
+    const dates = trip_summary.dates;
+    const trips = trip_summary.totalTrips;
+    const distance = trip_summary.totalDistance;
+    const amount = trip_summary.totalAmount;
+
+    const options = {
+        chart: {
+            height: 380,
+            type: 'line',
+            toolbar: {
+                show: false
             }
-        });
-
-        // line chart: distance trend
-        const ctxLine = document.getElementById('lineChart').getContext('2d');
-        if(lineChart) lineChart.destroy();
-        lineChart = new Chart(ctxLine, {
-            type:'line',
-            data:{
-            labels: sample.labels,
-            datasets:[{
-                label:'Distance',
-                data: sample.distances,
-                fill:true,
-                tension:0.35,
-                pointRadius:5,
-                pointHoverRadius:7,
-                backgroundColor:createGradient(ctxLine, '#e8f1ff', '#cfeaff'),
-                borderColor:'#2563eb'
-            }]
+        },
+        series: [{
+                name: 'Trips',
+                type: 'bar',
+                data: trips
             },
-            options:{responsive:true, plugins:{legend:{display:false}}, scales:{y:{beginAtZero:true}}}
-        });
-
-        // doughnut chart: run vs idle (simple split)
-        const moving = Math.round(sample.totalDist * 0.62);
-        const idle = Math.max(1, sample.totalDist - moving);
-        const ctxDon = document.getElementById('doughnutChart').getContext('2d');
-        if(doughnutChart) doughnutChart.destroy();
-        doughnutChart = new Chart(ctxDon, {
-            type:'doughnut',
-            data:{
-            labels:['Moving','Idle'],
-            datasets:[{data:[moving,idle], backgroundColor:['rgba(37,99,235,0.95)','rgba(6,182,212,0.9)']}]
+            {
+                name: 'Distance (km)',
+                type: 'line',
+                data: distance
             },
-            options:{responsive:true, plugins:{legend:{position:'bottom'}}}
-        });
-    }
-
-    function createGradient(ctx, c1, c2){
-        const g = ctx.createLinearGradient(0,0,0,220);
-        g.addColorStop(0, c1);
-        g.addColorStop(1, c2);
-        return g;
-    }
-
-    /* --------------------------
-    Route playback (canvas)
-    -------------------------- */
-    const routeCanvas = document.getElementById('routeCanvas');
-    const rc = routeCanvas.getContext('2d');
-    let routeState = {points:[], idx:0, playing:false, speed:1.0, lastTime:null, animId:null};
-
-    function resizeRouteCanvas(){
-        const rect = routeCanvas.getBoundingClientRect();
-        routeCanvas.width = Math.round(rect.width * devicePixelRatio);
-        routeCanvas.height = Math.round(rect.height * devicePixelRatio);
-        rc.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
-    }
-    window.addEventListener('resize', ()=> { resizeRouteCanvas(); drawRoute(); });
-    resizeRouteCanvas();
-
-    function drawGrid(){
-        const w = routeCanvas.clientWidth;
-        const h = routeCanvas.clientHeight;
-        rc.clearRect(0,0,w,h);
-        // light grid
-        rc.strokeStyle = '#eef4ff';
-        rc.lineWidth = 1;
-        const step = Math.max(40, Math.min(80, Math.round(w/6)));
-        for(let x=0;x<w;x+=step){
-            rc.beginPath(); rc.moveTo(x,0); rc.lineTo(x,h); rc.stroke();
-        }
-        for(let y=0;y<h;y+=step){
-            rc.beginPath(); rc.moveTo(0,y); rc.lineTo(w,y); rc.stroke();
-        }
-    }
-
-    function drawRoute(currentIdx = 0){
-        const pts = routeState.points;
-        const w = routeCanvas.clientWidth;
-        const h = routeCanvas.clientHeight;
-        drawGrid();
-        if(!pts || pts.length===0){
-            rc.fillStyle = '#f3f7ff';
-            rc.fillRect(0,0,w,h);
-            rc.fillStyle = '#6b7280';
-            rc.font = '14px sans-serif';
-            rc.fillText('No route loaded', 12, 22);
-            document.getElementById('routeStatus').textContent = 'Idle';
-            document.getElementById('routeTime').textContent = `0 / 0`;
-            return;
-        }
-        // draw route path
-        rc.lineWidth = 3;
-        rc.strokeStyle = '#2563eb';
-        rc.beginPath();
-        pts.forEach((p,i)=>{
-            const x = p.x * (w-20) + 10;
-            const y = p.y * (h-20) + 10;
-            if(i===0) rc.moveTo(x,y); else rc.lineTo(x,y);
-        });
-        rc.stroke();
-
-        // draw current moving marker
-        const idx = Math.max(0, Math.min(currentIdx, pts.length-1));
-        const p = pts[idx];
-        const mx = p.x * (w-20) + 10;
-        const my = p.y * (h-20) + 10;
-
-        // trailing small circle
-        rc.beginPath();
-        rc.fillStyle = 'rgba(37,99,235,0.12)';
-        rc.arc(mx,my,14,0,Math.PI*2); rc.fill();
-
-        rc.beginPath();
-        rc.fillStyle = '#ff8a00';
-        rc.arc(mx,my,8,0,Math.PI*2); rc.fill();
-
-        // update status text
-        document.getElementById('routeStatus').textContent = routeState.playing ? 'Playing' : 'Paused';
-        document.getElementById('routeTime').textContent = `${idx+1} / ${pts.length}`;
-    }
-
-    /* animate along points */
-    function startRoute(){
-        if(routeState.playing) return;
-        routeState.playing = true;
-        routeState.lastTime = null;
-        document.getElementById('playRoute').setAttribute('aria-pressed','true');
-        document.getElementById('pauseRoute').setAttribute('aria-pressed','false');
-        function step(ts){
-            if(!routeState.lastTime) routeState.lastTime = ts;
-            const dt = (ts - routeState.lastTime) / 1000; // seconds
-            routeState.lastTime = ts;
-            const advance = dt * 3 * routeState.speed; // adjustable playback rate
-            routeState.idx += advance;
-            if(routeState.idx >= routeState.points.length - 1){
-            routeState.idx = routeState.points.length - 1;
-            routeState.playing = false;
+            {
+                name: 'Revenue (₹)',
+                type: 'line',
+                data: amount
             }
-            drawRoute(Math.floor(routeState.idx));
-            if(routeState.playing) routeState.animId = requestAnimationFrame(step);
-            else {
-            cancelAnimationFrame(routeState.animId); routeState.animId = null;
-            document.getElementById('playRoute').setAttribute('aria-pressed','false');
-            document.getElementById('pauseRoute').setAttribute('aria-pressed','false');
+        ],
+        colors: ['#4e73df', '#1cc88a', '#f6c23e'],
+        stroke: {
+            width: [0, 3, 3],
+            curve: 'smooth'
+        },
+        dataLabels: {
+            enabled: false
+        },
+        xaxis: {
+            categories: dates,
+            labels: {
+                rotate: -45
             }
+        },
+        grid: {
+            borderColor: '#eee',
+            strokeDashArray: 4
+        },
+        legend: {
+            position: 'top'
+        },
+        tooltip: {
+            shared: true,
+            intersect: false
         }
-        routeState.animId = requestAnimationFrame(step);
-    }
-
-    function pauseRoute(){
-        routeState.playing = false;
-        if(routeState.animId) cancelAnimationFrame(routeState.animId);
-        routeState.animId = null;
-        document.getElementById('playRoute').setAttribute('aria-pressed','false');
-        document.getElementById('pauseRoute').setAttribute('aria-pressed','true');
-    }
-
-    function resetRoute(){
-        pauseRoute();
-        routeState.idx = 0;
-        drawRoute(0);
-    }
-
-    /* playback buttons */
-    document.getElementById('playRoute').addEventListener('click', ()=> startRoute());
-    document.getElementById('pauseRoute').addEventListener('click', ()=> pauseRoute());
-    document.getElementById('resetRoute').addEventListener('click', ()=> resetRoute());
-
-    /* --------------------------
-    Wiring + initial render
-    -------------------------- */
-    const metricTrips = document.getElementById('metricTrips');
-    const metricDistance = document.getElementById('metricDistance');
-    const metricSpeed = document.getElementById('metricSpeed');
-    const metricOverstay = document.getElementById('metricOverstay');
-    const activeReportTitle = document.getElementById('activeReportTitle');
-    const activeReportSub = document.getElementById('activeReportSub');
-
-    let current = {
-        report: 'trip',
-        vehicle: VEHICLES[0].id,
-        driver: DRIVERS[0].id,
-        from: dateFrom.value,
-        to: dateTo.value
     };
 
-    function selectReport(item){
-        current.report = item.id;
-        activeReportTitle.textContent = item.title;
-        activeReportSub.textContent = item.desc;
-        // visual highlight optional
-        updateDashboard(true);
+    new ApexCharts(document.querySelector("#tripSummaryChart"), options).render();
+
+
+    // Route History Chart Js Code
+    document.addEventListener('DOMContentLoaded', function() {
+        // Main Line Chart
+        var routeHistoryOptions = {
+            series: [{
+                name: 'Total Distance (km)',
+                type: 'line',
+                data: @json($routeHistory['total_distance'])
+            }, {
+                name: 'Total Stops',
+                type: 'column',
+                data: @json($routeHistory['total_stops'])
+            }],
+            chart: {
+                height: 350,
+                type: 'line',
+                stacked: false,
+                toolbar: {
+                    show: true
+                },
+                zoom: {
+                    enabled: true
+                }
+            },
+            colors: ['#5D87FF', '#49BEFF'],
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                width: [3, 1],
+                curve: 'smooth'
+            },
+            fill: {
+                opacity: [0.85, 0.25]
+            },
+            markers: {
+                size: 0
+            },
+            xaxis: {
+                categories: @json($routeHistory['dates']),
+                labels: {
+                    rotate: -45,
+                    style: {
+                        colors: '#6c757d',
+                        fontSize: '11px'
+                    }
+                }
+            },
+            yaxis: [{
+                title: {
+                    text: 'Distance (km)',
+                    style: {
+                        color: '#5D87FF'
+                    }
+                },
+                labels: {
+                    style: {
+                        colors: '#5D87FF'
+                    }
+                }
+            }, {
+                opposite: true,
+                title: {
+                    text: 'Stops',
+                    style: {
+                        color: '#49BEFF'
+                    }
+                },
+                labels: {
+                    style: {
+                        colors: '#49BEFF'
+                    }
+                }
+            }],
+            tooltip: {
+                shared: true,
+                intersect: false,
+                y: {
+                    formatter: function (y) {
+                        if (typeof y !== "undefined") {
+                            return y.toFixed(1);
+                        }
+                        return y;
+                    }
+                }
+            },
+            legend: {
+                position: 'top',
+                horizontalAlign: 'left'
+            },
+            grid: {
+                borderColor: '#f1f1f1',
+            }
+        };
+
+        var routeHistoryChart = new ApexCharts(document.querySelector("#routeHistoryChart"), routeHistoryOptions);
+        routeHistoryChart.render();
+
+        // Efficiency Gauge Chart
+        var avgEfficiency = {{ $routeHistory['summary']['avg_efficiency'] }};
+        var efficiencyGaugeOptions = {
+            series: [avgEfficiency * 10], // Scale for better visualization
+            chart: {
+                height: 350,
+                type: 'radialBar',
+            },
+            plotOptions: {
+                radialBar: {
+                    startAngle: -135,
+                    endAngle: 135,
+                    dataLabels: {
+                        name: {
+                            fontSize: '16px',
+                            color: undefined,
+                            offsetY: 120
+                        },
+                        value: {
+                            offsetY: 76,
+                            fontSize: '22px',
+                            color: undefined,
+                            formatter: function (val) {
+                                return (val / 10).toFixed(2) + ' stops/km';
+                            }
+                        }
+                    }
+                }
+            },
+            fill: {
+                type: 'gradient',
+                gradient: {
+                    shade: 'dark',
+                    shadeIntensity: 0.15,
+                    inverseColors: false,
+                    opacityFrom: 1,
+                    opacityTo: 1,
+                    stops: [0, 50, 65, 91]
+                },
+            },
+            stroke: {
+                dashArray: 4
+            },
+            labels: ['Route Efficiency'],
+            colors: ['#FFAE1F']
+        };
+
+        var efficiencyGauge = new ApexCharts(document.querySelector("#efficiencyGauge"), efficiencyGaugeOptions);
+        efficiencyGauge.render();
+    });
+
+
+    // Run
+    document.addEventListener('DOMContentLoaded', function() {
+        // Efficiency Trend Chart
+        var efficiencyTrendOptions = {
+            series: [{
+                name: 'Efficiency %',
+                data: @json($runIdleAnalytics['efficiency_ratio'])
+            }],
+            chart: {
+                height: 300,
+                type: 'line',
+                zoom: {
+                    enabled: true
+                },
+                toolbar: {
+                    show: true
+                }
+            },
+            colors: ['#5D87FF'],
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                width: 3,
+                curve: 'smooth'
+            },
+            markers: {
+                size: 5,
+                hover: {
+                    size: 7
+                }
+            },
+            xaxis: {
+                categories: @json($runIdleAnalytics['dates']),
+                labels: {
+                    rotate: -45,
+                    style: {
+                        colors: '#6c757d',
+                        fontSize: '11px'
+                    }
+                }
+            },
+            yaxis: {
+                title: {
+                    text: 'Efficiency %',
+                    style: {
+                        color: '#5D87FF'
+                    }
+                },
+                min: 0,
+                max: 100,
+                labels: {
+                    formatter: function(val) {
+                        return val + '%';
+                    }
+                }
+            },
+            tooltip: {
+                y: {
+                    formatter: function(val) {
+                        return val + '%';
+                    }
+                }
+            },
+            grid: {
+                borderColor: '#f1f1f1',
+            }
+        };
+
+        var efficiencyTrendChart = new ApexCharts(document.querySelector("#efficiencyTrendChart"), efficiencyTrendOptions);
+        efficiencyTrendChart.render();
+
+        // Time Distribution Chart
+        var timeDistributionOptions = {
+            series: [{
+                name: 'Run Time',
+                data: @json($runIdleAnalytics['run_time_minutes'])
+            }, {
+                name: 'Idle Time',
+                data: @json($runIdleAnalytics['idle_time_minutes'])
+            }],
+            chart: {
+                type: 'bar',
+                height: 300,
+                stacked: true,
+                toolbar: {
+                    show: true
+                }
+            },
+            colors: ['#00E396', '#FEB019'],
+            plotOptions: {
+                bar: {
+                    horizontal: false,
+                    columnWidth: '60%',
+                    borderRadius: 5
+                },
+            },
+            dataLabels: {
+                enabled: false
+            },
+            xaxis: {
+                categories: @json($runIdleAnalytics['dates']),
+                labels: {
+                    rotate: -45,
+                    style: {
+                        fontSize: '11px'
+                    }
+                }
+            },
+            yaxis: {
+                title: {
+                    text: 'Minutes'
+                }
+            },
+            legend: {
+                position: 'top'
+            },
+            grid: {
+                borderColor: '#f1f1f1',
+            }
+        };
+
+        var timeDistributionChart = new ApexCharts(document.querySelector("#timeDistributionChart"), timeDistributionOptions);
+        timeDistributionChart.render();
+
+        // Stops Analysis Chart
+        var stopsAnalysisOptions = {
+            series: [{
+                name: 'Total Stops',
+                data: @json($runIdleAnalytics['total_stops'])
+            }],
+            chart: {
+                height: 300,
+                type: 'area',
+                zoom: {
+                    enabled: true
+                },
+                toolbar: {
+                    show: true
+                }
+            },
+            colors: ['#FF4560'],
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                width: 2,
+                curve: 'smooth'
+            },
+            fill: {
+                type: 'gradient',
+                gradient: {
+                    shadeIntensity: 1,
+                    opacityFrom: 0.7,
+                    opacityTo: 0.3,
+                    stops: [0, 90, 100]
+                }
+            },
+            xaxis: {
+                categories: @json($runIdleAnalytics['dates']),
+                labels: {
+                    rotate: -45,
+                    style: {
+                        fontSize: '11px'
+                    }
+                }
+            },
+            yaxis: {
+                title: {
+                    text: 'Number of Stops'
+                }
+            },
+            grid: {
+                borderColor: '#f1f1f1',
+            },
+            markers: {
+                size: 4
+            }
+        };
+
+        var stopsAnalysisChart = new ApexCharts(document.querySelector("#stopsAnalysisChart"), stopsAnalysisOptions);
+        stopsAnalysisChart.render();
+
+        // Performance Gauge
+        var performanceGaugeOptions = {
+            series: [{{ $runIdleAnalytics['summary']['overall_efficiency'] }}],
+            chart: {
+                height: 300,
+                type: 'radialBar',
+            },
+            plotOptions: {
+                radialBar: {
+                    startAngle: -135,
+                    endAngle: 135,
+                    dataLabels: {
+                        name: {
+                            fontSize: '16px',
+                            color: undefined,
+                            offsetY: 120
+                        },
+                        value: {
+                            offsetY: 76,
+                            fontSize: '22px',
+                            color: undefined,
+                            formatter: function (val) {
+                                return val + "%";
+                            }
+                        }
+                    }
+                }
+            },
+            fill: {
+                type: 'gradient',
+                gradient: {
+                    shade: 'dark',
+                    shadeIntensity: 0.15,
+                    inverseColors: false,
+                    opacityFrom: 1,
+                    opacityTo: 1,
+                    stops: [0, 50, 65, 91]
+                },
+            },
+            stroke: {
+                dashArray: 4
+            },
+            labels: ['Overall Efficiency'],
+            colors: ['#5D87FF']
+        };
+
+        var performanceGauge = new ApexCharts(document.querySelector("#performanceGauge"), performanceGaugeOptions);
+        performanceGauge.render();
+    });
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+        
+        var distanceTrendOptions = {
+            series: [{
+                name: 'Distance (km)',
+                data: @json($distanceAnalytics['daily_distance'])
+            }],
+            chart: {
+                height: 350,
+                type: 'area',
+                zoom: {
+                    enabled: true
+                },
+                toolbar: {
+                    show: true
+                }
+            },
+            colors: ['#00E396'],
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                width: 3,
+                curve: 'smooth'
+            },
+            fill: {
+                type: 'gradient',
+                gradient: {
+                    shadeIntensity: 1,
+                    opacityFrom: 0.7,
+                    opacityTo: 0.3,
+                    stops: [0, 90, 100]
+                }
+            },
+            xaxis: {
+                categories: @json($distanceAnalytics['dates']),
+                labels: {
+                    rotate: -45,
+                    style: {
+                        fontSize: '11px'
+                    }
+                }
+            },
+            yaxis: {
+                title: {
+                    text: 'Distance (km)'
+                }
+            },
+            tooltip: {
+                y: {
+                    formatter: function(val) {
+                        return val + ' km';
+                    }
+                }
+            },
+            grid: {
+                borderColor: '#f1f1f1',
+            }
+        };
+
+        distanceTrendChart = new ApexCharts(document.querySelector("#distanceTrendChart"), distanceTrendOptions);
+        distanceTrendChart.render();
+
+        // Vehicle Distance Chart (Donut Chart)
+        var vehicleDistanceOptions = {
+            series: @json($distanceAnalytics['vehicle_distance']['data']),
+            chart: {
+                type: 'donut',
+                height: 350
+            },
+            labels: @json($distanceAnalytics['vehicle_distance']['labels']),
+            colors: ['#5D87FF', '#49BEFF', '#FFAE1F', '#FF5A5A', '#13D8AA', '#2E93fA', '#F86624', '#8E54E9', '#FF4560', '#00E396'],
+            legend: {
+                position: 'bottom'
+            },
+            plotOptions: {
+                pie: {
+                    donut: {
+                        size: '65%',
+                        labels: {
+                            show: true,
+                            total: {
+                                show: true,
+                                label: 'Total Distance',
+                                formatter: function(w) {
+                                    return @json($distanceAnalytics['summary']['total_distance']) + ' km';
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            dataLabels: {
+                enabled: true,
+                formatter: function(val, opts) {
+                    return opts.w.config.series[opts.seriesIndex].toFixed(1) + ' km';
+                }
+            }
+        };
+
+        vehicleDistanceChart = new ApexCharts(document.querySelector("#vehicleDistanceChart"), vehicleDistanceOptions);
+        vehicleDistanceChart.render();
+
+        // Driver Distance Chart (Horizontal Bar Chart)
+        var driverDistanceOptions = {
+            series: [{
+                name: 'Distance (km)',
+                data: @json($distanceAnalytics['driver_distance']['data'])
+            }],
+            chart: {
+                type: 'bar',
+                height: 300,
+                toolbar: {
+                    show: false
+                }
+            },
+            plotOptions: {
+                bar: {
+                    horizontal: true,
+                    borderRadius: 4,
+                    columnWidth: '60%',
+                }
+            },
+            colors: ['#49BEFF'],
+            dataLabels: {
+                enabled: true,
+                formatter: function(val) {
+                    return val.toFixed(1) + ' km';
+                }
+            },
+            xaxis: {
+                categories: @json($distanceAnalytics['driver_distance']['labels']),
+                title: {
+                    text: 'Distance (km)'
+                }
+            },
+            yaxis: {
+                labels: {
+                    style: {
+                        fontSize: '12px'
+                    }
+                }
+            },
+            grid: {
+                borderColor: '#f1f1f1',
+            }
+        };
+
+        driverDistanceChart = new ApexCharts(document.querySelector("#driverDistanceChart"), driverDistanceOptions);
+        driverDistanceChart.render();
+
+        // Speed Analysis Chart (Line + Column Combo)
+        var speedAnalysisOptions = {
+            series: [{
+                name: 'Avg Speed',
+                type: 'line',
+                data: @json($distanceAnalytics['avg_speed'])
+            }, {
+                name: 'Trips',
+                type: 'column',
+                data: @json($distanceAnalytics['trip_count'])
+            }],
+            chart: {
+                height: 300,
+                type: 'line',
+                stacked: false,
+                toolbar: {
+                    show: true
+                }
+            },
+            colors: ['#FF4560', '#00E396'],
+            stroke: {
+                width: [3, 0],
+                curve: 'smooth'
+            },
+            plotOptions: {
+                bar: {
+                    columnWidth: '50%',
+                    borderRadius: 5
+                }
+            },
+            xaxis: {
+                categories: @json($distanceAnalytics['dates']),
+                labels: {
+                    rotate: -45,
+                    style: {
+                        fontSize: '11px'
+                    }
+                }
+            },
+            yaxis: [{
+                title: {
+                    text: 'Speed (km/h)'
+                }
+            }, {
+                opposite: true,
+                title: {
+                    text: 'Trips'
+                }
+            }],
+            tooltip: {
+                shared: true,
+                intersect: false
+            },
+            legend: {
+                position: 'top'
+            }
+        };
+
+        speedAnalysisChart = new ApexCharts(document.querySelector("#speedAnalysisChart"), speedAnalysisOptions);
+        speedAnalysisChart.render();
+    });
+
+    // Geo-fence Charts ...................
+    document.addEventListener('DOMContentLoaded', function() {
+        // Daily Entries Stick Graph
+        var dailyEntriesStickOptions = {
+            series: [{
+                name: 'Zone Entries',
+                data: @json($geofenceAnalytics['daily_entries'])
+            }],
+            chart: {
+                height: 350,
+                type: 'line',
+                zoom: {
+                    enabled: true
+                },
+                toolbar: {
+                    show: true
+                }
+            },
+            colors: ['#5D87FF'],
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                width: 5,
+                curve: 'straight'
+            },
+            markers: {
+                size: 6,
+                hover: {
+                    size: 8
+                }
+            },
+            xaxis: {
+                categories: @json($geofenceAnalytics['dates']),
+                labels: {
+                    rotate: -45,
+                    style: {
+                        fontSize: '11px'
+                    }
+                }
+            },
+            yaxis: {
+                title: {
+                    text: 'Number of Entries'
+                },
+                min: 0
+            },
+            grid: {
+                borderColor: '#f1f1f1',
+                row: {
+                    colors: ['#f8f9fa', 'transparent'],
+                    opacity: 0.5
+                }
+            },
+            tooltip: {
+                y: {
+                    formatter: function(val) {
+                        return val + ' entries';
+                    }
+                }
+            }
+        };
+
+        dailyEntriesStickChart = new ApexCharts(document.querySelector("#dailyEntriesStickChart"), dailyEntriesStickOptions);
+        dailyEntriesStickChart.render();
+
+        // Zone Activity Heatmap (Radial Bar)
+        var zoneActivityOptions = {
+            series: @json($geofenceAnalytics['zone_activity']['entries']),
+            chart: {
+                height: 350,
+                type: 'radialBar',
+            },
+            plotOptions: {
+                radialBar: {
+                    dataLabels: {
+                        name: {
+                            fontSize: '14px',
+                        },
+                        value: {
+                            fontSize: '16px',
+                            formatter: function(val) {
+                                return val;
+                            }
+                        },
+                        total: {
+                            show: true,
+                            label: 'Total Entries',
+                            formatter: function(w) {
+                                return @json($geofenceAnalytics['summary']['total_entries']);
+                            }
+                        }
+                    }
+                }
+            },
+            labels: @json($geofenceAnalytics['zone_activity']['labels']),
+            colors: ['#5D87FF', '#49BEFF', '#FFAE1F', '#FF5A5A', '#13D8AA', '#8E54E9'],
+            legend: {
+                position: 'bottom'
+            }
+        };
+
+        zoneActivityChart = new ApexCharts(document.querySelector("#zoneActivityChart"), zoneActivityOptions);
+        zoneActivityChart.render();
+
+        // Vehicle Activity Chart (Bar Chart)
+        var vehicleActivityOptions = {
+            series: [{
+                name: 'Entries',
+                data: @json($geofenceAnalytics['vehicle_activity']['entries'])
+            }],
+            chart: {
+                type: 'bar',
+                height: 300,
+                toolbar: {
+                    show: false
+                }
+            },
+            plotOptions: {
+                bar: {
+                    borderRadius: 4,
+                    columnWidth: '60%',
+                    dataLabels: {
+                        position: 'top'
+                    }
+                }
+            },
+            colors: ['#49BEFF'],
+            dataLabels: {
+                enabled: true,
+                offsetY: -20,
+                style: {
+                    fontSize: '12px',
+                    colors: ["#304758"]
+                }
+            },
+            xaxis: {
+                categories: @json($geofenceAnalytics['vehicle_activity']['labels']),
+                position: 'bottom',
+                labels: {
+                    rotate: -45,
+                    style: {
+                        fontSize: '11px'
+                    }
+                },
+                axisBorder: {
+                    show: false
+                },
+                axisTicks: {
+                    show: false
+                },
+                crosshairs: {
+                    fill: {
+                        type: 'gradient',
+                        gradient: {
+                            colorFrom: '#D8E3F0',
+                            colorTo: '#BED1E6',
+                            stops: [0, 100],
+                            opacityFrom: 0.4,
+                            opacityTo: 0.5,
+                        }
+                    }
+                },
+                tooltip: {
+                    enabled: true,
+                }
+            },
+            yaxis: {
+                axisBorder: {
+                    show: false
+                },
+                axisTicks: {
+                    show: false,
+                },
+                labels: {
+                    show: true,
+                    formatter: function(val) {
+                        return val;
+                    }
+                }
+            },
+            grid: {
+                borderColor: '#f1f1f1',
+            }
+        };
+
+        vehicleActivityChart = new ApexCharts(document.querySelector("#vehicleActivityChart"), vehicleActivityOptions);
+        vehicleActivityChart.render();
+
+        // Peak Hours Chart (Area Chart)
+        var peakHoursData = @json($geofenceAnalytics['peak_hours']);
+        var peakHoursOptions = {
+            series: [{
+                name: 'Entries',
+                data: peakHoursData.map(item => item.count)
+            }],
+            chart: {
+                height: 300,
+                type: 'area',
+                zoom: {
+                    enabled: false
+                },
+                toolbar: {
+                    show: false
+                }
+            },
+            colors: ['#FF4560'],
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                curve: 'smooth',
+                width: 3
+            },
+            fill: {
+                type: 'gradient',
+                gradient: {
+                    shadeIntensity: 1,
+                    opacityFrom: 0.7,
+                    opacityTo: 0.3,
+                    stops: [0, 90, 100]
+                }
+            },
+            xaxis: {
+                categories: peakHoursData.map(item => item.hour),
+                labels: {
+                    rotate: -45,
+                    style: {
+                        fontSize: '10px'
+                    }
+                }
+            },
+            yaxis: {
+                title: {
+                    text: 'Number of Entries'
+                }
+            },
+            tooltip: {
+                x: {
+                    format: 'HH:mm'
+                }
+            },
+            grid: {
+                borderColor: '#f1f1f1',
+            }
+        };
+
+        peakHoursChart = new ApexCharts(document.querySelector("#peakHoursChart"), peakHoursOptions);
+        peakHoursChart.render();
+    });
+
+    // Overstay Charts .....................
+    document.addEventListener('DOMContentLoaded', function() {
+        // Daily Overstays Stick Graph
+        var dailyOverstaysStickOptions = {
+            series: [{
+                name: 'Overstays',
+                data: @json($overstayAnalytics['daily_overstays'])
+            }],
+            chart: {
+                height: 350,
+                type: 'line',
+                zoom: {
+                    enabled: true
+                },
+                toolbar: {
+                    show: true
+                }
+            },
+            colors: ['#FF4560'],
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                width: 5,
+                curve: 'straight'
+            },
+            markers: {
+                size: 6,
+                colors: ['#FF4560'],
+                strokeColors: '#fff',
+                strokeWidth: 2,
+                hover: {
+                    size: 8
+                }
+            },
+            xaxis: {
+                categories: @json($overstayAnalytics['dates']),
+                labels: {
+                    rotate: -45,
+                    style: {
+                        fontSize: '11px'
+                    }
+                }
+            },
+            yaxis: {
+                title: {
+                    text: 'Number of Overstays'
+                },
+                min: 0
+            },
+            grid: {
+                borderColor: '#f1f1f1',
+                row: {
+                    colors: ['#f8f9fa', 'transparent'],
+                    opacity: 0.5
+                }
+            },
+            tooltip: {
+                y: {
+                    formatter: function(val) {
+                        return val + ' overstays';
+                    }
+                }
+            }
+        };
+
+        dailyOverstaysStickChart = new ApexCharts(document.querySelector("#dailyOverstaysStickChart"), dailyOverstaysStickOptions);
+        dailyOverstaysStickChart.render();
+
+        // Vehicle Overstay Chart (Radial Bar)
+        var vehicleOverstayOptions = {
+            series: @json($overstayAnalytics['vehicle_overstays']['count']),
+            chart: {
+                height: 350,
+                type: 'radialBar',
+            },
+            plotOptions: {
+                radialBar: {
+                    dataLabels: {
+                        name: {
+                            fontSize: '14px',
+                        },
+                        value: {
+                            fontSize: '16px',
+                            formatter: function(val) {
+                                return val;
+                            }
+                        },
+                        total: {
+                            show: true,
+                            label: 'Total Overstays',
+                            formatter: function(w) {
+                                return @json($overstayAnalytics['summary']['total_overstays']);
+                            }
+                        }
+                    }
+                }
+            },
+            labels: @json($overstayAnalytics['vehicle_overstays']['labels']),
+            colors: ['#FF4560', '#FF6B6B', '#FF8E8E', '#FFB3B3', '#FFD8D8', '#FFEBEB'],
+            legend: {
+                position: 'bottom'
+            }
+        };
+
+        vehicleOverstayChart = new ApexCharts(document.querySelector("#vehicleOverstayChart"), vehicleOverstayOptions);
+        vehicleOverstayChart.render();
+
+        // Driver Overstay Chart (Bar Chart)
+        var driverOverstayOptions = {
+            series: [{
+                name: 'Overstays',
+                data: @json($overstayAnalytics['driver_overstays']['count'])
+            }],
+            chart: {
+                type: 'bar',
+                height: 300,
+                toolbar: {
+                    show: false
+                }
+            },
+            plotOptions: {
+                bar: {
+                    borderRadius: 4,
+                    columnWidth: '60%',
+                }
+            },
+            colors: ['#FF6B6B'],
+            dataLabels: {
+                enabled: true,
+                formatter: function(val) {
+                    return val;
+                },
+                offsetY: -20,
+                style: {
+                    fontSize: '12px',
+                    colors: ["#304758"]
+                }
+            },
+            xaxis: {
+                categories: @json($overstayAnalytics['driver_overstays']['labels']),
+                position: 'bottom',
+                labels: {
+                    rotate: -45,
+                    style: {
+                        fontSize: '11px'
+                    }
+                },
+                axisBorder: {
+                    show: false
+                },
+                axisTicks: {
+                    show: false
+                }
+            },
+            yaxis: {
+                title: {
+                    text: 'Overstay Count'
+                }
+            },
+            grid: {
+                borderColor: '#f1f1f1',
+            }
+        };
+
+        driverOverstayChart = new ApexCharts(document.querySelector("#driverOverstayChart"), driverOverstayOptions);
+        driverOverstayChart.render();
+
+        // Location Overstay Chart (Horizontal Bar)
+        var locationOverstayOptions = {
+            series: [{
+                name: 'Overstays',
+                data: @json($overstayAnalytics['location_overstays']['count'])
+            }],
+            chart: {
+                type: 'bar',
+                height: 300,
+                toolbar: {
+                    show: false
+                }
+            },
+            plotOptions: {
+                bar: {
+                    borderRadius: 4,
+                    horizontal: true,
+                }
+            },
+            colors: ['#FF8E53'],
+            dataLabels: {
+                enabled: true,
+                formatter: function(val) {
+                    return val;
+                }
+            },
+            xaxis: {
+                categories: @json($overstayAnalytics['location_overstays']['labels']),
+                title: {
+                    text: 'Overstay Count'
+                }
+            },
+            yaxis: {
+                labels: {
+                    style: {
+                        fontSize: '11px'
+                    }
+                }
+            },
+            grid: {
+                borderColor: '#f1f1f1',
+            }
+        };
+
+        locationOverstayChart = new ApexCharts(document.querySelector("#locationOverstayChart"), locationOverstayOptions);
+        locationOverstayChart.render();
+
+        // Duration Trend Chart (Area Chart)
+        var durationTrendOptions = {
+            series: [{
+                name: 'Avg Duration (min)',
+                data: @json($overstayAnalytics['duration_trend'])
+            }],
+            chart: {
+                height: 300,
+                type: 'area',
+                zoom: {
+                    enabled: false
+                },
+                toolbar: {
+                    show: false
+                }
+            },
+            colors: ['#00E396'],
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                curve: 'smooth',
+                width: 3
+            },
+            fill: {
+                type: 'gradient',
+                gradient: {
+                    shadeIntensity: 1,
+                    opacityFrom: 0.7,
+                    opacityTo: 0.3,
+                    stops: [0, 90, 100]
+                }
+            },
+            xaxis: {
+                categories: @json($overstayAnalytics['dates']),
+                labels: {
+                    rotate: -45,
+                    style: {
+                        fontSize: '11px'
+                    }
+                }
+            },
+            yaxis: {
+                title: {
+                    text: 'Minutes'
+                }
+            },
+            grid: {
+                borderColor: '#f1f1f1',
+            }
+        };
+
+        durationTrendChart = new ApexCharts(document.querySelector("#durationTrendChart"), durationTrendOptions);
+        durationTrendChart.render();
+
+        // Peak Hours Chart (Line Chart)
+        var peakHoursData = @json($overstayAnalytics['peak_hours']);
+        var peakHoursOptions = {
+            series: [{
+                name: 'Duration (min)',
+                data: peakHoursData.map(item => item.duration)
+            }],
+            chart: {
+                height: 300,
+                type: 'line',
+                zoom: {
+                    enabled: false
+                },
+                toolbar: {
+                    show: false
+                }
+            },
+            colors: ['#5D87FF'],
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                width: 3,
+                curve: 'smooth'
+            },
+            markers: {
+                size: 5,
+                hover: {
+                    size: 7
+                }
+            },
+            xaxis: {
+                categories: peakHoursData.map(item => item.hour),
+                labels: {
+                    rotate: -45,
+                    style: {
+                        fontSize: '10px'
+                    }
+                }
+            },
+            yaxis: {
+                title: {
+                    text: 'Total Duration (min)'
+                }
+            },
+            grid: {
+                borderColor: '#f1f1f1',
+            }
+        };
+
+        peakHoursChart = new ApexCharts(document.querySelector("#peakHoursChart"), peakHoursOptions);
+        peakHoursChart.render();
+    });
+
+    window.addEventListener('resize', function() {
+        if (dailyOverstaysStickChart) {
+            setTimeout(() => {
+                dailyOverstaysStickChart.updateOptions({
+                    chart: {
+                        width: '100%'
+                    }
+                });
+            }, 300);
+        }
+    });
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Attendance Stick Chart
+        var attendanceStickOptions = {
+            series: [
+                {
+                    name: 'Present Days',
+                    data: @json($attendanceAnalytics['present_days'])
+                },
+                {
+                    name: 'Absent Days',
+                    data: @json($attendanceAnalytics['absent_days'])
+                }
+            ],
+            chart: {
+                height: 400,
+                type: 'line',
+                zoom: {
+                    enabled: true
+                },
+                toolbar: {
+                    show: true
+                }
+            },
+            colors: ['#00E396', '#FF4560'],
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                width: 4,
+                curve: 'straight'
+            },
+            markers: {
+                size: 6,
+                hover: {
+                    size: 8
+                }
+            },
+            xaxis: {
+                categories: @json($attendanceAnalytics['drivers']),
+                labels: {
+                    rotate: -45,
+                    style: {
+                        fontSize: '11px'
+                    }
+                }
+            },
+            yaxis: {
+                title: {
+                    text: 'Number of Days'
+                },
+                min: 0
+            },
+            grid: {
+                borderColor: '#f1f1f1',
+                row: {
+                    colors: ['#f8f9fa', 'transparent'],
+                    opacity: 0.5
+                }
+            },
+            legend: {
+                position: 'top'
+            },
+            tooltip: {
+                y: {
+                    formatter: function(val) {
+                        return val + ' days';
+                    }
+                }
+            }
+        };
+
+        attendanceStickChart = new ApexCharts(document.querySelector("#attendanceStickChart"), attendanceStickOptions);
+        attendanceStickChart.render();
+
+        // Attendance Rate Chart (Radial Bar)
+        var attendanceRateOptions = {
+            series: @json($attendanceAnalytics['attendance_rate']),
+            chart: {
+                height: 400,
+                type: 'radialBar',
+            },
+            plotOptions: {
+                radialBar: {
+                    dataLabels: {
+                        name: {
+                            fontSize: '14px',
+                        },
+                        value: {
+                            fontSize: '16px',
+                            formatter: function(val) {
+                                return val + '%';
+                            }
+                        },
+                        total: {
+                            show: true,
+                            label: 'Avg Attendance',
+                            formatter: function(w) {
+                                return @json($attendanceAnalytics['summary']['avg_attendance_rate']) + '%';
+                            }
+                        }
+                    }
+                }
+            },
+            labels: @json($attendanceAnalytics['drivers']),
+            colors: ['#00E396', '#00B894', '#00A085', '#008B74', '#007563'],
+            legend: {
+                position: 'bottom',
+                fontSize: '12px'
+            }
+        };
+
+        attendanceRateChart = new ApexCharts(document.querySelector("#attendanceRateChart"), attendanceRateOptions);
+        attendanceRateChart.render();
+
+        // Monthly Trend Chart (Area Chart)
+        var monthlyTrendOptions = {
+            series: [{
+                name: 'Avg Present Days',
+                data: @json($attendanceAnalytics['monthly_trend'])
+            }],
+            chart: {
+                height: 350,
+                type: 'area',
+                zoom: {
+                    enabled: false
+                },
+                toolbar: {
+                    show: false
+                }
+            },
+            colors: ['#5D87FF'],
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                curve: 'smooth',
+                width: 3
+            },
+            fill: {
+                type: 'gradient',
+                gradient: {
+                    shadeIntensity: 1,
+                    opacityFrom: 0.7,
+                    opacityTo: 0.3,
+                    stops: [0, 90, 100]
+                }
+            },
+            xaxis: {
+                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                labels: {
+                    style: {
+                        fontSize: '11px'
+                    }
+                }
+            },
+            yaxis: {
+                title: {
+                    text: 'Average Present Days'
+                }
+            },
+            grid: {
+                borderColor: '#f1f1f1',
+            }
+        };
+
+        monthlyTrendChart = new ApexCharts(document.querySelector("#monthlyTrendChart"), monthlyTrendOptions);
+        monthlyTrendChart.render();
+
+        // Present vs Absent Chart (Donut)
+        var presentAbsentOptions = {
+            series: [@json($attendanceAnalytics['summary']['total_present_days']), @json($attendanceAnalytics['summary']['total_absent_days'])],
+            chart: {
+                type: 'donut',
+                height: 350
+            },
+            labels: ['Present Days', 'Absent Days'],
+            colors: ['#00E396', '#FF4560'],
+            legend: {
+                position: 'bottom'
+            },
+            plotOptions: {
+                pie: {
+                    donut: {
+                        size: '65%',
+                        labels: {
+                            show: true,
+                            total: {
+                                show: true,
+                                label: 'Total Days',
+                                formatter: function(w) {
+                                    return @json($attendanceAnalytics['summary']['total_present_days'] + $attendanceAnalytics['summary']['total_absent_days']);
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            dataLabels: {
+                enabled: true,
+                formatter: function(val, opts) {
+                    return opts.w.config.series[opts.seriesIndex] + ' days';
+                }
+            }
+        };
+
+        presentAbsentChart = new ApexCharts(document.querySelector("#presentAbsentChart"), presentAbsentOptions);
+        presentAbsentChart.render();
+    });
+    
+
+    // Login/Logout Charts ......................
+    document.addEventListener('DOMContentLoaded', function() {
+        
+        var loginActivityOptions = {
+            series: [
+                {
+                    name: 'Logins',
+                    data: @json($loginLogoutAnalytics['daily_logins'])
+                },
+                {
+                    name: 'Logouts',
+                    data: @json($loginLogoutAnalytics['daily_logouts'])
+                }
+            ],
+            chart: {
+                height: 350,
+                type: 'area',
+                zoom: {
+                    enabled: true
+                },
+                toolbar: {
+                    show: true
+                }
+            },
+            colors: ['#00E396', '#FF4560'],
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                curve: 'smooth',
+                width: 3
+            },
+            fill: {
+                type: 'gradient',
+                gradient: {
+                    shadeIntensity: 1,
+                    opacityFrom: 0.7,
+                    opacityTo: 0.3,
+                    stops: [0, 90, 100]
+                }
+            },
+            xaxis: {
+                categories: @json($loginLogoutAnalytics['dates']),
+                labels: {
+                    rotate: -45,
+                    style: {
+                        fontSize: '11px'
+                    }
+                }
+            },
+            yaxis: {
+                title: {
+                    text: 'Number of Events'
+                }
+            },
+            legend: {
+                position: 'top'
+            },
+            grid: {
+                borderColor: '#f1f1f1',
+            }
+        };
+
+        loginActivityTimeline = new ApexCharts(document.querySelector("#loginActivityTimeline"), loginActivityOptions);
+        loginActivityTimeline.render();
+
+        // Session Duration Heatmap (Radial Bar)
+        var sessionHeatmapOptions = {
+            series: @json($loginLogoutAnalytics['avg_session_duration']),
+            chart: {
+                height: 350,
+                type: 'radialBar',
+            },
+            plotOptions: {
+                radialBar: {
+                    hollow: {
+                        size: '30%',
+                    },
+                    dataLabels: {
+                        name: {
+                            fontSize: '14px',
+                        },
+                        value: {
+                            fontSize: '16px',
+                            formatter: function(val) {
+                                return val + 'm';
+                            }
+                        },
+                        total: {
+                            show: true,
+                            label: 'Avg Session',
+                            formatter: function(w) {
+                                const durations = @json($loginLogoutAnalytics['avg_session_duration']);
+                                const avg = durations.length > 0 ? 
+                                    Math.round(durations.reduce((a, b) => a + b) / durations.length) : 0;
+                                return avg + 'm';
+                            }
+                        }
+                    }
+                }
+            },
+            labels: @json($loginLogoutAnalytics['dates']),
+            colors: ['#5D87FF', '#49BEFF', '#FFAE1F', '#FF5A5A', '#13D8AA'],
+            legend: {
+                position: 'bottom',
+                fontSize: '10px'
+            }
+        };
+
+        sessionHeatmap = new ApexCharts(document.querySelector("#sessionHeatmap"), sessionHeatmapOptions);
+        sessionHeatmap.render();
+
+        // Driver Activity Radar (Radar Chart)
+        var driverActivityOptions = {
+            series: [{
+                name: 'Login Count',
+                data: @json($loginLogoutAnalytics['driver_activity']['logins'])
+            }],
+            chart: {
+                height: 300,
+                type: 'radar',
+                toolbar: {
+                    show: false
+                }
+            },
+            colors: ['#FF4560'],
+            xaxis: {
+                categories: @json($loginLogoutAnalytics['driver_activity']['labels'])
+            },
+            yaxis: {
+                show: false
+            },
+            markers: {
+                size: 4,
+                hover: {
+                    size: 6
+                }
+            },
+            plotOptions: {
+                radar: {
+                    size: 140,
+                    polygons: {
+                        strokeColors: '#e9e9e9',
+                        fill: {
+                            colors: ['#f8f8f8', '#fff']
+                        }
+                    }
+                }
+            }
+        };
+
+        driverActivityRadar = new ApexCharts(document.querySelector("#driverActivityRadar"));
+        driverActivityRadar.render();
+
+        // Login Time Distribution (Bar Chart)
+        var loginTimeData = @json($loginLogoutAnalytics['login_times']);
+        var loginTimeOptions = {
+            series: [{
+                name: 'Logins',
+                data: loginTimeData.map(item => item.count)
+            }],
+            chart: {
+                height: 300,
+                type: 'bar',
+                toolbar: {
+                    show: false
+                }
+            },
+            colors: ['#5D87FF'],
+            plotOptions: {
+                bar: {
+                    borderRadius: 4,
+                    columnWidth: '60%',
+                }
+            },
+            dataLabels: {
+                enabled: false
+            },
+            xaxis: {
+                categories: loginTimeData.map(item => item.hour),
+                labels: {
+                    rotate: -45,
+                    style: {
+                        fontSize: '10px'
+                    }
+                }
+            },
+            yaxis: {
+                title: {
+                    text: 'Login Count'
+                }
+            },
+            grid: {
+                borderColor: '#f1f1f1',
+            }
+        };
+
+        loginTimeDistribution = new ApexCharts(document.querySelector("#loginTimeDistribution"), loginTimeOptions);
+        loginTimeDistribution.render();
+
+        // Device Usage Pie (Pie Chart)
+        var deviceUsageOptions = {
+            series: @json($loginLogoutAnalytics['device_usage']['data']),
+            chart: {
+                height: 300,
+                type: 'pie',
+            },
+            labels: @json($loginLogoutAnalytics['device_usage']['labels']),
+            colors: ['#5D87FF', '#49BEFF', '#FFAE1F', '#FF5A5A', '#13D8AA', '#8E54E9'],
+            legend: {
+                position: 'bottom'
+            },
+            responsive: [{
+                breakpoint: 480,
+                options: {
+                    chart: {
+                        width: 200
+                    },
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }]
+        };
+
+        deviceUsagePie = new ApexCharts(document.querySelector("#deviceUsagePie"), deviceUsageOptions);
+        deviceUsagePie.render();
+
+        // Active Sessions Trend (Line Chart)
+        var activeSessionsOptions = {
+            series: [{
+                name: 'Active Sessions',
+                data: @json($loginLogoutAnalytics['active_sessions'])
+            }],
+            chart: {
+                height: 300,
+                type: 'line',
+                zoom: {
+                    enabled: false
+                },
+                toolbar: {
+                    show: false
+                }
+            },
+            colors: ['#00E396'],
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                width: 3,
+                curve: 'smooth'
+            },
+            markers: {
+                size: 5,
+                hover: {
+                    size: 7
+                }
+            },
+            xaxis: {
+                categories: @json($loginLogoutAnalytics['dates']),
+                labels: {
+                    rotate: -45,
+                    style: {
+                        fontSize: '11px'
+                    }
+                }
+            },
+            yaxis: {
+                title: {
+                    text: 'Active Sessions'
+                }
+            },
+            grid: {
+                borderColor: '#f1f1f1',
+            }
+        };
+
+        activeSessionsTrend = new ApexCharts(document.querySelector("#activeSessionsTrend"), activeSessionsOptions);
+        activeSessionsTrend.render();
+    });
+
+
+    // Login Time Charts
+    document.addEventListener('DOMContentLoaded', function() {
+        var candlestickOptions = {
+            series: [{
+                name: 'Login Time Distribution',
+                data: @json($loginTimeAnalytics['candlestick_data'])
+            }],
+            chart: {
+                height: 400,
+                type: 'candlestick',
+                toolbar: {
+                    show: true
+                }
+            },
+            title: {
+                text: 'Driver Login Time Patterns',
+                align: 'left'
+            },
+            xaxis: {
+                type: 'category',
+                labels: {
+                    formatter: function(val) {
+                        return val.length > 10 ? val.substring(0, 10) + '...' : val;
+                    },
+                    style: {
+                        fontSize: '10px'
+                    }
+                }
+            },
+            yaxis: {
+                tooltip: {
+                    enabled: true
+                },
+                labels: {
+                    formatter: function(val) {
+                        const hours = Math.floor(val);
+                        const minutes = Math.round((val - hours) * 60);
+                        return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+                    }
+                },
+                title: {
+                    text: 'Login Time'
+                }
+            },
+            plotOptions: {
+                candlestick: {
+                    colors: {
+                        upward: '#00E396',
+                        downward: '#FF4560'
+                    },
+                    wick: {
+                        useFillColor: true
+                    }
+                }
+            },
+            tooltip: {
+                custom: function({ seriesIndex, dataPointIndex, w }) {
+                    const data = w.globals.initialSeries[seriesIndex].data[dataPointIndex];
+                    const times = data.y;
+                    return `
+                    <div class="apexcharts-tooltip-box">
+                        <div><strong>${data.x}</strong></div>
+                        <div>Earliest: ${this.formatTime(times[0])}</div>
+                        <div>Q1: ${this.formatTime(times[1])}</div>
+                        <div>Median: ${this.formatTime(times[2])}</div>
+                        <div>Q3: ${this.formatTime(times[3])}</div>
+                        <div>Latest: ${this.formatTime(times[4])}</div>
+                    </div>
+                    `;
+                }.bind({
+                    formatTime: function(decimalTime) {
+                        const hours = Math.floor(decimalTime);
+                        const minutes = Math.round((decimalTime - hours) * 60);
+                        return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+                    }
+                })
+            }
+        };
+
+        loginTimeCandlestick = new ApexCharts(document.querySelector("#loginTimeCandlestick"), candlestickOptions);
+        loginTimeCandlestick.render();
+
+        // Hourly Login Distribution (Polar Area Chart)
+        var hourlyData = @json($loginTimeAnalytics['hourly_distribution']);
+        var hourlyOptions = {
+            series: hourlyData.map(item => item.count),
+            chart: {
+                height: 400,
+                type: 'polarArea',
+                toolbar: {
+                    show: false
+                }
+            },
+            labels: hourlyData.map(item => item.hour),
+            colors: [
+                '#5D87FF', '#49BEFF', '#FFAE1F', '#FF5A5A', '#13D8AA',
+                '#8E54E9', '#00E396', '#FF4560', '#F86624', '#2E93fA',
+                '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7',
+                '#DDA0DD', '#98D8C8', '#F7DC6F', '#BB8FCE', '#85C1E9',
+                '#F8C471', '#82E0AA', '#F1948A', '#85C1E9', '#D7BDE2'
+            ],
+            stroke: {
+                colors: ['#fff']
+            },
+            fill: {
+                opacity: 0.8
+            },
+            legend: {
+                position: 'bottom'
+            },
+            responsive: [{
+                breakpoint: 480,
+                options: {
+                    chart: {
+                        width: 200
+                    },
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }],
+            yaxis: {
+                show: false
+            }
+        };
+
+        hourlyLoginDistribution = new ApexCharts(document.querySelector("#hourlyLoginDistribution"), hourlyOptions);
+        hourlyLoginDistribution.render();
+
+        // Daily Login Trend (Line Chart)
+        var dailyTrendOptions = {
+            series: [{
+                name: 'Daily Logins',
+                data: @json($loginTimeAnalytics['daily_logins'])
+            }],
+            chart: {
+                height: 350,
+                type: 'line',
+                zoom: {
+                    enabled: true
+                },
+                toolbar: {
+                    show: true
+                }
+            },
+            colors: ['#5D87FF'],
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                width: 3,
+                curve: 'smooth'
+            },
+            markers: {
+                size: 5,
+                hover: {
+                    size: 7
+                }
+            },
+            xaxis: {
+                categories: @json($loginTimeAnalytics['dates']),
+                labels: {
+                    rotate: -45,
+                    style: {
+                        fontSize: '11px'
+                    }
+                }
+            },
+            yaxis: {
+                title: {
+                    text: 'Number of Logins'
+                }
+            },
+            grid: {
+                borderColor: '#f1f1f1',
+            }
+        };
+
+        dailyLoginTrend = new ApexCharts(document.querySelector("#dailyLoginTrend"), dailyTrendOptions);
+        dailyLoginTrend.render();
+
+        // Early Birds vs Night Owls (Bar Chart)
+        var earlyNightOptions = {
+            series: [
+                {
+                    name: 'Early Birds (Before 8 AM)',
+                    data: @json($loginTimeAnalytics['driver_early_birds']['consistency'])
+                },
+                {
+                    name: 'Night Owls (After 10 AM)',
+                    data: @json($loginTimeAnalytics['driver_night_owls']['consistency'])
+                }
+            ],
+            chart: {
+                type: 'bar',
+                height: 350,
+                stacked: false,
+                toolbar: {
+                    show: false
+                }
+            },
+            colors: ['#00E396', '#FF4560'],
+            plotOptions: {
+                bar: {
+                    horizontal: false,
+                    columnWidth: '55%',
+                    endingShape: 'rounded'
+                },
+            },
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                show: true,
+                width: 2,
+                colors: ['transparent']
+            },
+            xaxis: {
+                categories: @json($loginTimeAnalytics['driver_early_birds']['labels']),
+                labels: {
+                    rotate: -45,
+                    style: {
+                        fontSize: '10px'
+                    }
+                }
+            },
+            yaxis: {
+                title: {
+                    text: 'Consistency Score (%)'
+                },
+                max: 100
+            },
+            fill: {
+                opacity: 1
+            },
+            tooltip: {
+                y: {
+                    formatter: function (val) {
+                        return val + "% consistency"
+                    }
+                }
+            }
+        };
+
+        earlyNightComparison = new ApexCharts(document.querySelector("#earlyNightComparison"), earlyNightOptions);
+        earlyNightComparison.render();
+
+        // Login Consistency (Radial Bar Chart)
+        var consistencyOptions = {
+            series: @json($loginTimeAnalytics['login_consistency']['scores']),
+            chart: {
+                height: 350,
+                type: 'radialBar',
+            },
+            plotOptions: {
+                radialBar: {
+                    dataLabels: {
+                        name: {
+                            fontSize: '14px',
+                        },
+                        value: {
+                            fontSize: '16px',
+                            formatter: function(val) {
+                                return val + '%';
+                            }
+                        },
+                        total: {
+                            show: true,
+                            label: 'Avg Consistency',
+                            formatter: function(w) {
+                                const scores = @json($loginTimeAnalytics['login_consistency']['scores']);
+                                const avg = scores.length > 0 ? 
+                                    Math.round(scores.reduce((a, b) => a + b) / scores.length) : 0;
+                                return avg + '%';
+                            }
+                        }
+                    }
+                }
+            },
+            labels: @json($loginTimeAnalytics['login_consistency']['labels']),
+            colors: ['#5D87FF', '#49BEFF', '#FFAE1F', '#FF5A5A', '#13D8AA', '#8E54E9', '#00E396', '#FF4560', '#F86624', '#2E93fA'],
+            legend: {
+                position: 'bottom',
+                fontSize: '10px'
+            }
+        };
+
+        loginConsistency = new ApexCharts(document.querySelector("#loginConsistency"), consistencyOptions);
+        loginConsistency.render();
+
+        // Average Login Time Trend (Area Chart)
+        var avgTimeOptions = {
+            series: [{
+                name: 'Avg Login Time (Hours)',
+                data: @json($loginTimeAnalytics['login_trend'])
+            }],
+            chart: {
+                height: 350,
+                type: 'area',
+                zoom: {
+                    enabled: false
+                },
+                toolbar: {
+                    show: false
+                }
+            },
+            colors: ['#8E54E9'],
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                curve: 'smooth',
+                width: 3
+            },
+            fill: {
+                type: 'gradient',
+                gradient: {
+                    shadeIntensity: 1,
+                    opacityFrom: 0.7,
+                    opacityTo: 0.3,
+                    stops: [0, 90, 100]
+                }
+            },
+            xaxis: {
+                categories: @json($loginTimeAnalytics['dates']),
+                labels: {
+                    rotate: -45,
+                    style: {
+                        fontSize: '11px'
+                    }
+                }
+            },
+            yaxis: {
+                title: {
+                    text: 'Time (Hours)'
+                },
+                labels: {
+                    formatter: function(val) {
+                        const hours = Math.floor(val);
+                        const minutes = Math.round((val - hours) * 60);
+                        return `${hours}:${minutes.toString().padStart(2, '0')}`;
+                    }
+                }
+            },
+            grid: {
+                borderColor: '#f1f1f1',
+            }
+        };
+
+        avgLoginTimeTrend = new ApexCharts(document.querySelector("#avgLoginTimeTrend"), avgTimeOptions);
+        avgLoginTimeTrend.render();
+    });
+
+
+    // SOS Analytics Charts ........................
+    function getHeatmapColor(intensity) {
+        if (intensity >= 80) return '#FF0000';
+        if (intensity >= 60) return '#FF4560';
+        if (intensity >= 40) return '#FF6B6B';
+        if (intensity >= 20) return '#FF8E8E';
+        return '#FFB3B3';
     }
 
-    /* when Apply / Reset clicked */
-    applyBtn.addEventListener('click', ()=>{
-        current.vehicle = vehicleSelect.value;
-        current.driver = driverSelect.value;
-        current.from = dateFrom.value;
-        current.to = dateTo.value;
-        updateDashboard(true);
+    document.addEventListener('DOMContentLoaded', function() {
+        var bubbleData = @json($sosAnalytics['dates']).map((date, index) => {
+            return {
+                x: date,
+                y: @json($sosAnalytics['daily_sos'])[index],
+                z: @json($sosAnalytics['daily_sos'])[index] * 10 // Bubble size
+            };
+        });
+
+        var bubbleOptions = {
+            series: [{
+                name: 'SOS Alerts',
+                data: bubbleData
+            }],
+            chart: {
+                height: 400,
+                type: 'bubble',
+                toolbar: {
+                    show: true
+                }
+            },
+            dataLabels: {
+                enabled: false
+            },
+            fill: {
+                opacity: 0.8,
+                type: 'gradient',
+                gradient: {
+                    shade: 'dark',
+                    type: "vertical",
+                    shadeIntensity: 0.5,
+                    gradientToColors: ['#FF4560'],
+                    inverseColors: false,
+                    opacityFrom: 0.8,
+                    opacityTo: 0.4,
+                    stops: [0, 90, 100]
+                }
+            },
+            colors: ['#FF4560'],
+            title: {
+                text: 'SOS Alert Intensity Over Time'
+            },
+            xaxis: {
+                type: 'category',
+                labels: {
+                    rotate: -45,
+                    style: {
+                        fontSize: '11px'
+                    }
+                }
+            },
+            yaxis: {
+                title: {
+                    text: 'Number of Alerts'
+                },
+                max: Math.max(...@json($sosAnalytics['daily_sos'])) * 1.1
+            },
+            tooltip: {
+                custom: function({ seriesIndex, dataPointIndex, w }) {
+                    const data = w.globals.initialSeries[seriesIndex].data[dataPointIndex];
+                    return `
+                    <div class="apexcharts-tooltip-box bg-danger text-white">
+                        <div><strong>${data.x}</strong></div>
+                        <div>Alerts: ${data.y}</div>
+                        <div>Intensity: ${data.z/10}/10</div>
+                    </div>
+                    `;
+                }
+            }
+        };
+
+        sosBubbleTimeline = new ApexCharts(document.querySelector("#sosBubbleTimeline"), bubbleOptions);
+        sosBubbleTimeline.render();
+
+        // Severity Donut Chart
+        var severityOptions = {
+            series: @json($sosAnalytics['severity_analysis']['counts']),
+            chart: {
+                type: 'donut',
+                height: 400
+            },
+            labels: @json($sosAnalytics['severity_analysis']['labels']),
+            colors: @json($sosAnalytics['severity_analysis']['colors']),
+            legend: {
+                position: 'bottom'
+            },
+            plotOptions: {
+                pie: {
+                    donut: {
+                        size: '65%',
+                        labels: {
+                            show: true,
+                            total: {
+                                show: true,
+                                label: 'Total Alerts',
+                                formatter: function(w) {
+                                    return @json($sosAnalytics['summary']['total_sos_alerts']);
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            dataLabels: {
+                enabled: true,
+                formatter: function(val, opts) {
+                    return opts.w.config.series[opts.seriesIndex];
+                }
+            },
+            responsive: [{
+                breakpoint: 480,
+                options: {
+                    chart: {
+                        width: 200
+                    },
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }]
+        };
+
+        severityDonut = new ApexCharts(document.querySelector("#severityDonut"), severityOptions);
+        severityDonut.render();
+
+        // 24-Hour Heatmap
+        var heatmapData = @json($sosAnalytics['hourly_distribution']);
+        var heatmapOptions = {
+            series: [{
+                name: 'SOS Alerts',
+                data: heatmapData.map(item => ({
+                    x: item.hour,
+                    y: item.count,
+                    fillColor: getHeatmapColor(item.intensity)
+                }))
+            }],
+            chart: {
+                height: 350,
+                type: 'heatmap',
+                toolbar: {
+                    show: false
+                }
+            },
+            dataLabels: {
+                enabled: true
+            },
+            colors: ['#FF4560'],
+            xaxis: {
+                type: 'category',
+                labels: {
+                    style: {
+                        fontSize: '10px'
+                    }
+                }
+            },
+            yaxis: {
+                title: {
+                    text: 'Alert Count'
+                }
+            },
+            plotOptions: {
+                heatmap: {
+                    colorScale: {
+                        ranges: [
+                            { from: 0, to: 5, color: '#FFB3B3', name: 'Low' },
+                            { from: 6, to: 15, color: '#FF6B6B', name: 'Medium' },
+                            { from: 16, to: 25, color: '#FF4560', name: 'High' },
+                            { from: 26, to: 100, color: '#FF0000', name: 'Critical' }
+                        ]
+                    }
+                }
+            }
+        };
+
+        hourlyHeatmap = new ApexCharts(document.querySelector("#hourlyHeatmap"), heatmapOptions);
+        hourlyHeatmap.render();
+
+        // Driver Treemap Chart
+        var treemapData = @json($sosAnalytics['driver_sos_frequency']['labels']).map((label, index) => {
+            return {
+                x: label,
+                y: @json($sosAnalytics['driver_sos_frequency']['counts'])[index]
+            };
+        });
+
+        var treemapOptions = {
+            series: [{
+                data: treemapData
+            }],
+            legend: {
+                show: false
+            },
+            chart: {
+                height: 350,
+                type: 'treemap',
+                toolbar: {
+                    show: false
+                }
+            },
+            colors: [
+                '#FF4560', '#FF6B6B', '#FF8E8E', '#FFB3B3', '#FFD8D8',
+                '#FF0000', '#FF3333', '#FF6666', '#FF9999', '#FFCCCC'
+            ],
+            plotOptions: {
+                treemap: {
+                    enableShades: true,
+                    shadeIntensity: 0.5,
+                    reverseNegativeShade: true,
+                    colorScale: {
+                        ranges: [
+                            { from: 1, to: 5, color: '#FFB3B3' },
+                            { from: 6, to: 10, color: '#FF8E8E' },
+                            { from: 11, to: 15, color: '#FF6B6B' },
+                            { from: 16, to: 100, color: '#FF4560' }
+                        ]
+                    }
+                }
+            }
+        };
+
+        driverTreemap = new ApexCharts(document.querySelector("#driverTreemap"), treemapOptions);
+        driverTreemap.render();
+
+        // Location Radar Chart
+        var radarOptions = {
+            series: [{
+                name: 'SOS Frequency',
+                data: @json($sosAnalytics['location_clusters']['counts'])
+            }],
+            chart: {
+                height: 350,
+                type: 'radar',
+                toolbar: {
+                    show: false
+                }
+            },
+            xaxis: {
+                categories: @json($sosAnalytics['location_clusters']['labels'])
+            },
+            yaxis: {
+                show: false
+            },
+            colors: ['#FF4560'],
+            plotOptions: {
+                radar: {
+                    size: 140,
+                    polygons: {
+                        strokeColors: '#e9e9e9',
+                        fill: {
+                            colors: ['#f8f8f8', '#fff']
+                        }
+                    }
+                }
+            },
+            markers: {
+                size: 4,
+                colors: ['#fff'],
+                strokeColor: '#FF4560',
+                strokeWidth: 2
+            }
+        };
+
+        locationRadar = new ApexCharts(document.querySelector("#locationRadar"), radarOptions);
+        locationRadar.render();
+
+        // Response Time Trend (Area Chart)
+        var responseTimeOptions = {
+            series: [{
+                name: 'Avg Response Time (min)',
+                data: @json($sosAnalytics['response_time_trend'])
+            }],
+            chart: {
+                height: 350,
+                type: 'area',
+                zoom: {
+                    enabled: false
+                },
+                toolbar: {
+                    show: false
+                }
+            },
+            colors: ['#00E396'],
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                curve: 'smooth',
+                width: 3
+            },
+            fill: {
+                type: 'gradient',
+                gradient: {
+                    shadeIntensity: 1,
+                    opacityFrom: 0.7,
+                    opacityTo: 0.3,
+                    stops: [0, 90, 100]
+                }
+            },
+            xaxis: {
+                categories: @json($sosAnalytics['dates']),
+                labels: {
+                    rotate: -45,
+                    style: {
+                        fontSize: '11px'
+                    }
+                }
+            },
+            yaxis: {
+                title: {
+                    text: 'Response Time (minutes)'
+                }
+            },
+            grid: {
+                borderColor: '#f1f1f1',
+            }
+        };
+
+        responseTimeTrend = new ApexCharts(document.querySelector("#responseTimeTrend"));
+        responseTimeTrend.render();
     });
 
-    resetBtn.addEventListener('click', ()=>{
-        vehicleSelect.selectedIndex = 0;
-        driverSelect.selectedIndex = 0;
-        populateFilters();
-        current.vehicle = vehicleSelect.value;
-        current.driver = driverSelect.value;
-        current.from = dateFrom.value;
-        current.to = dateTo.value;
-        updateDashboard(true);
-    });
-
-    /* populate initial menu selections */
-    REPORTS.forEach(r => {
-    // first becomes active visually by default (no extra UI highlight to keep DOM simple)
-    });
-    SAFETY.forEach(r=>{});
-
-    /* main update function to refresh charts, metrics, and route */
-    function updateDashboard(flash=false){
-        // ensure defaults set
-        current.vehicle = current.vehicle || vehicleSelect.value || VEHICLES[0].id;
-        current.driver = current.driver || driverSelect.value || DRIVERS[0].id;
-        current.from = current.from || dateFrom.value;
-        current.to = current.to || dateTo.value;
-
-        const sample = generateSampleData({from:current.from, to:current.to, vehicle:current.vehicle, driver:current.driver});
-        createCharts(sample);
-        metricTrips.textContent = sample.totalTrips;
-        metricDistance.textContent = sample.totalDist + ' km';
-        metricSpeed.textContent = sample.avgSpeed + ' km/h';
-        metricOverstay.textContent = sample.overstay;
-
-        // load route
-        routeState.points = sample.route;
-        routeState.idx = 0;
-        routeState.playing = false;
-        if(routeState.animId) { cancelAnimationFrame(routeState.animId); routeState.animId = null; }
-        resizeRouteCanvas();
-        drawRoute(0);
-
-        if(flash){
-            const el = document.querySelector('.content .panel');
-            el.style.boxShadow = '0 20px 60px rgba(37,99,235,0.08)';
-            setTimeout(()=> el.style.boxShadow = '0 10px 30px rgba(15,23,42,0.04)', 600);
-        }
-    }
-
-    /* initial values */
-    current.vehicle = VEHICLES[0].id;
-    current.driver = DRIVERS[0].id;
-    current.from = dateFrom.value;
-    current.to = dateTo.value;
-
-    /* fill selects with initial values after DOM ready */
-    document.addEventListener('DOMContentLoaded', ()=>{
-        vehicleSelect.value = current.vehicle;
-        driverSelect.value = current.driver;
-        updateDashboard();
-    });
-
-    /* keyboard shortcuts: 1-6 select first 6 reports */
-    window.addEventListener('keydown',(e)=>{
-        const n = parseInt(e.key,10);
-        if(!isNaN(n) && n>=1 && n<=6){
-            const r = REPORTS[n-1];
-            if(r) selectReport(r);
-        }
-    });
 </script>
 @endsection

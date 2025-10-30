@@ -389,6 +389,7 @@ class DriverApiController extends Controller
 
     protected function sendNewOTP($phoneNumber)
     {
+
         // $otp = 1234;
         $otp = rand(1000, 9999);
         $user = User::where('phone', $phoneNumber)->first();
@@ -1529,7 +1530,7 @@ public function getAllBookingRequest(Request $request)
         $driver->latitude = $request->latitude;
         $driver->longitude = $request->longitude;
         $driver->save();
-
+        
         DriverLocation::create([
             'driver_id' => $driver->id,
             'vehicle_id' => null,

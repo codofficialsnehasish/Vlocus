@@ -513,8 +513,8 @@
                 </div>
 
                 <div class="custom-input-wrapper mb-3" style="margin-top: 15px;">
-                    <label class="custom-floating-label">TOTAL Bill Amount</label>
-                    <input type="number" class="form-control custom-input amount" name="amount" placeholder="Enter bill amount" >
+                    <label class="custom-floating-label">TOTAL Amount</label>
+                    <input type="number" class="form-control custom-input amount" name="amount" placeholder="Enter amount" >
                 </div>
 
                 {{-- <div class="custom-input-wrapper mb-3">

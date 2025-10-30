@@ -132,7 +132,6 @@ Route::prefix('admin')->group(function (){
                 Route::post("/update",'update')->name('update');
                 Route::delete("/delete/{routeId}",'destroy')->name('delete');
                 Route::post("/add-company",'add_company')->name('add_company');
-
             });
         });
 
