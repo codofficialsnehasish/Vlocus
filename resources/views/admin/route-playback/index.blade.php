@@ -222,7 +222,7 @@
 
         // Custom driver icon
         const driverIcon = L.divIcon({
-            html: '<i class="fas fa-solid fa-circle" style="color: #dc3545; font-size: 24px;"></i>', //fa-truck-moving 
+            html: '<i class="fas fa-solid fa-truck-moving" style="color: #dc3545; font-size: 24px;"></i>', //fa-truck-moving 
             className: 'driver-marker',
             iconSize: [24, 24],
             iconAnchor: [12, 12]
