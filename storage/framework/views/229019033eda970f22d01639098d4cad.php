@@ -267,13 +267,6 @@
                             <div class="menu-title d-flex align-items-center">Tasks</div>
                         </a>
                     </li>
-
-                    <li class="nav-item" style="margin-right:10px;">
-                        <a class="nav-link  " href="<?php echo e(route('route.playback')); ?>">
-                            <div class="parent-icon"><i class="material-icons-outlined">local_shipping</i></div>
-                            <div class="menu-title d-flex align-items-center">Route Playback</div>
-                        </a>
-                    </li>
                     
                     <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->any([
                         'Trip Summary Report Show', 
