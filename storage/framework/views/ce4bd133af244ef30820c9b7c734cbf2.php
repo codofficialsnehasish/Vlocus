@@ -229,7 +229,7 @@
                             
                             <input type="radio" class="btn-check" name="statusFilter" id="filterOffline" autocomplete="off">
                             <label class="btn btn-outline-primary" for="filterOffline">Offline</label>
-
+                            
                             <input type="radio" class="btn-check" name="statusFilter" id="filterIdle" autocomplete="off">
                             <label class="btn btn-outline-primary" for="filterIdle">Idle</label>
 
@@ -240,27 +240,41 @@
                         <!-- Vehicle List (initially visible) -->
                         <div class="vehicle-list-container" id="vehicle-list">
                             <?php $__currentLoopData = $drivers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $driver): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <?php $driver_vehicle = getDriverDetails($driver->id)->vehicle; ?>
+                            <?php 
+                                $current_active_delivery = $driver->currentActiveDelivery;
+                                // if($current_active_delivery){
+                                //     dd($current_active_delivery);
+
+                                // }
+                                $driver_vehicle = $current_active_delivery?->vehicle; // use null-safe operator
+                            ?>
+                            
                             <div class="list-group-item list-group-item-action flex-column align-items-start mb-2 vehicle-item" 
-                                 data-id="<?php echo e($driver_vehicle->id); ?>"
-                                 data-driver-id="<?php echo e($driver->id); ?>"
+                                 data-id="<?php echo e($driver_vehicle->id ?? null); ?>"
+                                 data-driver-id="<?php echo e($driver->id ?? null); ?>"
                                  data-lat="<?php echo e($driver->driver->latitude); ?>" 
                                  data-lng="<?php echo e($driver->driver->longitude); ?>"
-                                 data-name="<?php echo e($driver_vehicle->name); ?>"
-                                 data-vehicle-number="<?php echo e($driver_vehicle->vehicle_number); ?>"
+                                 data-name="<?php echo e($driver_vehicle->name ?? null); ?>"
+                                 data-vehicle-number="<?php echo e($driver_vehicle->vehicle_number ?? null); ?>"
                                  data-driver-name="<?php echo e($driver->name); ?>"
                                  data-driver-phone="<?php echo e($driver->phone); ?>"
                                  data-status="<?php echo e($driver->driver->ride_mode == 1 ? 'Online' : 'Offline'); ?>"
-                                 data-last-updated="<?php echo e($driver_vehicle->updated_at->diffForHumans()); ?>">
+                                 data-running-status="<?php echo e(!empty($driver_vehicle) == 1 ? 'Running' : 'Idle'); ?>"
+                                 data-last-updated="<?php echo e(optional($driver_vehicle?->updated_at)?->diffForHumans() ?? 'N/A'); ?>">
                                 <div class="d-flex w-100 justify-content-between">
-                                    <h6 class="mb-1"><?php echo e($driver_vehicle->name); ?></h6>
-                                    <span class="dash-lable mb-0 bg-<?php echo e($driver->driver->ride_mode == 1 ? 'success' : 'danger'); ?> bg-opacity-10 text-<?php echo e($driver->driver->ride_mode == 1 ? 'success' : 'danger'); ?> rounded-2"><?php echo e($driver->driver->ride_mode == 1 ? 'Online' : 'Offline'); ?></span>
+                                    <h6 class="mb-1"><?php echo e($driver_vehicle->name ?? null); ?></h6>
+                                    <div class="status">
+                                        <span class="dash-lable mb-0 bg-<?php echo e($driver->driver->ride_mode == 1 ? 'success' : 'danger'); ?> bg-opacity-10 text-<?php echo e($driver->driver->ride_mode == 1 ? 'success' : 'danger'); ?> rounded-2"><?php echo e($driver->driver->ride_mode == 1 ? 'Online' : 'Offline'); ?></span>
+                                        <span class="dash-lable mb-0 bg-<?php echo e(!empty($driver_vehicle) ? 'success' : 'danger'); ?> bg-opacity-10 text-<?php echo e(!empty($driver_vehicle) ? 'success' : 'danger'); ?> rounded-2"><?php echo e(!empty($driver_vehicle) ? 'Running' : 'Idle'); ?></span>
+                                    </div>
                                 </div>
                                 <p class="mb-1">Driver: <?php echo e($driver->name); ?> (<?php echo e($driver->phone); ?>)</p>
-                                <p class="mb-1">Vehicle Number: <?php echo e($driver_vehicle->vehicle_number); ?></p>
+                                <p class="mb-1">Vehicle Number: <?php echo e($driver_vehicle->vehicle_number ?? 'N/A'); ?></p>
                                 <small>Last updated: <span class="update-time"><?php echo e($driver->updated_at->diffForHumans()); ?></span></small>
                             </div>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+                            
                         </div>
                         
                         <!-- Driver Details Container (initially hidden) -->
@@ -358,33 +372,85 @@
             filterVehicles();
         });
         
+        // function filterVehicles() {
+        //     const searchTerm = $searchInput.val().toLowerCase();
+        //     const selectedStatus = $('input[name="statusFilter"]:checked').attr('id');
+        //     const selectedRunningStatus = $('input[name="runningFilter"]:checked').attr('id');
+            
+        //     $vehicleItems.each(function() {
+        //         const $item = $(this);
+        //         const name = String($item.data('name') || '').toLowerCase();
+        //         const vehicleNumber = String($item.data('vehicle-number') || '').toLowerCase();
+        //         const driverName = String($item.data('driver-name') || '').toLowerCase();
+        //         const driverPhone = String($item.data('driver-phone') || '').toLowerCase();
+        //         const status = String($item.data('status') || '');
+        //         const running_status = String($item.data('running-status') || '');
+                
+        //         // Check search term
+        //         const matchesSearch = name.includes(searchTerm) || 
+        //                             vehicleNumber.includes(searchTerm) || 
+        //                             driverName.includes(searchTerm) || 
+        //                             driverPhone.includes(searchTerm);
+                
+        //         // Check status filter
+        //         let matchesStatus = true;
+        //         if (selectedStatus === 'filterOnline') {
+        //             matchesStatus = status === 'Online';
+        //         } else if (selectedStatus === 'filterOffline') {
+        //             matchesStatus = status === 'Offline';
+        //         } 
+
+        //         if (selectedRunningStatus === 'filterIdle') {
+        //             matchesStatus = running_status === 'Idle';
+        //         } else if (selectedRunningStatus === 'filterRunning') {
+        //             matchesStatus = running_status === 'Running';
+        //         }
+                
+        //         // Show/hide based on filters
+        //         if (matchesSearch && matchesStatus) {
+        //             $item.show();
+        //         } else {
+        //             $item.hide();
+        //         }
+        //     });
+        // }
+
         function filterVehicles() {
             const searchTerm = $searchInput.val().toLowerCase();
             const selectedStatus = $('input[name="statusFilter"]:checked').attr('id');
             
             $vehicleItems.each(function() {
                 const $item = $(this);
+                console.log($item);
                 const name = String($item.data('name') || '').toLowerCase();
                 const vehicleNumber = String($item.data('vehicle-number') || '').toLowerCase();
                 const driverName = String($item.data('driver-name') || '').toLowerCase();
                 const driverPhone = String($item.data('driver-phone') || '').toLowerCase();
                 const status = String($item.data('status') || '');
+                const running_status = String($item.data('running-status') || '');
                 
-                // Check search term
-                const matchesSearch = name.includes(searchTerm) || 
-                                    vehicleNumber.includes(searchTerm) || 
-                                    driverName.includes(searchTerm) || 
-                                    driverPhone.includes(searchTerm);
+                // --- Search Filter ---
+                const matchesSearch =
+                    name.includes(searchTerm) ||
+                    vehicleNumber.includes(searchTerm) ||
+                    driverName.includes(searchTerm) ||
+                    driverPhone.includes(searchTerm);
                 
-                // Check status filter
+                // --- Online/Offline Filter ---
                 let matchesStatus = true;
+                console.log("efgwaegt " +selectedStatus);
                 if (selectedStatus === 'filterOnline') {
                     matchesStatus = status === 'Online';
                 } else if (selectedStatus === 'filterOffline') {
                     matchesStatus = status === 'Offline';
+                } else if (selectedStatus === 'filterIdle') {
+                    matchesStatus = running_status === 'Idle';
+                    console.log(matchesStatus);
+                } else if (selectedStatus === 'filterRunning') {
+                    matchesStatus = running_status === 'Running';
                 }
-                
-                // Show/hide based on filters
+
+                // --- Final Combined Logic ---
                 if (matchesSearch && matchesStatus) {
                     $item.show();
                 } else {
@@ -392,6 +458,7 @@
                 }
             });
         }
+
         
         // Trigger initial filter
         filterVehicles();
@@ -1475,40 +1542,40 @@
     }
 
     // Filter vehicles based on search and status
-    function filterVehicles() {
-        const searchTerm = $('#vehicleSearch').val().toLowerCase();
-        const selectedStatus = $('input[name="statusFilter"]:checked').attr('id');
+    // function filterVehicles() {
+    //     const searchTerm = $('#vehicleSearch').val().toLowerCase();
+    //     const selectedStatus = $('input[name="statusFilter"]:checked').attr('id');
         
-        $('.vehicle-item').each(function() {
-            const $item = $(this);
-            const name = String($item.data('name') || '').toLowerCase();
-            const vehicleNumber = String($item.data('vehicle-number') || '').toLowerCase();
-            const driverName = String($item.data('driver-name') || '').toLowerCase();
-            const driverPhone = String($item.data('driver-phone') || '').toLowerCase();
-            const status = String($item.data('status') || '');
+    //     $('.vehicle-item').each(function() {
+    //         const $item = $(this);
+    //         const name = String($item.data('name') || '').toLowerCase();
+    //         const vehicleNumber = String($item.data('vehicle-number') || '').toLowerCase();
+    //         const driverName = String($item.data('driver-name') || '').toLowerCase();
+    //         const driverPhone = String($item.data('driver-phone') || '').toLowerCase();
+    //         const status = String($item.data('status') || '');
             
-            // Check search term
-            const matchesSearch = name.includes(searchTerm) || 
-                                vehicleNumber.includes(searchTerm) || 
-                                driverName.includes(searchTerm) || 
-                                driverPhone.includes(searchTerm);
+    //         // Check search term
+    //         const matchesSearch = name.includes(searchTerm) || 
+    //                             vehicleNumber.includes(searchTerm) || 
+    //                             driverName.includes(searchTerm) || 
+    //                             driverPhone.includes(searchTerm);
             
-            // Check status filter
-            let matchesStatus = true;
-            if (selectedStatus === 'filterOnline') {
-                matchesStatus = status === 'Online';
-            } else if (selectedStatus === 'filterOffline') {
-                matchesStatus = status === 'Offline';
-            }
+    //         // Check status filter
+    //         let matchesStatus = true;
+    //         if (selectedStatus === 'filterOnline') {
+    //             matchesStatus = status === 'Online';
+    //         } else if (selectedStatus === 'filterOffline') {
+    //             matchesStatus = status === 'Offline';
+    //         }
             
-            // Show/hide based on filters
-            if (matchesSearch && matchesStatus) {
-                $item.show();
-            } else {
-                $item.hide();
-            }
-        });
-    }
+    //         // Show/hide based on filters
+    //         if (matchesSearch && matchesStatus) {
+    //             $item.show();
+    //         } else {
+    //             $item.hide();
+    //         }
+    //     });
+    // }
 
     // Set up live updates
     function setupLiveUpdates() {

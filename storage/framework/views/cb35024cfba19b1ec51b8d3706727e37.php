@@ -1,3 +1,5 @@
+
+
 <?php $__env->startSection('title'); ?>
     Delivery Schedule
 <?php $__env->stopSection(); ?>
@@ -405,7 +407,7 @@
 <?php $__env->startSection('content'); ?>
 
     <!--breadcrumb-->
-    <div class="offcanvas offcanvas-start delivery-note-overlay" tabindex="-1" id="deliveryNote" aria-modal="true" role="dialog" style="width: 100%;">
+    <div class="offcanvas offcanvas-start delivery-note-overlay" tabindex="-1" id="deliveryNote" aria-modal="true" role="dialog" style="width: 100%; margin-top: 60px;">
 
         <form id="task-form" >
             <div class="offcanvas-header border-bottom mt-2">
@@ -414,7 +416,7 @@
                 <button type="submit" class="btn-close" id="edit-submit-close-btn" style="display: none;"></button>
             </div>
 
-            <div class="offcanvas-body" style="position: relative; height: 700px;  overflow-y: auto">
+            <div class="offcanvas-body" style="position: relative; height: 80vh;  overflow-y: auto;" style="margin-bottom:50px;">
             
                 
 
@@ -486,7 +488,7 @@
 
                 
 
-                <div class="custom-input-wrapper mb-3">
+                <div class="custom-input-wrapper mb-3" >
                     <label class="custom-floating-label">PAYMENT DETAILS</label>
                     <select class="form-control form-select custom-input payment-type" name="payment_type">
                         <option value="" selected disabled>Select Type</option>
@@ -497,13 +499,13 @@
 
                 <div class="custom-input-wrapper mb-3" style="margin-top: 15px;">
                     <label class="custom-floating-label">TOTAL Amount</label>
-                    <input type="number" class="form-control custom-input amount" name="amount" placeholder="Enter amount">
+                    <input type="number" class="form-control custom-input amount" name="amount" placeholder="Enter amount" >
                 </div>
 
                 
 
                 
-                <div id="ofcanvus-submit-btn" style="position: sticky; bottom: 50; background: white; padding: 10px 0; z-index: 10;">
+                <div id="ofcanvus-submit-btn" style="position: fixed; bottom: 0; background: white; padding: 10px 0; z-index: 10; width: 555px;">
                     <button type="submit" class="btn btn-primary text-uppercase fw-bold w-100">
                         Add Delivery Task
                     </button>
@@ -513,6 +515,12 @@
                 </div>
             </div>
         </form>
+
+        <!-- <div id="ofcanvus-submit-btn" style="position: sticky; bottom: 0; background: white; padding: 10px 0; z-index: 10; margin:0 15px;">
+                    <button type="submit" class="btn btn-primary text-uppercase fw-bold w-100">
+                        Add Delivery Task
+                    </button>
+        </div> -->
     </div>
 
     <form class="needs-validation" action="<?php echo e(route('delivery-schedule.store')); ?>" method="post" novalidate enctype="multipart/form-data">
@@ -520,7 +528,7 @@
         
         <div class="d-flex ">
             <!-- Sidebar -->
-            <div class="sidebar show" id="sidebar">
+            <div class="sidebar show" id="sidebar" style="z-index:5">
                 <div class="d-flex task-header">
                     <div class="task-header">
                         <div class="py-1 px-2 rounded-circle  bg-white"><i class="bi bi-pencil-square text-black"></i>
@@ -601,7 +609,7 @@
         </div>
     </form>
 
-    <div class="modal fade" id="quickShopAddModal">
+    <div class="modal fade" id="quickShopAddModal" style="z-index: 999999;">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
             <div class="modal-content">
                 <div class="modal-header border-bottom-0 bg-grd-primary py-2">

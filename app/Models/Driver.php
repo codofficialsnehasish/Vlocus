@@ -39,4 +39,11 @@ class Driver extends Model implements HasMedia
     {
         return $this->hasMany(DriverLocation::class, 'driver_id');
     }
+
+    public function currentActiveDelivery()
+    {
+        return $this->hasOne(DeliverySchedule::class, 'driver_id', 'user_id')
+            ->where('is_completed', '!=', 1)
+            ->latestOfMany('delivery_date');
+    }
 }

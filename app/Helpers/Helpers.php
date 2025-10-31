@@ -42,6 +42,15 @@ if (!function_exists('generateBookingNumber')) {
     }
 }
 
+if (!function_exists('generateOrderNumber')) {
+    function generateOrderNumber() {
+        $dateTime = date('YmdHis');
+        // $orderNumber = 'ORD' . $dateTime;
+        $orderNumber = 'O' . $dateTime;
+        return $orderNumber;
+    }
+}
+
 if (!function_exists('getFare')) {
     function getFare($route_id, $from_stop_id, $to_stop_id) {
         $fare = Fare::where('route_id', $route_id)

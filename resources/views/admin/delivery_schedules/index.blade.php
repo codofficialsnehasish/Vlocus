@@ -39,6 +39,7 @@
                             <tr>
                                 <th>S.l</th>
                                 <th>Delevery Date</th>
+                                <th>Order Id</th>
                                 <th>Driver</th>
                                 <th>Vehicle</th>
                                 <th>Total Shop</th>
@@ -53,6 +54,7 @@
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $item->delivery_date }}</td>
+                                    <td>{{ $item->order_id }}</td>
                                     <td>{{ $item->driver?->name }}</td>
                                     <td>{{ $item->vehicle?->name }}</td>
                                     <td>{{ $item->deliveryScheduleShops?->count() }}</td>

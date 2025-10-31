@@ -301,6 +301,7 @@ class DeliveryScheduleController extends Controller implements HasMiddleware
         
         $deliverySchedule = DeliverySchedule::create([
             'delivery_date' => toDbDate($request->delivery_date),
+            'order_id' => generateOrderNumber(),
             'driver_id' => $request->driver_id,
             'vehicle_id' => $request->vehicle_id,
             'delivery_note'=>$request->delivery_note,

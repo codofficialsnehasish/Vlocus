@@ -39,6 +39,7 @@
                             <tr>
                                 <th>S.l</th>
                                 <th>Delevery Date</th>
+                                <th>Order Id</th>
                                 <th>Driver</th>
                                 <th>Vehicle</th>
                                 <th>Total Shop</th>
@@ -53,6 +54,7 @@
                                 <tr>
                                     <td><?php echo e($loop->iteration); ?></td>
                                     <td><?php echo e($item->delivery_date); ?></td>
+                                    <td><?php echo e($item->order_id); ?></td>
                                     <td><?php echo e($item->driver?->name); ?></td>
                                     <td><?php echo e($item->vehicle?->name); ?></td>
                                     <td><?php echo e($item->deliveryScheduleShops?->count()); ?></td>

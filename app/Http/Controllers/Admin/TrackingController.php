@@ -12,7 +12,11 @@ class TrackingController extends Controller
 {
     public function index()
     {
-        $drivers = User::role('Driver')->latest()->get();
+        // $drivers = User::role('Driver')->latest()->get();
+        $drivers = User::role('Driver')
+                    ->with(['driver', 'currentActiveDelivery.vehicle'])
+                    ->latest()
+                    ->get();
 
         $vehicles = Vehicle::latest()->get();
         $shops = Shop::latest()->get(); 

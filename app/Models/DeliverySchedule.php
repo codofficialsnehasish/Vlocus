@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class DeliverySchedule extends Model
 {
-    protected $fillable = ['delivery_date','driver_id','vehicle_id','status','delivery_note','payment_type','amount'];
+    protected $fillable = ['delivery_date','order_id','driver_id','vehicle_id','status','delivery_note','payment_type','amount'];
 
     public function driver()
     {
