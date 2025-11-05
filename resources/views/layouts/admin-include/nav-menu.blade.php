@@ -103,170 +103,184 @@
                             </ul>
                         </li>
                     @endcan --}}
-                    @canany(['System User Show', 'Driver Show', 'User Show'])
-                        <li class="nav-item dropdown">
-                            <a class="nav-link {{ in_array(request()->segment(2), ['drivers','companys','branchs','employees']) ? 'active' : '' }} dropdown-toggle dropdown-toggle-nocaret" href="javascript:;"
-                                data-bs-toggle="dropdown">
-                                <div class="parent-icon"><i class='material-icons-outlined'>admin_panel_settings</i></div>
-                                <div class="menu-title d-flex align-items-center">Users</div>
-                                <div class="ms-auto dropy-icon"><i class='material-icons-outlined'>expand_more</i></div>
-                            </a>
-                            <ul class="dropdown-menu">
-                                {{-- @can('System User Show')
-                                    <li><a class="dropdown-item" href="{{ route('system-user.index') }}"><i
-                                                class='material-icons-outlined'>supervised_user_circle</i>System User</a></li>
-                                @endcan --}}
-                           
-                                @can('Driver Show')
-                                    <li><a class="dropdown-item" href="{{ route('driver.index') }}"><i
-                                                class='material-icons-outlined'>drive_eta</i>Driver</a></li>
-                                @endcan
+                    <li class="nav-item dropdown">
+                        <a class="nav-link {{ in_array(request()->segment(2), ['drivers','companys','branchs','employees','vehicle-types', 'vehicles', 'brands', 'models']) ? 'active' : '' }} dropdown-toggle dropdown-toggle-nocaret" href="javascript:;"
+                            data-bs-toggle="dropdown">
+                            <div class="parent-icon"><i class='material-icons-outlined'>storage</i></div>
+                            <div class="menu-title d-flex align-items-center">Entry</div>
+                            <div class="ms-auto dropy-icon"><i class='material-icons-outlined'>expand_more</i></div>
+                        </a>
+                        <ul class="dropdown-menu">
+                            @canany(['System User Show', 'Driver Show', 'User Show'])
+                                {{-- <li class="nav-item dropdown"> --}}
+                                <li class="nav-item dropend mb-2">
+                                    <a class="nav-link {{ in_array(request()->segment(2), ['drivers','companys','branchs','employees']) ? 'active' : '' }} dropdown-toggle dropdown-toggle-nocaret" href="javascript:;"
+                                        data-bs-toggle="dropdown">
+                                        <div class="parent-icon"><i class='material-icons-outlined'>admin_panel_settings</i></div>
+                                        <div class="menu-title d-flex align-items-center">Users</div>
+                                        {{-- <div class="ms-auto dropy-icon"><i class='material-icons-outlined'>expand_more</i></div> --}}
+                                    </a>
+                                    {{-- <ul class="dropdown-menu"> --}}
+                                    <ul class="dropdown-menu submenu">
+                                        {{-- @can('System User Show')
+                                            <li><a class="dropdown-item" href="{{ route('system-user.index') }}"><i
+                                                        class='material-icons-outlined'>supervised_user_circle</i>System User</a></li>
+                                        @endcan --}}
+                                
+                                        @can('Driver Show')
+                                            <li><a class="dropdown-item" href="{{ route('driver.index') }}"><i
+                                                        class='material-icons-outlined'>drive_eta</i>Driver</a></li>
+                                        @endcan
 
-                                @can('Company Show')
-                                    <li><a class="dropdown-item" href="{{ route('company.index') }}"><i
-                                                class='material-icons-outlined'>business</i>Company</a></li>
-                                @endcan
+                                        @can('Company Show')
+                                            <li><a class="dropdown-item" href="{{ route('company.index') }}"><i
+                                                        class='material-icons-outlined'>business</i>Company</a></li>
+                                        @endcan
 
-                                @can('Branch Show')
-                                    <li><a class="dropdown-item" href="{{ route('branch.index') }}"><i
-                                                class='material-icons-outlined'>account_tree</i>Branch</a></li>
-                                @endcan
+                                        @can('Branch Show')
+                                            <li><a class="dropdown-item" href="{{ route('branch.index') }}"><i
+                                                        class='material-icons-outlined'>account_tree</i>Branch</a></li>
+                                        @endcan
 
-                                @can('Employee Show')
-                                    <li><a class="dropdown-item" href="{{ route('employee.index') }}"><i
-                                                class='material-icons-outlined'>groups</i>Employees</a></li>
-                                @endcan
+                                        @can('Employee Show')
+                                            <li><a class="dropdown-item" href="{{ route('employee.index') }}"><i
+                                                        class='material-icons-outlined'>groups</i>Employees</a></li>
+                                        @endcan
 
-                                {{-- @can('User Show')
-                                    <li><a class="dropdown-item" href="{{ route('user.index') }}"><i
-                                                class='material-icons-outlined'>person</i>User</a></li>
-                                @endcan --}}
-                            </ul>
-                        </li>
-                    @endcan
-                    @canany([
-                        'Bus Stop Show',
-                        'Bus Stop Create',
-                        'Route Show',
-                        'Route Create',
-                        'Vehicle Type Show',
-                        'Vehicle Type Create',
-                        'Vehicle Layout Show',
-                        'Vehicle Layout Create',
-                        'Vehicle Show',
-                        'Vehicle
-                        Create',
-                        ])
-                        <li class="nav-item dropdown">
-                            <a class="nav-link {{ in_array(request()->segment(2), ['vehicle-types', 'vehicles', 'brands', 'models']) ? 'active' : '' }} dropdown-toggle dropdown-toggle-nocaret" href="javascript:;"
-                                data-bs-toggle="dropdown">
-                                <div class="parent-icon"><i class='material-icons-outlined'>storage</i></div>
-                                <div class="menu-title d-flex align-items-center">Master</div>
-                                <div class="ms-auto dropy-icon"><i class='material-icons-outlined'>expand_more</i></div>
-                            </a>
-                            <ul class="dropdown-menu">
-                          
-                                @canany(['Vehicle Type Show', 'Vehicle Type Create'])
-                                    <li class="nav-item dropend">
-                                        <a class="dropdown-item dropdown-toggle dropdown-toggle-nocaret"
-                                            href="javascript:;"><i class="material-icons-outlined">local_shipping</i>Vehicle
-                                            Types</a>
-                                        <ul class="dropdown-menu submenu">
-                                            @can('Vehicle Type Show')
-                                                <li><a class="dropdown-item" href="{{ route('vehicle-type.index') }}"><i
-                                                            class="material-icons-outlined">directions_car</i>List Vehicle
-                                                        Types</a>
-                                                </li>
-                                            @endcan
-                                            @can('Vehicle Type Create')
-                                                <li><a class="dropdown-item" href="{{ route('vehicle-type.create') }}"><i
-                                                            class="material-icons-outlined">add_circle</i>Add Vehicle Types</a>
-                                                </li>
-                                            @endcan
-                                        </ul>
-                                    </li>
-                                @endcan
-                           
-                                @canany(['Vehicle Show', 'Vehicle Create'])
-                                    <li class="nav-item dropend">
-                                        <a class="dropdown-item dropdown-toggle dropdown-toggle-nocaret"
-                                            href="javascript:;"><i class="material-icons-outlined">directions_bus</i>Vehicles
-                                        </a>
-                                        <ul class="dropdown-menu submenu">
-                                            @can('Vehicle Show')
-                                                <li><a class="dropdown-item" href="{{ route('vehicle.index') }}"><i
-                                                            class="material-icons-outlined">format_list_bulleted</i>List of
-                                                        Vehicles </a></li>
-                                            @endcan
-                                            @can('Vehicle Create')
-                                                <li><a class="dropdown-item" href="{{ route('vehicle.create') }}"><i
-                                                            class="material-icons-outlined">add_circle</i>Add New Vehicle</a></li>
-                                            @endcan
-                                        </ul>
-                                    </li>
-                                @endcan
-                                @canany(['Brand Show', 'Brand Create'])
-                                    <li class="nav-item dropend">
-                                        <a class="dropdown-item dropdown-toggle dropdown-toggle-nocaret"
-                                            href="javascript:;"><i
-                                                class="material-icons-outlined">branding_watermark</i>Brand</a>
-                                        <ul class="dropdown-menu submenu">
-                                            @can('Brand Show')
-                                                <li><a class="dropdown-item" href="{{ route('brand.index') }}"><i
-                                                            class="material-icons-outlined">branding_watermark</i>List Brands
-                                                    </a></li>
-                                            @endcan
-                                            @can('Brand Create')
-                                                <li><a class="dropdown-item" href="{{ route('brand.create') }}"><i
-                                                            class="material-icons-outlined">add_circle</i>Add Brand</a>
-                                                </li>
-                                            @endcan
-                                        </ul>
-                                    </li>
-                                @endcan
-                                @canany(['Model Show', 'Model Create'])
-                                    <li class="nav-item dropend">
-                                        <a class="dropdown-item dropdown-toggle dropdown-toggle-nocaret"
-                                            href="javascript:;"><i class="material-icons-outlined">style</i>Model</a>
-                                        <ul class="dropdown-menu submenu">
-                                            @can('Model Show')
-                                                <li><a class="dropdown-item" href="{{ route('model.index') }}"><i
-                                                            class="material-icons-outlined">style</i>List Models
-                                                    </a></li>
-                                            @endcan
-                                            @can('Model Create')
-                                                <li><a class="dropdown-item" href="{{ route('model.create') }}"><i
-                                                            class="material-icons-outlined">add_circle</i>Add Model</a>
-                                                </li>
-                                            @endcan
-                                        </ul>
-                                    </li>
-                                @endcan
-                                @canany(['Color Show', 'Color Create'])
-                                    <!--<li class="nav-item dropend">-->
-                                    <!--    <a class="dropdown-item dropdown-toggle dropdown-toggle-nocaret"-->
-                                    <!--        href="javascript:;"><i class="material-icons-outlined">palette</i>Color</a>-->
-                                    <!--    <ul class="dropdown-menu submenu">-->
-                                    <!--        @can('Color Show')-->
-                                    <!--            <li><a class="dropdown-item" href="{{ route('color.index') }}"><i-->
-                                    <!--                        class="material-icons-outlined">palette</i>List Colors-->
-                                    <!--                </a></li>-->
-                                    <!--        @endcan-->
-                                    <!--        @can('Color Create')-->
-                                    <!--            <li><a class="dropdown-item" href="{{ route('color.create') }}"><i-->
-                                    <!--                        class="material-icons-outlined">add_circle</i>Add Color</a>-->
-                                    <!--            </li>-->
-                                    <!--        @endcan-->
-                                    <!--    </ul>-->
-                                    <!--</li>-->
-                                @endcan
-                               
-                            
+                                        {{-- @can('User Show')
+                                            <li><a class="dropdown-item" href="{{ route('user.index') }}"><i
+                                                        class='material-icons-outlined'>person</i>User</a></li>
+                                        @endcan --}}
+                                    </ul>
+                                </li>
+                            @endcan
+                            @canany([
+                                'Bus Stop Show',
+                                'Bus Stop Create',
+                                'Route Show',
+                                'Route Create',
+                                'Vehicle Type Show',
+                                'Vehicle Type Create',
+                                'Vehicle Layout Show',
+                                'Vehicle Layout Create',
+                                'Vehicle Show',
+                                'Vehicle
+                                Create',
+                                ])
+                                {{-- <li class="nav-item dropdown"> --}}
+                                <li class="nav-item dropend">
+                                    <a class="nav-link {{ in_array(request()->segment(2), ['vehicle-types', 'vehicles', 'brands', 'models']) ? 'active' : '' }} dropdown-toggle dropdown-toggle-nocaret" href="javascript:;"
+                                        data-bs-toggle="dropdown">
+                                        <div class="parent-icon"><i class='material-icons-outlined'>storage</i></div>
+                                        <div class="menu-title d-flex align-items-center">Master</div>
+                                        {{-- <div class="ms-auto dropy-icon"><i class='material-icons-outlined'>expand_more</i></div> --}}
+                                    </a>
+                                    {{-- <ul class="dropdown-menu"> --}}
+                                    <ul class="dropdown-menu submenu">
+                                
+                                        @canany(['Vehicle Type Show', 'Vehicle Type Create'])
+                                            <li class="nav-item dropend">
+                                                <a class="dropdown-item dropdown-toggle dropdown-toggle-nocaret"
+                                                    href="javascript:;"><i class="material-icons-outlined">local_shipping</i>Vehicle
+                                                    Types</a>
+                                                <ul class="dropdown-menu submenu">
+                                                    @can('Vehicle Type Show')
+                                                        <li><a class="dropdown-item" href="{{ route('vehicle-type.index') }}"><i
+                                                                    class="material-icons-outlined">directions_car</i>List Vehicle
+                                                                Types</a>
+                                                        </li>
+                                                    @endcan
+                                                    @can('Vehicle Type Create')
+                                                        <li><a class="dropdown-item" href="{{ route('vehicle-type.create') }}"><i
+                                                                    class="material-icons-outlined">add_circle</i>Add Vehicle Types</a>
+                                                        </li>
+                                                    @endcan
+                                                </ul>
+                                            </li>
+                                        @endcan
+                                
+                                        @canany(['Vehicle Show', 'Vehicle Create'])
+                                            <li class="nav-item dropend">
+                                                <a class="dropdown-item dropdown-toggle dropdown-toggle-nocaret"
+                                                    href="javascript:;"><i class="material-icons-outlined">directions_bus</i>Vehicles
+                                                </a>
+                                                <ul class="dropdown-menu submenu">
+                                                    @can('Vehicle Show')
+                                                        <li><a class="dropdown-item" href="{{ route('vehicle.index') }}"><i
+                                                                    class="material-icons-outlined">format_list_bulleted</i>List of
+                                                                Vehicles </a></li>
+                                                    @endcan
+                                                    @can('Vehicle Create')
+                                                        <li><a class="dropdown-item" href="{{ route('vehicle.create') }}"><i
+                                                                    class="material-icons-outlined">add_circle</i>Add New Vehicle</a></li>
+                                                    @endcan
+                                                </ul>
+                                            </li>
+                                        @endcan
+                                        @canany(['Brand Show', 'Brand Create'])
+                                            <li class="nav-item dropend">
+                                                <a class="dropdown-item dropdown-toggle dropdown-toggle-nocaret"
+                                                    href="javascript:;"><i
+                                                        class="material-icons-outlined">branding_watermark</i>Brand</a>
+                                                <ul class="dropdown-menu submenu">
+                                                    @can('Brand Show')
+                                                        <li><a class="dropdown-item" href="{{ route('brand.index') }}"><i
+                                                                    class="material-icons-outlined">branding_watermark</i>List Brands
+                                                            </a></li>
+                                                    @endcan
+                                                    @can('Brand Create')
+                                                        <li><a class="dropdown-item" href="{{ route('brand.create') }}"><i
+                                                                    class="material-icons-outlined">add_circle</i>Add Brand</a>
+                                                        </li>
+                                                    @endcan
+                                                </ul>
+                                            </li>
+                                        @endcan
+                                        @canany(['Model Show', 'Model Create'])
+                                            <li class="nav-item dropend">
+                                                <a class="dropdown-item dropdown-toggle dropdown-toggle-nocaret"
+                                                    href="javascript:;"><i class="material-icons-outlined">style</i>Model</a>
+                                                <ul class="dropdown-menu submenu">
+                                                    @can('Model Show')
+                                                        <li><a class="dropdown-item" href="{{ route('model.index') }}"><i
+                                                                    class="material-icons-outlined">style</i>List Models
+                                                            </a></li>
+                                                    @endcan
+                                                    @can('Model Create')
+                                                        <li><a class="dropdown-item" href="{{ route('model.create') }}"><i
+                                                                    class="material-icons-outlined">add_circle</i>Add Model</a>
+                                                        </li>
+                                                    @endcan
+                                                </ul>
+                                            </li>
+                                        @endcan
+                                        @canany(['Color Show', 'Color Create'])
+                                            <!--<li class="nav-item dropend">-->
+                                            <!--    <a class="dropdown-item dropdown-toggle dropdown-toggle-nocaret"-->
+                                            <!--        href="javascript:;"><i class="material-icons-outlined">palette</i>Color</a>-->
+                                            <!--    <ul class="dropdown-menu submenu">-->
+                                            <!--        @can('Color Show')-->
+                                            <!--            <li><a class="dropdown-item" href="{{ route('color.index') }}"><i-->
+                                            <!--                        class="material-icons-outlined">palette</i>List Colors-->
+                                            <!--                </a></li>-->
+                                            <!--        @endcan-->
+                                            <!--        @can('Color Create')-->
+                                            <!--            <li><a class="dropdown-item" href="{{ route('color.create') }}"><i-->
+                                            <!--                        class="material-icons-outlined">add_circle</i>Add Color</a>-->
+                                            <!--            </li>-->
+                                            <!--        @endcan-->
+                                            <!--    </ul>-->
+                                            <!--</li>-->
+                                        @endcan
+                                    
+                                    
 
 
-                            </ul>
-                        </li>
-                    @endcan
+                                    </ul>
+                                </li>
+                            @endcan
+                        </ul>
+                    </li>
 
                     @canany(['Shop Show', 'Shop Create', 'Delivery Schedule Show', 'Delivery Schedule Create'])
                         <!--<li class="nav-item dropdown">-->
