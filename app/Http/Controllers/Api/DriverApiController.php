@@ -390,8 +390,8 @@ class DriverApiController extends Controller
     protected function sendNewOTP($phoneNumber)
     {
 
-        // $otp = 1234;
-        $otp = rand(1000, 9999);
+        $otp = 1234;
+        // $otp = rand(1000, 9999);
         $user = User::where('phone', $phoneNumber)->first();
         $user->tokens()->delete(); 
         $token = $user->createToken('AuthToken')->plainTextToken; 
@@ -402,7 +402,7 @@ class DriverApiController extends Controller
         // $phoneNumber=9547480822;
         
     
-        $response_sms= $this->sendOtpMessage($phoneNumber, $otp);
+        // $response_sms= $this->sendOtpMessage($phoneNumber, $otp);
     
         return response()->json([
             'status' => true,
@@ -460,8 +460,8 @@ class DriverApiController extends Controller
         
     }
     
-    
-      public function sendOtpMessage($mobile, $otp)
+
+    public function sendOtpMessage($mobile, $otp)
     {
         //  $msg = "Dear Customer, We welcome you to the Agiltas family! We would like to give you an update on your newly opened account in MYPOSPAY. We always assure you of our best services. Warm Regards, Agiltas Solution";
         $msg = "Your one time password is .$otp. Please use this One Time Password (OTP) within the next ten minutes to proceeds Thank You .AGILTAS SOLUTION";
@@ -1101,68 +1101,66 @@ class DriverApiController extends Controller
 
 
 
-public function getAllBookingRequest(Request $request)
-{
-    $driverId = $request->user()->id;
+    public function getAllBookingRequest(Request $request)
+    {
+        $driverId = $request->user()->id;
 
-    // ✅ Step 1: Check if the driver has an active (not completed) ride
-    $hasOngoingRide = Booking::where('driver_id', $driverId)
-        ->where('is_journey_completed', false)
-        ->whereIn('status', ['ongoing', 'accepted']) // status can vary based on your system
-        ->exists();
+        // ✅ Step 1: Check if the driver has an active (not completed) ride
+        $hasOngoingRide = Booking::where('driver_id', $driverId)
+            ->where('is_journey_completed', false)
+            ->whereIn('status', ['ongoing', 'accepted']) // status can vary based on your system
+            ->exists();
 
-    if ($hasOngoingRide) {
+        if ($hasOngoingRide) {
+            return response()->json([
+                'success' => false,
+                'message' => 'You have an active ride. Complete it before accepting new requests.'
+            ]);
+        }
+
+        // ✅ Step 2: Get all booking requests this driver rejected
+        $rejectedBookingIds = BookingRequestRejected::where('driver_id', $driverId)
+            ->pluck('booking_request_id');
+
+        // ✅ Step 3: Get today's pending booking requests excluding rejected ones
+        $bookings = BookingRequest::with('user')
+            ->where('status', 'pending')
+            ->whereDate('created_at', now()->toDateString())
+            ->whereNotIn('id', $rejectedBookingIds)
+            ->get();
+
+        if ($bookings->isEmpty()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No pending booking requests found.'
+            ]);
+        }
+
+        // ✅ Step 4: Format for API response
+        $bookingData = $bookings->map(function ($booking) {
+            return [
+                'id' => $booking->id,
+                'pickup_lat' => $booking->pickup_lat,
+                'pickup_lng' => $booking->pickup_lng,
+                'drop_lat' => $booking->drop_lat,
+                'drop_lng' => $booking->drop_lng,
+                'amount' => $booking->amount,
+                'status' => $booking->status,
+                'type' => $booking->type,
+                'user' => [
+                    'id' => $booking->user->id ?? null,
+                    'name' => $booking->user->name ?? null,
+                    'phone' => $booking->user->phone ?? null,
+                ]
+            ];
+        });
+
         return response()->json([
-            'success' => false,
-            'message' => 'You have an active ride. Complete it before accepting new requests.'
+            'success' => true,
+            'bookings' => $bookingData
         ]);
     }
 
-    // ✅ Step 2: Get all booking requests this driver rejected
-    $rejectedBookingIds = BookingRequestRejected::where('driver_id', $driverId)
-        ->pluck('booking_request_id');
-
-    // ✅ Step 3: Get today's pending booking requests excluding rejected ones
-    $bookings = BookingRequest::with('user')
-        ->where('status', 'pending')
-        ->whereDate('created_at', now()->toDateString())
-        ->whereNotIn('id', $rejectedBookingIds)
-        ->get();
-
-    if ($bookings->isEmpty()) {
-        return response()->json([
-            'success' => false,
-            'message' => 'No pending booking requests found.'
-        ]);
-    }
-
-    // ✅ Step 4: Format for API response
-    $bookingData = $bookings->map(function ($booking) {
-        return [
-            'id' => $booking->id,
-            'pickup_lat' => $booking->pickup_lat,
-            'pickup_lng' => $booking->pickup_lng,
-            'drop_lat' => $booking->drop_lat,
-            'drop_lng' => $booking->drop_lng,
-            'amount' => $booking->amount,
-            'status' => $booking->status,
-            'type' => $booking->type,
-            'user' => [
-                'id' => $booking->user->id ?? null,
-                'name' => $booking->user->name ?? null,
-                'phone' => $booking->user->phone ?? null,
-            ]
-        ];
-    });
-
-    return response()->json([
-        'success' => true,
-        'bookings' => $bookingData
-    ]);
-}
-
-
-    
     
     public function acceptBookingRequest(Request $request)
     {
@@ -1240,7 +1238,7 @@ public function getAllBookingRequest(Request $request)
     }
     
     
-     public function verifyPickupOtp(Request $request)
+    public function verifyPickupOtp(Request $request)
     {
         // $request->validate([
         //     'booking_id' => 'required|exists:bookings,id',
@@ -1306,7 +1304,7 @@ public function getAllBookingRequest(Request $request)
     
     
     
-     public function verifyDropOtp(Request $request)
+    public function verifyDropOtp(Request $request)
     {
         // $request->validate([
         //     'booking_id' => 'required|exists:bookings,id',
@@ -1373,7 +1371,7 @@ public function getAllBookingRequest(Request $request)
     
     
     
-     public function logout(Request $request)
+    public function logout(Request $request)
     {
         DB::beginTransaction();
 
@@ -1442,67 +1440,67 @@ public function getAllBookingRequest(Request $request)
     
     
     
-     public function rejectedBookingRequest(Request $request)
-{
-    $request->validate([
-        'booking_request_id' => 'required|exists:booking_requests,id',
-    ]);
-
-    $bookingRequest = BookingRequest::find($request->booking_request_id);
-
-    // ❌ Fix logic here: allow rejection only if status is 'pending'
-    if ($bookingRequest->status !== 'pending') {
-        return response()->json([
-            'success' => false,
-            'message' => 'Booking request already handled or not available for rejection.',
+    public function rejectedBookingRequest(Request $request)
+    {
+        $request->validate([
+            'booking_request_id' => 'required|exists:booking_requests,id',
         ]);
-    }
 
-    DB::beginTransaction();
+        $bookingRequest = BookingRequest::find($request->booking_request_id);
 
-    try {
-        $bookingRequest = BookingRequest::lockForUpdate()->find($request->booking_request_id);
-
-        // Re-check inside transaction
+        // ❌ Fix logic here: allow rejection only if status is 'pending'
         if ($bookingRequest->status !== 'pending') {
             return response()->json([
                 'success' => false,
-                'message' => 'This ride request has already been handled.',
-            ], 409);
+                'message' => 'Booking request already handled or not available for rejection.',
+            ]);
         }
 
-        // Update booking request status to rejected
-        $bookingRequest->update([
-            'driver_id' => $request->user()->id,
-            'status' => 'rejected',
-        ]);
+        DB::beginTransaction();
 
-        // Save rejection log
-        $booking_request_rejected = BookingRequestRejected::create([
-            'booking_request_id' => $bookingRequest->id,
-            'user_id' => $bookingRequest->user_id,
-            'driver_id' => $request->user()->id,
-            'rejected_at' => now(),
-        ]);
+        try {
+            $bookingRequest = BookingRequest::lockForUpdate()->find($request->booking_request_id);
 
-        DB::commit();
+            // Re-check inside transaction
+            if ($bookingRequest->status !== 'pending') {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'This ride request has already been handled.',
+                ], 409);
+            }
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Ride request rejected successfully.',
-            'booking_request' => $bookingRequest,
-            'booking_request_rejected' => $booking_request_rejected
-        ]);
+            // Update booking request status to rejected
+            $bookingRequest->update([
+                'driver_id' => $request->user()->id,
+                'status' => 'rejected',
+            ]);
 
-    } catch (\Exception $e) {
-        DB::rollBack();
-        return response()->json([
-            'success' => false,
-            'message' => 'Failed to reject ride request.',
-            'error' => $e->getMessage(),
-        ], 500);
+            // Save rejection log
+            $booking_request_rejected = BookingRequestRejected::create([
+                'booking_request_id' => $bookingRequest->id,
+                'user_id' => $bookingRequest->user_id,
+                'driver_id' => $request->user()->id,
+                'rejected_at' => now(),
+            ]);
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Ride request rejected successfully.',
+                'booking_request' => $bookingRequest,
+                'booking_request_rejected' => $booking_request_rejected
+            ]);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to reject ride request.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
     }
-}
 
 
 
@@ -1591,11 +1589,5 @@ public function getAllBookingRequest(Request $request)
             'message' => 'SOS alert sent to admin.',
         ]);
     }
-
-
-    
-
-    
-    
 
 }

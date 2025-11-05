@@ -46,6 +46,10 @@ Route::get('/vehicles/realtime', function (Request $request) {
 });
 
 
+
+ Route::get('/order/{delivery_id}/{shop_id}/track', [TrackingController::class, 'order_tracking'])->name('order.tracking');
+ Route::get('/driver/{id}/location', [TrackingController::class, 'get_driver_location'])->name('driver.location');
+
  Route::get('/track-delivery', [DeliveryScheduleController::class, 'track_delivery'])->name('track.delivery');
  Route::get('/invoice/{deliveryId}/{shop_id}', [DeliveryScheduleController::class, 'deliveryInvoice'])->name('delivery.invoice');
  Route::get('/get-driver-location', [DeliveryScheduleController::class, 'get_driver_location'])->name('get.driver.locaion');

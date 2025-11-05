@@ -56,7 +56,7 @@
                                     <td><?php echo e($item->delivery_date); ?></td>
                                     <td><?php echo e($item->order_id); ?></td>
                                     <td><?php echo e($item->driver?->name); ?></td>
-                                    <td><?php echo e($item->vehicle?->name); ?></td>
+                                    <td><?php echo e($item->vehicle?->vehicle_number); ?></td>
                                     <td><?php echo e($item->deliveryScheduleShops?->count()); ?></td>
 
                                     <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->any(['Delivery Schedule Edit', 'Delivery Schedule Delete'])): ?>

@@ -56,7 +56,7 @@
                                     <td>{{ $item->delivery_date }}</td>
                                     <td>{{ $item->order_id }}</td>
                                     <td>{{ $item->driver?->name }}</td>
-                                    <td>{{ $item->vehicle?->name }}</td>
+                                    <td>{{ $item->vehicle?->vehicle_number }}</td>
                                     <td>{{ $item->deliveryScheduleShops?->count() }}</td>
 
                                     @canany(['Delivery Schedule Edit', 'Delivery Schedule Delete'])
