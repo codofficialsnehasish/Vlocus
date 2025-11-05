@@ -66,14 +66,32 @@ class DeliveryController extends Controller
             $driver_id = $request->user()->id;
         }
         
+        // $deliveries = DeliverySchedule::where('driver_id', $driver_id)
+        //     ->whereDate('delivery_date', date('Y-m-d'))
+        //     ->with([
+        //         'vehicle:id,name,vehicle_number,engine_number,ac_status',
+        //         'deliveryScheduleShops.shop',
+        //         'deliveryScheduleShops.media' // Load media relation for delivery image and signature
+        //     ])
+        //     ->get();
+
         $deliveries = DeliverySchedule::where('driver_id', $driver_id)
-            ->whereDate('delivery_date', date('Y-m-d'))
+            ->where(function ($q) {
+                $q->whereDate('delivery_date', date('Y-m-d')) // today's schedules
+                ->orWhereHas('deliveryScheduleShops', function ($sub) {
+                    $sub->where('is_delivered', 0); // previous incomplete ones
+                });
+            })
             ->with([
                 'vehicle:id,name,vehicle_number,engine_number,ac_status',
-                'deliveryScheduleShops.shop',
-                'deliveryScheduleShops.media' // Load media relation for delivery image and signature
+                'deliveryScheduleShops' => function ($query) {
+                    $query->where('is_delivered', 0) // only incomplete shops
+                        ->with(['shop', 'media']);
+                },
             ])
             ->get();
+
+
         // return $deliveries;
     
         // Enhance response to include image URLs
