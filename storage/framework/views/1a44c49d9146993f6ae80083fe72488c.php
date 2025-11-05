@@ -43,6 +43,7 @@
                                 <th>Driver</th>
                                 <th>Vehicle</th>
                                 <th>Total Shop</th>
+                                <th>Status</th>
                                 <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->any(['Delivery Schedule Edit', 'Delivery Schedule Delete'])): ?>
                                     <th>Action</th>
                                 <?php endif; ?>
@@ -58,6 +59,13 @@
                                     <td><?php echo e($item->driver?->name); ?></td>
                                     <td><?php echo e($item->vehicle?->vehicle_number); ?></td>
                                     <td><?php echo e($item->deliveryScheduleShops?->count()); ?></td>
+                                    <td>
+                                        <?php if($item->is_completed): ?>
+                                            <span class="badge bg-success">Completed</span>
+                                        <?php else: ?>
+                                            <span class="badge bg-warning text-dark">Pending</span>
+                                        <?php endif; ?>
+                                    </td>
 
                                     <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->any(['Delivery Schedule Edit', 'Delivery Schedule Delete'])): ?>
                                         <td class="d-flex">

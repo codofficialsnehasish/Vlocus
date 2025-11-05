@@ -57,6 +57,15 @@
                         <ol class="ps-3">
                             @foreach($delivery_schedule_shops as $index => $shop)
                                 <li class="mb-4">
+                                    <p class="mb-2"><strong>Status : </strong> 
+                                        @if($shop->is_delivered)
+                                            <span class="badge bg-success">Delivered</span>
+                                        @elseif($shop->is_accepted)
+                                            <span class="badge bg-info text-dark">Accepted</span>
+                                        @else
+                                            <span class="badge bg-warning text-dark">Pending</span>
+                                        @endif
+                                    </p>
                                     <p class="mb-2"><strong>LR No:</strong> {{ $shop->lr_no }}</p>
                                     <p class="mb-2"><strong>Shop Name:</strong> {{ $shop->shop->shop_name ?? 'N/A' }}</p>
                                     <p class="mb-2"><strong>Address:</strong> {{ $shop->shop->shop_address ?? 'N/A' }}</p>

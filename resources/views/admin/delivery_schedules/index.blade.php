@@ -43,6 +43,7 @@
                                 <th>Driver</th>
                                 <th>Vehicle</th>
                                 <th>Total Shop</th>
+                                <th>Status</th>
                                 @canany(['Delivery Schedule Edit', 'Delivery Schedule Delete'])
                                     <th>Action</th>
                                 @endcanany
@@ -58,6 +59,13 @@
                                     <td>{{ $item->driver?->name }}</td>
                                     <td>{{ $item->vehicle?->vehicle_number }}</td>
                                     <td>{{ $item->deliveryScheduleShops?->count() }}</td>
+                                    <td>
+                                        @if($item->is_completed)
+                                            <span class="badge bg-success">Completed</span>
+                                        @else
+                                            <span class="badge bg-warning text-dark">Pending</span>
+                                        @endif
+                                    </td>
 
                                     @canany(['Delivery Schedule Edit', 'Delivery Schedule Delete'])
                                         <td class="d-flex">

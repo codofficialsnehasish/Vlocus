@@ -351,24 +351,24 @@
                     <div class="col-md-4">
                         <div class="card bg-primary text-white text-center border-0 shadow-sm">
                             <div class="card-body">
-                                <h6>Total Trips</h6>
-                                <h2 class="fw-bold">{{ $trip_summary['totalTrips']->sum() }}</h2>
+                                <h6 class="text-white">Total Trips</h6>
+                                <h2 class="fw-bold text-white">{{ $trip_summary['totalTrips']->sum() }}</h2>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="card bg-success text-white text-center border-0 shadow-sm">
                             <div class="card-body">
-                                <h6>Total Distance</h6>
-                                <h2 class="fw-bold">{{ number_format($trip_summary['totalDistance']->sum(), 2) }} km</h2>
+                                <h6 class="text-white">Total Distance</h6>
+                                <h2 class="fw-bold text-white">{{ number_format($trip_summary['totalDistance']->sum(), 2) }} km</h2>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="card bg-warning text-white text-center border-0 shadow-sm">
                             <div class="card-body">
-                                <h6>Total Amount</h6>
-                                <h2 class="fw-bold">₹{{ number_format($trip_summary['totalAmount']->sum(), 2) }}</h2>
+                                <h6 class="text-white">Total Amount</h6>
+                                <h2 class="fw-bold text-white">₹{{ number_format($trip_summary['totalAmount']->sum(), 2) }}</h2>
                             </div>
                         </div>
                     </div>
@@ -513,18 +513,18 @@
                                         </div>
                                     </div>
                                     <div class="col-xl-2 col-md-4 col-6">
-                                        <div class="card bg-purple bg-opacity-10 border-0">
+                                        <div class="card bg-success bg-opacity-10 border-0">
                                             <div class="card-body text-center">
-                                                <i class="bx bx-user h3 text-purple mb-2"></i>
+                                                <i class="bx bx-user h3 text-success mb-2"></i>
                                                 <h5 class="mb-1">{{ $runIdleAnalytics['summary']['total_drivers'] }}</h5>
                                                 <p class="text-muted mb-0">Drivers</p>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-xl-2 col-md-4 col-6">
-                                        <div class="card bg-orange bg-opacity-10 border-0">
+                                        <div class="card bg-info bg-opacity-10 border-0">
                                             <div class="card-body text-center">
-                                                <i class="bx bx-car h3 text-orange mb-2"></i>
+                                                <i class="bx bx-car h3 text-info mb-2"></i>
                                                 <h5 class="mb-1">{{ $runIdleAnalytics['summary']['total_vehicles'] }}</h5>
                                                 <p class="text-muted mb-0">Vehicles</p>
                                             </div>
@@ -622,18 +622,18 @@
                                         </div>
                                     </div>
                                     <div class="col-xl-2 col-md-4 col-6">
-                                        <div class="card bg-purple bg-opacity-10 border-0">
+                                        <div class="card bg-success bg-opacity-10 border-0">
                                             <div class="card-body text-center">
-                                                <i class="bx bx-user h3 text-purple mb-2"></i>
+                                                <i class="bx bx-user h3 text-success mb-2"></i>
                                                 <h5 class="mb-1">{{ Str::limit($distanceAnalytics['summary']['top_driver'], 12) }}</h5>
                                                 <p class="text-muted mb-0">Top Driver</p>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-xl-2 col-md-4 col-6">
-                                        <div class="card bg-orange bg-opacity-10 border-0">
+                                        <div class="card bg-info bg-opacity-10 border-0">
                                             <div class="card-body text-center">
-                                                <i class="bx bx-calendar-star h3 text-orange mb-2"></i>
+                                                <i class="bx bx-calendar-star h3 text-info mb-2"></i>
                                                 <h5 class="mb-1">{{ $distanceAnalytics['summary']['most_active_day'] }}</h5>
                                                 <p class="text-muted mb-0">Peak Day</p>
                                             </div>
@@ -730,18 +730,18 @@
                                         </div>
                                     </div>
                                     <div class="col-xl-2 col-md-4 col-6">
-                                        <div class="card bg-purple bg-opacity-10 border-0">
+                                        <div class="card bg-success bg-opacity-10 border-0">
                                             <div class="card-body text-center">
-                                                <i class="bx bx-building h3 text-purple mb-2"></i>
+                                                <i class="bx bx-building h3 text-success mb-2"></i>
                                                 <h5 class="mb-1" data-card="active-zone">{{ Str::limit($geofenceAnalytics['summary']['most_active_zone'], 12) }}</h5>
                                                 <p class="text-muted mb-0">Top Zone</p>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-xl-2 col-md-4 col-6">
-                                        <div class="card bg-orange bg-opacity-10 border-0">
+                                        <div class="card bg-info bg-opacity-10 border-0">
                                             <div class="card-body text-center">
-                                                <i class="bx bx-trending-up h3 text-orange mb-2"></i>
+                                                <i class="bx bx-trending-up h3 text-info mb-2"></i>
                                                 <h5 class="mb-1" data-card="peak-hour">{{ $geofenceAnalytics['summary']['peak_hour'] }}</h5>
                                                 <p class="text-muted mb-0">Peak Hour</p>
                                             </div>
@@ -838,18 +838,18 @@
                                         </div>
                                     </div>
                                     <div class="col-xl-2 col-md-4 col-6">
-                                        <div class="card bg-purple bg-opacity-10 border-0">
+                                        <div class="card bg-success bg-opacity-10 border-0">
                                             <div class="card-body text-center">
-                                                <i class="bx bx-user h3 text-purple mb-2"></i>
+                                                <i class="bx bx-user h3 text-success mb-2"></i>
                                                 <h5 class="mb-1" data-card="problem-driver">{{ Str::limit($overstayAnalytics['summary']['most_problematic_driver'], 12) }}</h5>
                                                 <p class="text-muted mb-0">Problem Driver</p>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-xl-2 col-md-4 col-6">
-                                        <div class="card bg-orange bg-opacity-10 border-0">
+                                        <div class="card bg-info bg-opacity-10 border-0">
                                             <div class="card-body text-center">
-                                                <i class="bx bx-map-pin h3 text-orange mb-2"></i>
+                                                <i class="bx bx-map-pin h3 text-info mb-2"></i>
                                                 <h5 class="mb-1" data-card="peak-hour">{{ $overstayAnalytics['summary']['peak_overstay_hour'] }}</h5>
                                                 <p class="text-muted mb-0">Peak Hour</p>
                                             </div>
@@ -941,9 +941,9 @@
                                         </div>
                                     </div>
                                     <div class="col-xl-2 col-md-4 col-6">
-                                        <div class="card bg-purple bg-opacity-10 border-0">
+                                        <div class="card bg-success bg-opacity-10 border-0">
                                             <div class="card-body text-center">
-                                                <i class="bx bx-trending-down h3 text-purple mb-2"></i>
+                                                <i class="bx bx-trending-down h3 text-success mb-2"></i>
                                                 <h5 class="mb-1" data-card="worst-driver">{{ Str::limit($attendanceAnalytics['summary']['worst_driver'], 12) }}</h5>
                                                 <p class="text-muted mb-0">Needs Improvement</p>
                                             </div>
@@ -1042,18 +1042,18 @@
                                         </div>
                                     </div>
                                     <div class="col-xl-2 col-md-4 col-6">
-                                        <div class="card bg-purple bg-opacity-10 border-0">
+                                        <div class="card bg-success bg-opacity-10 border-0">
                                             <div class="card-body text-center">
-                                                <i class="bx bx-trending-up h3 text-purple mb-2"></i>
+                                                <i class="bx bx-trending-up h3 text-success mb-2"></i>
                                                 <h5 class="mb-1" data-card="peak-hour">{{ $loginLogoutAnalytics['summary']['peak_login_hour'] }}</h5>
                                                 <p class="text-muted mb-0">Peak Hour</p>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-xl-2 col-md-4 col-6">
-                                        <div class="card bg-orange bg-opacity-10 border-0">
+                                        <div class="card bg-info bg-opacity-10 border-0">
                                             <div class="card-body text-center">
-                                                <i class="bx bx-mobile h3 text-orange mb-2"></i>
+                                                <i class="bx bx-mobile h3 text-info mb-2"></i>
                                                 <h5 class="mb-1" data-card="used-device">{{ Str::limit($loginLogoutAnalytics['summary']['most_used_device'], 12) }}</h5>
                                                 <p class="text-muted mb-0">Top Device</p>
                                             </div>
@@ -1171,18 +1171,18 @@
                                         </div>
                                     </div>
                                     <div class="col-xl-2 col-md-4 col-6">
-                                        <div class="card bg-purple bg-opacity-10 border-0">
+                                        <div class="card bg-success bg-opacity-10 border-0">
                                             <div class="card-body text-center">
-                                                <i class="bx bx-moon h3 text-purple mb-2"></i>
+                                                <i class="bx bx-moon h3 text-success mb-2"></i>
                                                 <h5 class="mb-1" data-card="latest-driver">{{ Str::limit($loginTimeAnalytics['summary']['latest_driver'], 12) }}</h5>
                                                 <p class="text-muted mb-0">Night Owl</p>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-xl-2 col-md-4 col-6">
-                                        <div class="card bg-orange bg-opacity-10 border-0">
+                                        <div class="card bg-info bg-opacity-10 border-0">
                                             <div class="card-body text-center">
-                                                <i class="bx bx-calendar-star h3 text-orange mb-2"></i>
+                                                <i class="bx bx-calendar-star h3 text-info mb-2"></i>
                                                 <h5 class="mb-1" data-card="busy-day">{{ $loginTimeAnalytics['summary']['busiest_day'] }}</h5>
                                                 <p class="text-muted mb-0">Busiest Day</p>
                                             </div>
@@ -1300,18 +1300,18 @@
                                         </div>
                                     </div>
                                     <div class="col-xl-2 col-md-4 col-6">
-                                        <div class="card bg-purple bg-opacity-10 border-0">
+                                        <div class="card bg-success bg-opacity-10 border-0">
                                             <div class="card-body text-center">
-                                                <i class="bx bx-user-voice h3 text-purple mb-2"></i>
+                                                <i class="bx bx-user-voice h3 text-success mb-2"></i>
                                                 <h5 class="mb-1" data-card="frequent-driver">{{ Str::limit($sosAnalytics['summary']['most_frequent_driver'], 12) }}</h5>
                                                 <p class="text-muted mb-0">Frequent Reporter</p>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-xl-2 col-md-4 col-6">
-                                        <div class="card bg-orange bg-opacity-10 border-0">
+                                        <div class="card bg-info bg-opacity-10 border-0">
                                             <div class="card-body text-center">
-                                                <i class="bx bx-map h3 text-orange mb-2"></i>
+                                                <i class="bx bx-map h3 text-info mb-2"></i>
                                                 <h5 class="mb-1" data-card="common-location">{{ Str::limit($sosAnalytics['summary']['most_common_location'], 12) }}</h5>
                                                 <p class="text-muted mb-0">Hotspot Location</p>
                                             </div>

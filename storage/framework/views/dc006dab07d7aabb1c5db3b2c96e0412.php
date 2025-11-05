@@ -57,6 +57,15 @@
                         <ol class="ps-3">
                             <?php $__currentLoopData = $delivery_schedule_shops; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $shop): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <li class="mb-4">
+                                    <p class="mb-2"><strong>Status : </strong> 
+                                        <?php if($shop->is_delivered): ?>
+                                            <span class="badge bg-success">Delivered</span>
+                                        <?php elseif($shop->is_accepted): ?>
+                                            <span class="badge bg-info text-dark">Accepted</span>
+                                        <?php else: ?>
+                                            <span class="badge bg-warning text-dark">Pending</span>
+                                        <?php endif; ?>
+                                    </p>
                                     <p class="mb-2"><strong>LR No:</strong> <?php echo e($shop->lr_no); ?></p>
                                     <p class="mb-2"><strong>Shop Name:</strong> <?php echo e($shop->shop->shop_name ?? 'N/A'); ?></p>
                                     <p class="mb-2"><strong>Address:</strong> <?php echo e($shop->shop->shop_address ?? 'N/A'); ?></p>
