@@ -26,6 +26,7 @@ use App\Http\Controllers\Admin\{
     EmployeeController,
     ReportController,
     RoutePlaybackController,
+    PlanController,
 };
 use App\Http\Controllers\{
     HomeController,
@@ -296,6 +297,25 @@ Route::prefix('admin')->group(function (){
         Route::get('/route-playback', [RoutePlaybackController::class, 'index'])->name('route.playback');
         Route::post('/route-playback/data', [RoutePlaybackController::class, 'getRouteData'])->name('route.playback.data');
         // Route::match(['get', 'post'], '/route-playback/data', [RoutePlaybackController::class, 'getRouteData'])->name('route.playback.data');
+
+
+        Route::get('/plans', [PlanController::class, 'index'])->name('plans.index');
+
+        // Plan CRUD
+        Route::post('/plans/store', [PlanController::class, 'storePlan'])->name('plans.store');
+        Route::get('/plans/{id}/edit', [PlanController::class, 'editPlan'])->name('plans.edit');
+        Route::post('/plans/{id}/update', [PlanController::class, 'updatePlan'])->name('plans.update');
+        Route::delete('/plans/{id}', [PlanController::class, 'destroyPlan'])->name('plans.destroy');
+
+        // Feature CRUD
+        Route::post('/features/store', [PlanController::class, 'storeFeature'])->name('features.store');
+        Route::get('/features/{id}/edit', [PlanController::class, 'editFeature'])->name('features.edit');
+        Route::post('/features/{id}/update', [PlanController::class, 'updateFeature'])->name('features.update');
+        Route::delete('/features/{id}', [PlanController::class, 'destroyFeature'])->name('features.destroy');
+
+        // Plan-Feature mapping
+        Route::post('/plans/update-mapping', [PlanController::class, 'updateMapping'])->name('plans.updateMapping');
+
     });
 });
 

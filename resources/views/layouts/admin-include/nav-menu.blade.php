@@ -104,7 +104,7 @@
                         </li>
                     @endcan --}}
                     <li class="nav-item dropdown">
-                        <a class="nav-link {{ in_array(request()->segment(2), ['drivers','companys','branchs','employees','vehicle-types', 'vehicles', 'brands', 'models']) ? 'active' : '' }} dropdown-toggle dropdown-toggle-nocaret" href="javascript:;"
+                        <a class="nav-link {{ in_array(request()->segment(2), ['plans','drivers','companys','branchs','employees','vehicle-types', 'vehicles', 'brands', 'models']) ? 'active' : '' }} dropdown-toggle dropdown-toggle-nocaret" href="javascript:;"
                             data-bs-toggle="dropdown">
                             <div class="parent-icon"><i class='material-icons-outlined'>storage</i></div>
                             <div class="menu-title d-flex align-items-center">Entry</div>
@@ -168,7 +168,7 @@
                                 Create',
                                 ])
                                 {{-- <li class="nav-item dropdown"> --}}
-                                <li class="nav-item dropend">
+                                <li class="nav-item dropend mb-2">
                                     <a class="nav-link {{ in_array(request()->segment(2), ['vehicle-types', 'vehicles', 'brands', 'models']) ? 'active' : '' }} dropdown-toggle dropdown-toggle-nocaret" href="javascript:;"
                                         data-bs-toggle="dropdown">
                                         <div class="parent-icon"><i class='material-icons-outlined'>storage</i></div>
@@ -279,6 +279,12 @@
                                     </ul>
                                 </li>
                             @endcan
+                            <li class="nav-item">
+                                <a class="nav-link {{ in_array(request()->segment(2), ['plans']) ? 'active' : '' }}" href="{{ route('plans.index') }}">
+                                    <div class="parent-icon"><i class='material-icons-outlined'>layers</i></div>
+                                    <div class="menu-title d-flex align-items-center">Plans</div>
+                                </a>
+                            </li>
                         </ul>
                     </li>
 

@@ -1,3 +1,5 @@
+
+
 <?php $__env->startSection('title'); ?>
 Vehicle Types
 <?php $__env->stopSection(); ?>
