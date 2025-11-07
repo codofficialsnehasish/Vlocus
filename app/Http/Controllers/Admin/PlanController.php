@@ -13,7 +13,7 @@ class PlanController extends Controller
 {
     public function index()
     {
-        $plans = Plan::with('features')->orderBy('id', 'desc')->get();
+        $plans = Plan::with('features')->orderBy('id', 'asc')->get();
         $features = Feature::orderBy('category')->orderBy('order')->get();
         return view('admin.plan.index', compact('plans', 'features'));
     }

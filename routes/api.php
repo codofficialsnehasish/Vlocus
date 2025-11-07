@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\{
     DriverApiController,
     DeliveryController,
     DashboardController,
+    PlanApiController,
 };
 
 use App\Http\Controllers\Admin\{
@@ -31,6 +32,8 @@ Route::get('get-brand-model/{brandId}', [DriverApiController::class, 'get_brand_
 Route::controller(VehicleController::class)->group(function () {
     Route::get("/get-vehicle-types",'get_vehicle_types');
 });
+
+Route::get('/plans', [PlanApiController::class, 'index']);
 
 Route::middleware('auth:sanctum')->group(function () {
 
