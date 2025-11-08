@@ -27,6 +27,7 @@ use App\Http\Controllers\Admin\{
     ReportController,
     RoutePlaybackController,
     PlanController,
+    DeliveryScheduleBulkController,
 };
 use App\Http\Controllers\{
     HomeController,
@@ -253,6 +254,12 @@ Route::prefix('admin')->group(function (){
             
             Route::post('create-shop', 'add_shop')->name('delivery-schedule.add_shop');
         });
+
+        Route::get('delivery-schedule/template/download', [DeliveryScheduleBulkController::class, 'downloadTemplate'])
+            ->name('delivery-schedule.template.download');
+
+        Route::post('delivery-schedule/bulk-upload', [DeliveryScheduleBulkController::class, 'bulkUpload'])
+            ->name('delivery-schedule.bulk.upload');
         
         Route::prefix('settings')->controller(SettingsController::class)->group(function () {
             Route::get('/', 'create')->name('settings');

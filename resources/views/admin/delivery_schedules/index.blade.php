@@ -30,6 +30,48 @@
     </div>
     <!--end breadcrumb-->
 
+    <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5>Bulk Upload Delivery Schedule</h5>
+            <a href="{{ route('delivery-schedule.template.download') }}" class="btn btn-sm btn-success">
+                <i class="bi bi-download"></i> Download Template
+            </a>
+        </div>
+
+        <div class="card-body">
+            <form action="{{ route('delivery-schedule.bulk.upload') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <input type="file" name="bulk_file" class="form-control" required>
+                    </div>
+                    <div class="col-md-4 text-end">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-upload"></i> Upload File
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            <!-- Instruction Section -->
+            <hr>
+            <div class="alert alert-info mt-3">
+                <h6 class="mb-2"><i class="bi bi-info-circle"></i> Instructions for Filling the Excel Template:</h6>
+                <ul class="mb-0 ps-3">
+                    <li>Enter the <strong>Delivery Date</strong> in <code>YYYY-MM-DD</code> format (e.g., <code>2025-11-10</code>).</li>
+                    <li>Enter valid <strong>Driver</strong> Mobile Number.</li>
+                    <li>Enter valid <strong>Vehicle</strong> Number.</li>
+                    <li>Enter valid <strong>Shop</strong> number where the delivery is scheduled.</li>
+                    <li><strong>Branch/Consignor</strong> will be auto-assigned based on your login (Employee or Branch user).</li>
+                    <li class="text-danger">Do not rename, remove, or reorder any columns in the Excel sheet.</li>
+                    <li class="text-danger">Once filled, save the file and upload it here in <strong>.xlsx</strong> format only.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+
     <div class="card mt-4">
         <div class="card-body">
             <div class="product-table">
