@@ -11,6 +11,8 @@ use App\Http\Controllers\Api\{
     DeliveryController,
     DashboardController,
     PlanApiController,
+    PaymentApiController,
+    CompanyRegisterApiController,
 };
 
 use App\Http\Controllers\Admin\{
@@ -34,8 +36,13 @@ Route::controller(VehicleController::class)->group(function () {
 });
 
 Route::get('/plans', [PlanApiController::class, 'index']);
+Route::post('/razorpay/order', [PaymentApiController::class, 'createOrder']);
+
+Route::post('/company/register', [CompanyRegisterApiController::class, 'register']);
+Route::post('/company/login', [CompanyRegisterApiController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/razorpay/payment-success', [PaymentApiController::class, 'paymentSuccess']);
 
     Route::delete('delete-user-account', [AuthController::class, 'delete_user_account']);
     

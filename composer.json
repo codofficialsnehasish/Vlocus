@@ -44,8 +44,8 @@
             "app/Helpers/DateTime_Helper.php",
             "app/Helpers/RolePermission_Helper.php",
             "app/Helpers/Route_Helper.php",
-            "app/Helpers/Helpers.php"
-
+            "app/Helpers/Helpers.php",
+            "app/Helpers/PlanHelper.php"
         ]
     },
     "scripts": {

@@ -179,17 +179,27 @@
                                         </div>
                                         <div>
                                             <select 
-                                                name="feature_permissions[<?php echo e($feature->id); ?>][]" 
+                                                name="feature_permissions[<?php echo e($plan->id); ?>][<?php echo e($feature->id); ?>][]" 
                                                 class="form-select form-select-sm mt-1 select2-permissions" 
                                                 multiple
                                             >
+
+                                                
+                                                <?php
+                                                    $existingPermissionIds = \App\Models\PlanFeaturePermission::where('plan_id', $plan->id)
+                                                        ->where('feature_id', $feature->id)
+                                                        ->pluck('permission_id')
+                                                        ->toArray();
+                                                ?>
+
                                                 <?php $__currentLoopData = $allPermissions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $permission): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                     <option value="<?php echo e($permission->id); ?>"
-                                                        <?php echo e($feature->permissions->contains($permission->id) ? 'selected' : ''); ?>>
+                                                        <?php echo e(in_array($permission->id, $existingPermissionIds) ? 'selected' : ''); ?>>
                                                         <?php echo e($permission->name); ?>
 
                                                     </option>
                                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
                                             </select>
                                         </div>
                                     </td>

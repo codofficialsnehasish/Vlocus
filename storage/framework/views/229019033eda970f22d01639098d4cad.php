@@ -45,7 +45,7 @@
                     
                     
                     <li class="nav-item dropdown">
-                        <a class="nav-link <?php echo e(in_array(request()->segment(2), ['plans','drivers','companys','branchs','employees','vehicle-types', 'vehicles', 'brands', 'models']) ? 'active' : ''); ?> dropdown-toggle dropdown-toggle-nocaret" href="javascript:;"
+                        <a class="nav-link <?php echo e(in_array(request()->segment(2), ['drivers','companys','branchs','employees','vehicle-types', 'vehicles', 'brands', 'models']) ? 'active' : ''); ?> dropdown-toggle dropdown-toggle-nocaret" href="javascript:;"
                             data-bs-toggle="dropdown">
                             <div class="parent-icon"><i class='material-icons-outlined'>storage</i></div>
                             <div class="menu-title d-flex align-items-center">Entry</div>

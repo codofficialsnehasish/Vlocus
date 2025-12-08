@@ -51,4 +51,5 @@ return array(
     '3eeb5f53c95626ce384a6bcb45755a5d' => $baseDir . '/app/Helpers/RolePermission_Helper.php',
     '45563bec938c99212140e28546bd6f4d' => $baseDir . '/app/Helpers/Route_Helper.php',
     '381c1f7485be5ec909ca0fe1ede4b928' => $baseDir . '/app/Helpers/Helpers.php',
+    '6ad574ab161946661715aea45fdbdc70' => $baseDir . '/app/Helpers/PlanHelper.php',
 );
