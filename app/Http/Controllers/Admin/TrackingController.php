@@ -24,7 +24,7 @@ class TrackingController extends Controller
         $shops = Shop::latest()->get(); 
         return view('admin.tracking.index',compact('drivers','vehicles','shops'));
     }
-
+    
     public function order_tracking(Request $request){
         // $delivery = DeliverySchedule::with('deliveryScheduleShops')->findOrFail($request->delivery_id);
         $delivery = DeliverySchedule::with([

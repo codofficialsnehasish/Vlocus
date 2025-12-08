@@ -1,5 +1,7 @@
 
-
+<?php $__env->startSection('css'); ?>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<?php $__env->stopSection(); ?>
 <?php $__env->startSection('title', 'Plan Management'); ?>
 
 <?php $__env->startSection('content'); ?>
@@ -17,9 +19,9 @@
 
 <div class="card">
     <div class="card-body">
-        <div class="row" style="height: 600px;"> <!-- Fixed card height -->
+        <div class="row"> <!-- Fixed card height -->
             <!-- Add Plan -->
-            <div class="col-md-6 border-end overflow-auto">
+            <div class="col-md-6 border-end">
                 <h5>Add Plan</h5>
                 <form action="<?php echo e(route('plans.store')); ?>" method="POST">
                     <?php echo csrf_field(); ?>
@@ -91,27 +93,19 @@
                         <label class="form-label">Feature Name</label>
                         <input type="text" name="name" class="form-control" required>
                     </div>
-                    <div class="mb-2">
-                        <label class="form-label">Category</label>
-                        <input type="text" name="category" class="form-control">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Order</label>
-                        <input type="number" name="order" class="form-control">
-                    </div>
+                    
                     <button class="btn btn-success w-100">Add Feature</button>
                 </form>
 
                 <hr>
 
                 <h6 class="mt-3">Existing Features</h6>
-                <div class="table-responsive flex-grow-1 overflow-auto">
+                <div class="table-responsive flex-grow-1 overflow-auto" style="max-height: 300px; overflow-y: auto;">
                     <table class="table table-bordered table-sm mb-0">
-                        <thead>
+                        <thead class="table-light" style="position: sticky; top: 0; z-index: 10;">
                             <tr>
                                 <th>Name</th>
-                                <th>Category</th>
-                                <th>Order</th>
+                                
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -119,8 +113,7 @@
                             <?php $__currentLoopData = $features; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $feature): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <tr>
                                     <td><?php echo e($feature->name); ?></td>
-                                    <td><?php echo e($feature->category); ?></td>
-                                    <td><?php echo e($feature->order); ?></td>
+                                    
                                     <td>
                                         <button type="button" class="btn btn-sm btn-outline-primary editFeatureBtn" data-id="<?php echo e($feature->id); ?>">Edit</button>
                                         <form action="<?php echo e(route('features.destroy', $feature->id)); ?>" method="POST" style="display:inline-block;">
@@ -133,6 +126,7 @@
                         </tbody>
                     </table>
                 </div>
+
             </div>
         </div>
     </div>
@@ -164,15 +158,40 @@
                                         $pivot = $plan->planFeatures->firstWhere('feature_id', $feature->id);
                                     ?>
                                     <td>
-                                        <select name="mapping[<?php echo e($plan->id); ?>][<?php echo e($feature->id); ?>][availability]" class="form-select form-select-sm mb-1">
-                                            <option value="no" <?php echo e($pivot?->availability == 'no' ? 'selected' : ''); ?>>No</option>
-                                            <option value="partial" <?php echo e($pivot?->availability == 'partial' ? 'selected' : ''); ?>>Partial</option>
-                                            <option value="yes" <?php echo e($pivot?->availability == 'yes' ? 'selected' : ''); ?>>Yes</option>
-                                        </select>
-                                        <input type="text" class="form-control form-control-sm"
-                                               name="mapping[<?php echo e($plan->id); ?>][<?php echo e($feature->id); ?>][details]"
-                                               value="<?php echo e($pivot?->details); ?>"
-                                               placeholder="Details">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <select name="mapping[<?php echo e($plan->id); ?>][<?php echo e($feature->id); ?>][availability]" 
+                                                    class="form-select form-select-sm w-auto">
+                                                <option value="no" <?php echo e($pivot?->availability == 'no' ? 'selected' : ''); ?>>No</option>
+                                                <option value="partial" <?php echo e($pivot?->availability == 'partial' ? 'selected' : ''); ?>>Partial</option>
+                                                <option value="yes" <?php echo e($pivot?->availability == 'yes' ? 'selected' : ''); ?>>Yes</option>
+                                            </select>
+
+                                            <textarea
+                                                class="form-control form-control-sm w-50"
+                                                name="mapping[<?php echo e($plan->id); ?>][<?php echo e($feature->id); ?>][details]"
+                                                placeholder="Details"><?php echo e($pivot?->details); ?></textarea>
+
+                                            <input type="number" 
+                                                class="form-control form-control-sm w-25"
+                                                name="mapping[<?php echo e($plan->id); ?>][<?php echo e($feature->id); ?>][limit]"
+                                                value="<?php echo e($pivot?->limit); ?>"
+                                                placeholder="Limit">
+                                        </div>
+                                        <div>
+                                            <select 
+                                                name="feature_permissions[<?php echo e($feature->id); ?>][]" 
+                                                class="form-select form-select-sm mt-1 select2-permissions" 
+                                                multiple
+                                            >
+                                                <?php $__currentLoopData = $allPermissions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $permission): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                    <option value="<?php echo e($permission->id); ?>"
+                                                        <?php echo e($feature->permissions->contains($permission->id) ? 'selected' : ''); ?>>
+                                                        <?php echo e($permission->name); ?>
+
+                                                    </option>
+                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                            </select>
+                                        </div>
                                     </td>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </tr>
@@ -240,11 +259,11 @@
             <label>Name</label>
             <input type="text" name="name" class="form-control" required>
           </div>
-          <div class="mb-2">
+          <div class="mb-2 d-none">
             <label>Category</label>
             <input type="text" name="category" class="form-control">
           </div>
-          <div class="mb-2">
+          <div class="mb-2 d-none">
             <label>Order</label>
             <input type="number" name="order" class="form-control">
           </div>
@@ -259,6 +278,17 @@
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('scripts'); ?>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('.select2-permissions').select2({
+        placeholder: "Select permissions",
+        allowClear: true,
+        width: '100%',
+    });
+});
+</script>
+
 <script>
 $(function() {
     // Edit Plan

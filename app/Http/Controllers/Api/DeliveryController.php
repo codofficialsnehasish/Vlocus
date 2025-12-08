@@ -74,7 +74,6 @@ class DeliveryController extends Controller
         //         'deliveryScheduleShops.media' // Load media relation for delivery image and signature
         //     ])
         //     ->get();
-
         $deliveries = DeliverySchedule::where('driver_id', $driver_id)
             ->where(function ($q) {
                 $q->whereDate('delivery_date', date('Y-m-d')) // today's schedules
@@ -90,8 +89,6 @@ class DeliveryController extends Controller
                 },
             ])
             ->get();
-
-
         // return $deliveries;
     
         // Enhance response to include image URLs

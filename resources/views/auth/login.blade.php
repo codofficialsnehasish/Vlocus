@@ -35,9 +35,9 @@
         </div>
         
         @if (Route::has('password.request'))
-        {{-- <div class="col-md-6 text-end"> 
+        <div class="col-md-6 text-end"> 
             <a href="{{ route('password.request') }}">Forgot Password ?</a>
-        </div> --}}
+        </div>
         @endif
         
         <div class="col-12">

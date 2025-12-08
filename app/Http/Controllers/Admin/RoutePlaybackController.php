@@ -25,7 +25,8 @@ class RoutePlaybackController extends Controller
         ]);
 
         $driverId = $request->driver_id;
-        $date = Carbon::parse($request->date);
+        // $date = Carbon::parse($request->date);
+        $date = $request->date;
 
         $driver = Driver::find($driverId);
         $driverId = $driver->id;
@@ -37,6 +38,7 @@ class RoutePlaybackController extends Controller
             ->whereDate('created_at', $date)
             ->orderBy('created_at')
             ->get();
+        // return $date;
 
         if ($locations->isEmpty()) {
             return response()->json([
@@ -62,8 +64,9 @@ class RoutePlaybackController extends Controller
             'start_location' => $routeData->first(),
             'end_location' => $routeData->last(),
             'total_points' => $routeData->count(),
-            'date' => $date->format('Y-m-d')
+            'date' => $date
         ]);
+        
         // $data = [
         //     'route' => $routeData,
         //     'start_location' => $routeData->first(),

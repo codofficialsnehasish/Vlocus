@@ -20,6 +20,8 @@ return new class extends Migration
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('vehicle_type')->references('id')->on('vehicle_types')->onDelete('cascade');
+
+
         });
     }
 

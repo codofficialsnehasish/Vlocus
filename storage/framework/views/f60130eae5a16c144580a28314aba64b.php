@@ -135,7 +135,9 @@
         </div>
         
         <?php if(Route::has('password.request')): ?>
-        
+        <div class="col-md-6 text-end"> 
+            <a href="<?php echo e(route('password.request')); ?>">Forgot Password ?</a>
+        </div>
         <?php endif; ?>
         
         <div class="col-12">

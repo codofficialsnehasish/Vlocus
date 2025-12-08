@@ -1,5 +1,7 @@
 @extends('layouts.app')
-
+@section('css')
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+@endsection
 @section('title', 'Plan Management')
 
 @section('content')
@@ -17,9 +19,9 @@
 
 <div class="card">
     <div class="card-body">
-        <div class="row" style="height: 600px;"> <!-- Fixed card height -->
+        <div class="row"> <!-- Fixed card height -->
             <!-- Add Plan -->
-            <div class="col-md-6 border-end overflow-auto">
+            <div class="col-md-6 border-end">
                 <h5>Add Plan</h5>
                 <form action="{{ route('plans.store') }}" method="POST">
                     @csrf
@@ -91,27 +93,27 @@
                         <label class="form-label">Feature Name</label>
                         <input type="text" name="name" class="form-control" required>
                     </div>
-                    <div class="mb-2">
+                    {{-- <div class="mb-2">
                         <label class="form-label">Category</label>
                         <input type="text" name="category" class="form-control">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Order</label>
                         <input type="number" name="order" class="form-control">
-                    </div>
+                    </div> --}}
                     <button class="btn btn-success w-100">Add Feature</button>
                 </form>
 
                 <hr>
 
                 <h6 class="mt-3">Existing Features</h6>
-                <div class="table-responsive flex-grow-1 overflow-auto">
+                <div class="table-responsive flex-grow-1 overflow-auto" style="max-height: 300px; overflow-y: auto;">
                     <table class="table table-bordered table-sm mb-0">
-                        <thead>
+                        <thead class="table-light" style="position: sticky; top: 0; z-index: 10;">
                             <tr>
                                 <th>Name</th>
-                                <th>Category</th>
-                                <th>Order</th>
+                                {{-- <th>Category</th>
+                                <th>Order</th> --}}
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -119,8 +121,8 @@
                             @foreach($features as $feature)
                                 <tr>
                                     <td>{{ $feature->name }}</td>
-                                    <td>{{ $feature->category }}</td>
-                                    <td>{{ $feature->order }}</td>
+                                    {{-- <td>{{ $feature->category }}</td>
+                                    <td>{{ $feature->order }}</td> --}}
                                     <td>
                                         <button type="button" class="btn btn-sm btn-outline-primary editFeatureBtn" data-id="{{ $feature->id }}">Edit</button>
                                         <form action="{{ route('features.destroy', $feature->id) }}" method="POST" style="display:inline-block;">
@@ -133,6 +135,7 @@
                         </tbody>
                     </table>
                 </div>
+
             </div>
         </div>
     </div>
@@ -164,15 +167,54 @@
                                         $pivot = $plan->planFeatures->firstWhere('feature_id', $feature->id);
                                     @endphp
                                     <td>
-                                        <select name="mapping[{{ $plan->id }}][{{ $feature->id }}][availability]" class="form-select form-select-sm mb-1">
-                                            <option value="no" {{ $pivot?->availability == 'no' ? 'selected' : '' }}>No</option>
-                                            <option value="partial" {{ $pivot?->availability == 'partial' ? 'selected' : '' }}>Partial</option>
-                                            <option value="yes" {{ $pivot?->availability == 'yes' ? 'selected' : '' }}>Yes</option>
-                                        </select>
-                                        <input type="text" class="form-control form-control-sm"
-                                               name="mapping[{{ $plan->id }}][{{ $feature->id }}][details]"
-                                               value="{{ $pivot?->details }}"
-                                               placeholder="Details">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <select name="mapping[{{ $plan->id }}][{{ $feature->id }}][availability]" 
+                                                    class="form-select form-select-sm w-auto">
+                                                <option value="no" {{ $pivot?->availability == 'no' ? 'selected' : '' }}>No</option>
+                                                <option value="partial" {{ $pivot?->availability == 'partial' ? 'selected' : '' }}>Partial</option>
+                                                <option value="yes" {{ $pivot?->availability == 'yes' ? 'selected' : '' }}>Yes</option>
+                                            </select>
+
+                                            <textarea
+                                                class="form-control form-control-sm w-50"
+                                                name="mapping[{{ $plan->id }}][{{ $feature->id }}][details]"
+                                                placeholder="Details">{{ $pivot?->details }}</textarea>
+
+                                            <input type="number" 
+                                                class="form-control form-control-sm w-25"
+                                                name="mapping[{{ $plan->id }}][{{ $feature->id }}][limit]"
+                                                value="{{ $pivot?->limit }}"
+                                                placeholder="Limit">
+                                        </div>
+                                        <div>
+                                            <select 
+                                                name="feature_permissions[{{ $plan->id }}][{{ $feature->id }}][]" 
+                                                class="form-select form-select-sm mt-1 select2-permissions" 
+                                                multiple
+                                            >
+
+                                                {{-- @foreach($allPermissions as $permission)
+                                                    <option value="{{ $permission->id }}"
+                                                        {{ $feature->permissions->contains($permission->id) ? 'selected' : '' }}>
+                                                        {{ $permission->name }}
+                                                    </option>
+                                                @endforeach --}}
+                                                @php
+                                                    $existingPermissionIds = \App\Models\PlanFeaturePermission::where('plan_id', $plan->id)
+                                                        ->where('feature_id', $feature->id)
+                                                        ->pluck('permission_id')
+                                                        ->toArray();
+                                                @endphp
+
+                                                @foreach($allPermissions as $permission)
+                                                    <option value="{{ $permission->id }}"
+                                                        {{ in_array($permission->id, $existingPermissionIds) ? 'selected' : '' }}>
+                                                        {{ $permission->name }}
+                                                    </option>
+                                                @endforeach
+
+                                            </select>
+                                        </div>
                                     </td>
                                 @endforeach
                             </tr>
@@ -240,11 +282,11 @@
             <label>Name</label>
             <input type="text" name="name" class="form-control" required>
           </div>
-          <div class="mb-2">
+          <div class="mb-2 d-none">
             <label>Category</label>
             <input type="text" name="category" class="form-control">
           </div>
-          <div class="mb-2">
+          <div class="mb-2 d-none">
             <label>Order</label>
             <input type="number" name="order" class="form-control">
           </div>
@@ -259,6 +301,17 @@
 @endsection
 
 @section('scripts')
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('.select2-permissions').select2({
+        placeholder: "Select permissions",
+        allowClear: true,
+        width: '100%',
+    });
+});
+</script>
+
 <script>
 $(function() {
     // Edit Plan

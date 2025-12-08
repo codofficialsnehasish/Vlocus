@@ -3,12 +3,12 @@
 @section('title', 'Route Playback')
 @section('css')
     <style>
-        /* #map {
+        #map {
             height: 70vh;
             width: 100%;
             border-radius: 8px;
             border: 2px solid #dee2e6;
-        } */
+        }
         .playback-controls {
             background: #f8f9fa;
             padding: 15px;
@@ -44,7 +44,6 @@
         }
     </style>
 @endsection
-
 @section('content')
 
 <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
@@ -738,5 +737,5 @@
             document.getElementById('date').value = new Date().toISOString().split('T')[0];
         });
     </script>
-
+    
 @endsection

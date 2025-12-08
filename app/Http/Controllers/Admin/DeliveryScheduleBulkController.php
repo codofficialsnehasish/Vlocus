@@ -13,9 +13,19 @@ use PhpOffice\PhpSpreadsheet\Shared\Date as ExcelDate;
 use App\Models\User;
 use App\Models\Vehicle;
 use App\Models\Shop;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 
-class DeliveryScheduleBulkController extends Controller
+class DeliveryScheduleBulkController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [
+            new Middleware('permission:Bulk Upload Template', only: ['downloadTemplate']),
+            new Middleware('permission:Bulk Upload', only: ['bulkUpload']),
+        ];
+    }
+
     /**
      * Download the Excel Template for Bulk Upload
      */

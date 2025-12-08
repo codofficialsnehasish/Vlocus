@@ -11,6 +11,7 @@ class PlanFeature extends Model
         'feature_id',
         'availability',
         'details',
+        'limit',
     ];
 
     /**
@@ -28,4 +29,10 @@ class PlanFeature extends Model
     {
         return $this->belongsTo(Feature::class);
     }
+
+    public function planPermissions()
+    {
+        return $this->hasMany(PlanFeaturePermission::class);
+    }
+
 }

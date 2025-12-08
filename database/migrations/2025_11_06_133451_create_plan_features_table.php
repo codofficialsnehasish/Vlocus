@@ -18,6 +18,7 @@ return new class extends Migration
 
             $table->enum('availability', ['yes', 'no', 'partial'])->default('no');
             $table->string('details')->nullable(); // e.g. “Up to 10 drivers”, “500 SMS/month”
+            $table->integer('limit')->nullable(); // e.g. 10 drivers
             $table->timestamps();
         });
     }

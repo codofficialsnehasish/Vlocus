@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Feature extends Model
 {
     protected $fillable = [
+        'slug',
         'name',
         'category',
         'order',
@@ -29,4 +30,10 @@ class Feature extends Model
                     ->withPivot('availability', 'details')
                     ->withTimestamps();
     }
+
+    public function permissions()
+    {
+        return $this->belongsToMany(\Spatie\Permission\Models\Permission::class, 'feature_permission');
+    }
+
 }

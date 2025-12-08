@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('features', function (Blueprint $table) {
             $table->id();
+            $table->string('slug')->unique(); 
             $table->string('name'); // e.g. "Driver Application"
             $table->string('category')->nullable(); // e.g. "Driver", "Integration"
             $table->integer('order')->default(0); // for sorting

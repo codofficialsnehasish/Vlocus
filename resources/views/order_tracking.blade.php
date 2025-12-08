@@ -100,7 +100,6 @@
         data-ad-client="ca-pub-7814820408838796"
         data-ad-slot="1234567890"
         data-ad-format="auto"
-        data-adtest="on"
         data-full-width-responsive="true"></ins>
     <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
     </div>

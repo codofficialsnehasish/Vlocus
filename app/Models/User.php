@@ -77,7 +77,7 @@ class User extends Authenticatable implements HasMedia
     {
         return $this->hasOne(Driver::class, 'user_id');
     }
-
+    
     public function currentActiveDelivery()
     {
         return $this->hasOne(DeliverySchedule::class, 'driver_id', 'id')

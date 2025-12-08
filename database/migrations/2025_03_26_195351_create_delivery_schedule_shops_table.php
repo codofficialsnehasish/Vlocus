@@ -16,7 +16,6 @@ return new class extends Migration
             $table->foreignId('delivery_schedule_id')->constrained()->onDelete('cascade');
             $table->foreignId('shop_id')->constrained()->onDelete('cascade');
             $table->integer('order_serial')->nullable();
-            $table->integer('app_serial')->nullable();
             $table->unsignedBigInteger('otp')->nullable();
             $table->tinyInteger('is_delivered')->default(0);
             $table->timestamp('delivered_at')->nullable();

@@ -14,11 +14,16 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
     <!-- Flatpickr JS -->
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+    {{-- flatpickr --}}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
 
 
     <style>
-        .edit-task-selector{
+        .edit-task-selector {
             padding: 3px !important;
         }
 
@@ -26,27 +31,29 @@
             position: static !important;
             overflow: visible !important;
         }
+
         /* Base Reset */
-        html, body {
-        height: 100%;
-        margin: 0;
-        overflow: hidden;
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
         }
 
         /* Topbar */
         .topbar {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        margin-top: 55px;
-        height: 50px;
-        background-color: #ddd;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0 1rem;
-        z-index: 100;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            margin-top: 55px;
+            height: 50px;
+            background-color: #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1rem;
+            z-index: 100;
         }
 
         /* Sidebar */
@@ -67,57 +74,57 @@
         }
 
         .sidebar.show {
-        transform: translateX(0);
+            transform: translateX(0);
         }
 
         /* Map Container */
         .map-container {
-        position: absolute;
-        top: 50px;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        width: 100%;
-        height: calc(100vh - 50px);
-        transition: margin-left 0.3s;
+            position: absolute;
+            top: 50px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            height: calc(100vh - 50px);
+            transition: margin-left 0.3s;
         }
 
-        .sidebar.show ~ .map-container {
-        /* margin-left: 700px;
-        width: calc(100% - 700px); */
-        width: 100%;
+        .sidebar.show~.map-container {
+            /* margin-left: 700px;
+                                width: calc(100% - 700px); */
+            width: 100%;
         }
 
         /* Location List */
         #locations {
-        height: 430px;
-        overflow-y: auto;
+            height: 430px;
+            overflow-y: auto;
         }
 
         /* Location Box */
         .location-box {
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        margin-bottom: 10px;
-        overflow: hidden;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            overflow: hidden;
         }
 
         .location-header {
-        background-color: #f5f5f5;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 10px;
-        cursor: pointer;
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            cursor: pointer;
         }
 
         .location-content {
-        padding: 10px;
+            padding: 10px;
         }
 
         .toggle-icon.rotate {
-        transform: rotate(180deg);
-        transition: transform 0.3s ease;
+            transform: rotate(180deg);
+            transition: transform 0.3s ease;
         }
 
         /* Task Section */
@@ -137,191 +144,197 @@
 
         /* Task Item */
         .item-row {
-        padding: 0.5rem;
-        background-color: #fafafa;
-        border-bottom: 1px solid #eee;
-        border-radius: 5px;
-        margin-bottom: 4px;
+            padding: 0.5rem;
+            background-color: #fafafa;
+            border-bottom: 1px solid #eee;
+            border-radius: 5px;
+            margin-bottom: 4px;
         }
 
         /* Buttons */
         .btn-icon {
-        background: none;
-        border: none;
-        color: #dc3545;
-        margin-left: 0.5rem;
+            background: none;
+            border: none;
+            color: #dc3545;
+            margin-left: 0.5rem;
         }
 
         .btn-submit {
-        width: 48%;
+            width: 48%;
         }
 
         /* Bottom Button Container */
         .bottom-button-container {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        padding: 16px;
-        background-color: #fff;
-        border-top: 1px solid #ddd;
-        z-index: 20;
-        width: 600px;
-        margin-top: -555px;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            padding: 16px;
+            background-color: #fff;
+            border-top: 1px solid #ddd;
+            z-index: 20;
+            width: 600px;
+            margin-top: -555px;
         }
 
         /* Responsive Adjustments */
 
-        @media only screen and (min-width: 1366px) and (max-width: 1600px){
+        @media only screen and (min-width: 1366px) and (max-width: 1600px) {
             #locations {
-        height: 58vh;
-        overflow-y: auto;
-        }
+                height: 58vh;
+                overflow-y: auto;
+            }
         }
 
         @media (max-width: 1199px) {
-        .bottom-button-container {
-            width: 100%;
-        }
+            .bottom-button-container {
+                width: 100%;
+            }
         }
 
-        @media(max-width:1024px){
+        @media(max-width:1050px) {
             #locations {
-        height: 430px;
-        overflow-y: auto;
-        }
+                height: 430px;
+                overflow-y: auto;
+            }
+
+            .sidebar {
+                width: 40%;
+            }
         }
 
-        @media (max-width: 767px) {
-        .sidebar {
-            width: 100%;
-        }
+        @media (max-width: 770px) {
+            .sidebar {
+                width: 50%;
+            }
 
-        .sidebar.show ~ .map-container {
-            margin-left: 0;
-            width: 100%;
-        }
-        #locations {
-        height: 450px;
-        overflow-y: auto;
-        }
+            .sidebar.show~.map-container {
+                margin-left: 0;
+                width: 100%;
+            }
+
+            #locations {
+                height: 450px;
+                overflow-y: auto;
+            }
+
+
         }
 
         /* Delivery Note Offcanvas */
         .delivery-note-overlay {
-        position: fixed;
-        z-index: 1065;
-        width: 100%;
-        max-width: 600px;
-        background: white;
-        transition: transform 0.3s ease-in-out;
+            position: fixed;
+            z-index: 1065;
+            width: 100%;
+            max-width: 600px;
+            background: white;
+            transition: transform 0.3s ease-in-out;
         }
 
         .offcanvas-backdrop {
-        z-index: 1064 !important;
-        background-color: rgba(0, 0, 0, 0.2);
+            z-index: 1064 !important;
+            background-color: rgba(0, 0, 0, 0.2);
         }
 
         body.offcanvas-open {
-        overflow: hidden;
+            overflow: hidden;
         }
 
         /* Delivery Note Input Fields */
         .custom-input-wrapper {
-        position: relative;
+            position: relative;
         }
 
         .custom-floating-label {
-        position: absolute;
-        top: -0.6rem;
-        left: 1rem;
-        background: white;
-        padding: 0 5px;
-        font-size: 0.75rem;
-        color: #666;
-        z-index: 1;
+            position: absolute;
+            top: -0.6rem;
+            left: 1rem;
+            background: white;
+            padding: 0 5px;
+            font-size: 0.75rem;
+            color: #666;
+            z-index: 1;
         }
 
         .custom-input {
-        border: 1px solid #bbb;
-        border-radius: 6px;
-        padding: 12px;
-        font-size: 0.875rem;
-        /* margin-bottom: 25px; */
+            border: 1px solid #bbb;
+            border-radius: 6px;
+            padding: 12px;
+            font-size: 0.875rem;
+            /* margin-bottom: 25px; */
         }
-
     </style>
     <style>
         /* Default state - show top-header and primary-menu */
         .top-header {
-        display: block;
+            display: block;
         }
 
         .primary-menu {
-        display: block;
+            display: block;
         }
 
         /* Hide top-header when screen width is 1366px or more (full screen) */
         @media screen and (min-width: 1366px) {
-        .top-header {
-            display: none;
-        }
+            .top-header {
+                display: none;
+            }
 
-        .primary-menu .navbar {
-            top: 0;
-        }
+            .primary-menu .navbar {
+                top: 0;
+            }
 
-        .main-wrapper {
-            margin-top: 50px;
-        }
+            .main-wrapper {
+                margin-top: 50px;
+            }
         }
     </style>
 
     <style>
         .order-card {
-        color: #fff;
+            color: #fff;
         }
 
         .bg-c-blue {
-        background: linear-gradient(45deg, #4099ff, #73b4ff);
+            background: linear-gradient(45deg, #4099ff, #73b4ff);
         }
 
         .bg-c-green {
-        background: linear-gradient(45deg, #2ed8b6, #59e0c5);
+            background: linear-gradient(45deg, #2ed8b6, #59e0c5);
         }
 
         .bg-c-yellow {
-        background: linear-gradient(45deg, #FFB64D, #ffcb80);
+            background: linear-gradient(45deg, #FFB64D, #ffcb80);
         }
 
         .bg-c-pink {
-        background: linear-gradient(45deg, #FF5370, #ff869a);
+            background: linear-gradient(45deg, #FF5370, #ff869a);
         }
 
 
         .card {
-        border-radius: 5px;
-        -webkit-box-shadow: 0 1px 2.94px 0.06px rgba(4, 26, 55, 0.16);
-        box-shadow: 0 1px 2.94px 0.06px rgba(4, 26, 55, 0.16);
-        border: none;
-        margin-bottom: 30px;
-        -webkit-transition: all 0.3s ease-in-out;
-        transition: all 0.3s ease-in-out;
+            border-radius: 5px;
+            -webkit-box-shadow: 0 1px 2.94px 0.06px rgba(4, 26, 55, 0.16);
+            box-shadow: 0 1px 2.94px 0.06px rgba(4, 26, 55, 0.16);
+            border: none;
+            margin-bottom: 30px;
+            -webkit-transition: all 0.3s ease-in-out;
+            transition: all 0.3s ease-in-out;
         }
 
         .card .card-block {
-        padding: 25px;
+            padding: 25px;
         }
 
         .order-card i {
-        font-size: 26px;
+            font-size: 26px;
         }
 
         .f-left {
-        float: left;
+            float: left;
         }
 
         .f-right {
-        float: right;
+            float: right;
         }
     </style>
 
@@ -333,15 +346,18 @@
         }
 
         .product-title {
-            flex: 1; /* take remaining space */
+            flex: 1;
+            /* take remaining space */
         }
 
         .product-unit {
-            width: 120px; /* fixed width for select */
+            width: 120px;
+            /* fixed width for select */
         }
 
         .product-qty {
-            width: 80px; /* enough for ~5 digits */
+            width: 80px;
+            /* enough for ~5 digits */
             /* text-align: right; */
         }
 
@@ -363,6 +379,7 @@
         .show-important {
             display: flex !important;
         }
+
         .hide-important {
             display: none !important;
         }
@@ -401,23 +418,23 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css">
     <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css">
-
 @endsection
 
 @section('content')
-
     <!--breadcrumb-->
-    <div class="offcanvas offcanvas-start delivery-note-overlay" tabindex="-1" id="deliveryNote" aria-modal="true" role="dialog" style="width: 100%; margin-top: 60px;">
+    <div class="offcanvas offcanvas-start delivery-note-overlay" tabindex="-1" id="deliveryNote" aria-modal="true"
+        role="dialog" style="width: 100%; margin-top: 60px;">
 
-        <form id="task-form" >
+        <form id="task-form">
             <div class="offcanvas-header border-bottom mt-2">
                 <h6 class="offcanvas-title fw-bold">DELIVERY NOTE</h6>
                 <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 <button type="submit" class="btn-close" id="edit-submit-close-btn" style="display: none;"></button>
             </div>
 
-            <div class="offcanvas-body" style="position: relative; height: 80vh;  overflow-y: auto;" style="margin-bottom:50px;">
-            
+            <div class="offcanvas-body" style="position: relative; height: 80vh;  overflow-y: auto;"
+                style="margin-bottom:50px;">
+
                 {{-- <div class="custom-input-wrapper mb-3">
                     <label class="custom-floating-label">DELIVERY DATE</label>
                     <input type="text" id="delivery_date" class="form-control custom-input" placeholder="DD/MM/YYYY">
@@ -438,14 +455,17 @@
                     <label class="custom-floating-label">
                         CONSIGNOR DETAILS
                     </label>
-                    @if(auth()->user()->hasRole('Employee'))
-                    <input type="text" value="{{ auth()->user()->employee?->branch?->name ?? 'N/A' }}" class="form-control custom-input" placeholder="Type here..." readonly>
-                    <input type="hidden" value="{{ auth()->user()->employee?->branch?->id ?? '' }}" name="branch_id" id="branch_id">
+                    @if (auth()->user()->hasRole('Employee'))
+                        <input type="text" value="{{ auth()->user()->employee?->branch?->name ?? 'N/A' }}"
+                            class="form-control custom-input" placeholder="Type here..." readonly>
+                        <input type="hidden" value="{{ auth()->user()->employee?->branch?->id ?? '' }}" name="branch_id"
+                            id="branch_id">
                     @endif
 
-                    @if(auth()->user()->hasRole('Branch'))
-                    <input type="text" value="{{ auth()->user()->name ?? 'N/A' }}" class="form-control custom-input" placeholder="Type here..." readonly>
-                    <input type="hidden" value="{{ auth()->user()->id ?? '' }}" name="branch_id" id="branch_id">
+                    @if (auth()->user()->hasRole('Branch'))
+                        <input type="text" value="{{ auth()->user()->name ?? 'N/A' }}" class="form-control custom-input"
+                            placeholder="Type here..." readonly>
+                        <input type="hidden" value="{{ auth()->user()->id ?? '' }}" name="branch_id" id="branch_id">
                     @endif
                 </div>
 
@@ -456,7 +476,8 @@
                             <i class="text-primary" data-feather="plus"></i>
                         </a>
                     </label>
-                    <input type="text" class="form-control custom-input" id="search_shop_name" name="consignee_details" placeholder="Type here...">
+                    <input type="text" class="form-control custom-input" id="search_shop_name" name="consignee_details"
+                        placeholder="Type here...">
                     <div id="suggestions" class="list-group position-absolute z-index-3"
                         style="z-index: 99999; height: 100px; overflow-y: auto; width: 95%;background: white;">
                     </div>
@@ -479,7 +500,8 @@
                             <option value="unit">Unit</option>
                             <option value="box">Box</option>
                         </select>
-                        <input type="number" min="1" value="1" class="product-qty form-control custom-input">
+                        <input type="number" min="1" value="1"
+                            class="product-qty form-control custom-input">
                         <button type="button" class="remove-row btn btn-sm btn-danger" onclick="removeRow(this)">
                             <i class="material-icons-outlined">delete</i>
                         </button>
@@ -503,7 +525,7 @@
                     <input type="text" class="form-control custom-input" placeholder="Type here...">
                 </div> --}}
 
-                <div class="custom-input-wrapper mb-3" >
+                <div class="custom-input-wrapper mb-3">
                     <label class="custom-floating-label">PAYMENT DETAILS</label>
                     <select class="form-control form-select custom-input payment-type" name="payment_type">
                         <option value="" selected disabled>Select Type</option>
@@ -514,7 +536,8 @@
 
                 <div class="custom-input-wrapper mb-3" style="margin-top: 15px;">
                     <label class="custom-floating-label">TOTAL Amount</label>
-                    <input type="number" class="form-control custom-input amount" name="amount" placeholder="Enter amount" >
+                    <input type="number" class="form-control custom-input amount" name="amount"
+                        placeholder="Enter amount">
                 </div>
 
                 {{-- <div class="custom-input-wrapper mb-3">
@@ -528,25 +551,27 @@
                 </div> --}}
 
                 {{-- <button type="submit" class="btn btn-primary text-uppercase fw-bold" style="position: fixed; bottom: 0; margin-bottom: 20px;width: 59%; z-index: 555px;">Add Delivery Task</button> --}}
-                <div id="ofcanvus-submit-btn" style="position: fixed; bottom: 0; background: white; padding: 10px 0; z-index: 10; width: 555px;">
+                <div id="ofcanvus-submit-btn"
+                    style="position: fixed; bottom: 0; background: white; padding: 10px 0; z-index: 10; width: 555px;">
                     <button type="submit" class="btn btn-primary text-uppercase fw-bold w-100">
                         Add Delivery Task
                     </button>
                 </div>
 
-                <div class="d-grid" >
+                <div class="d-grid">
                 </div>
             </div>
         </form>
 
         <!-- <div id="ofcanvus-submit-btn" style="position: sticky; bottom: 0; background: white; padding: 10px 0; z-index: 10; margin:0 15px;">
-                    <button type="submit" class="btn btn-primary text-uppercase fw-bold w-100">
-                        Add Delivery Task
-                    </button>
-        </div> -->
+                                            <button type="submit" class="btn btn-primary text-uppercase fw-bold w-100">
+                                                Add Delivery Task
+                                            </button>
+                                </div> -->
     </div>
 
-    <form class="needs-validation" action="{{ route('delivery-schedule.store') }}" method="post" novalidate enctype="multipart/form-data">
+    <form class="needs-validation" action="{{ route('delivery-schedule.store') }}" method="post" novalidate
+        enctype="multipart/form-data">
         @csrf
         {{-- <input type="hidden" name="shop_ids" id="shop_ids"> --}}
         <div class="d-flex ">
@@ -558,6 +583,10 @@
                         </div>
                         Create Task
                     </div>
+
+
+
+
                     <div class="mb-4 mt-3">
                         {{-- <a href="javascript:void(0);" data-bs-toggle="offcanvas" data-bs-target="#deliveryNote"
                             class="btn-add text-decoration-none text-white">
@@ -573,28 +602,29 @@
                 <div class="p-3">
                     <div class="row p-1">
                         <div class="mb-3 col-md-3 p-0 edit-task-selector">
-                            <input type="text" id="delivery_date"  name="delivery_date" value="{{ old('delivery_date') }}" class="form-control" placeholder="DD/MM/YYYY">
+                            <input type="text" id="delivery_date" name="delivery_date"
+                                value="{{ old('delivery_date') }}" class="form-control" placeholder="DD/MM/YYYY">
                             <div class="invalid-feedback">Please enter a delivery date.</div>
                         </div>
                         <div class="custom-input-wrapper mb-3 col-md-5 p-0 edit-task-selector">
                             <select class="form-select single-select-field" name="vehicle_id" id="vehicle_id" required>
                                 <option value="" selected disabled>Select Vehicle</option>
-            
+
                                 @foreach ($vehicles as $vehicle)
                                     <option value="{{ $vehicle->id }}"
                                         {{ old('vehicle_id') == $vehicle->id ? 'selected' : '' }}>
-                                        {{ $vehicle->name }} | {{ $vehicle->vehicle_number}}
+                                        {{ $vehicle->name }} | {{ $vehicle->vehicle_number }}
                                     </option>
                                 @endforeach
                                 <option value="add_new">➕ Add New Vehicle</option>
                             </select>
                             <div class="invalid-feedback">Please select a vehicle.</div>
                         </div>
-            
+
                         <div class=" mb-3 col-md-4 p-0 edit-task-selector">
                             <select class="form-select single-select-field" name="driver_id" id="driver_id" required>
                                 <option value="" selected disabled>Select Driver</option>
-            
+
                                 @foreach ($drivers as $driver)
                                     <option value="{{ $driver->id }}"
                                         {{ old('driver_id') == $driver->id ? 'selected' : '' }}>
@@ -774,31 +804,38 @@
                             <!-- Vehicle Name -->
                             <div class="mb-3 col-md-6">
                                 <label for="name" class="form-label">Name <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" name="name" id="name" placeholder="Enter Vehicle Name" value="{{ old('name') }}" required>
+                                <input type="text" class="form-control" name="name" id="name"
+                                    placeholder="Enter Vehicle Name" value="{{ old('name') }}" required>
                                 <div class="valid-feedback">Looks good!</div>
                                 <div class="invalid-feedback">Please enter the vehicle name.</div>
                             </div>
 
                             <!-- Vehicle Number -->
                             <div class="mb-3 col-md-6">
-                                <label for="vehicle_number" class="form-label">Vehicle Number <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" name="vehicle_number" id="vehicle_number" placeholder="Enter Vehicle Number" value="{{ old('vehicle_number') }}" required>
+                                <label for="vehicle_number" class="form-label">Vehicle Number <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="vehicle_number" id="vehicle_number"
+                                    placeholder="Enter Vehicle Number" value="{{ old('vehicle_number') }}" required>
                                 <div class="valid-feedback">Looks good!</div>
                                 <div class="invalid-feedback">Please enter the vehicle number.</div>
                             </div>
 
                             <!-- RWC Number -->
                             <div class="mb-3 col-md-6">
-                                <label for="rwc_number" class="form-label">RWC Number <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" name="rwc_number" id="rwc_number" placeholder="Enter RWC Number" value="{{ old('rwc_number') }}" required>
+                                <label for="rwc_number" class="form-label">RWC Number <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="rwc_number" id="rwc_number"
+                                    placeholder="Enter RWC Number" value="{{ old('rwc_number') }}" required>
                                 <div class="valid-feedback">Looks good!</div>
                                 <div class="invalid-feedback">Please enter the RWC number.</div>
                             </div>
 
                             <!-- Engine Number -->
                             <div class="mb-3 col-md-6">
-                                <label for="rwc_number" class="form-label">Engine Number <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" name="engine_number" id="engine_number" placeholder="Enter RWC Number" value="{{ old('engine_number') }}" required>
+                                <label for="rwc_number" class="form-label">Engine Number <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="engine_number" id="engine_number"
+                                    placeholder="Enter RWC Number" value="{{ old('engine_number') }}" required>
                                 <div class="valid-feedback">Looks good!</div>
                                 <div class="invalid-feedback">Please enter the Engine number.</div>
                             </div>
@@ -838,7 +875,8 @@
                             </div>
 
                             <div class="mb-3">
-                                <img class="img-thumbnail rounded me-2" id="blah" alt="" width="200" src="" data-holder-rendered="true" style="display: none;">
+                                <img class="img-thumbnail rounded me-2" id="blah" alt="" width="200"
+                                    src="" data-holder-rendered="true" style="display: none;">
                             </div>
                             <div class="mb-3">
                                 <input type="file" class="form-control" name="image" id="imgInp" required>
@@ -869,44 +907,73 @@
                             <input type="hidden" name="response_for" value="modal">
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">First Name <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" placeholder="Enter First name" name="first_name" value="{{ old('first_name') }}" required>
+                                <input type="text" class="form-control" placeholder="Enter First name"
+                                    name="first_name" value="{{ old('first_name') }}" required>
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label class="form-label">Last Name <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" placeholder="Enter Last name" name="last_name" value="{{ old('last_name') }}" required>
+                                <input type="text" class="form-control" placeholder="Enter Last name"
+                                    name="last_name" value="{{ old('last_name') }}" required>
                             </div>
                             <div class="mb-3 col-md-4">
                                 <label class="form-label">Email <span class="text-danger">*</span></label>
-                                <input type="email" class="form-control" name="email" id="email" value="{{ old('email') }}" required>
+                                <input type="email" class="form-control" name="email" id="email"
+                                    value="{{ old('email') }}" required>
                             </div>
                             <div class="mb-3 col-md-4">
                                 <label class="form-label">Password <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" name="password" value="{{ old('password') }}" required>
+                                <input type="text" class="form-control" name="password"
+                                    value="{{ old('password') }}" required>
                             </div>
                             <div class="mb-3 col-md-4">
                                 <label class="form-label">Gender <span class="text-danger">*</span></label>
                                 <select class="form-control input-height" name="gender" required>
                                     <option value selected disabled>Select...</option>
                                     <option value="male" @if (old('gender') == 'male') selected @endif>Male</option>
-                                    <option value="female" @if (old('gender') == 'female') selected @endif>Female</option>
-                                    <option value="others" @if (old('gender') == 'others') selected @endif>Others</option>
+                                    <option value="female" @if (old('gender') == 'female') selected @endif>Female
+                                    </option>
+                                    <option value="others" @if (old('gender') == 'others') selected @endif>Others
+                                    </option>
                                 </select>
                             </div>
                             <div class="mb-3 col-md-4">
                                 <label class="form-label">Mobile No. <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" name="phone" value="{{ old('phone') }}" required>
+                                <input type="text" class="form-control" name="phone" value="{{ old('phone') }}"
+                                    required>
                             </div>
+                            {{-- <div class="mb-3 col-md-4">
+                                <label class="form-label">Date Of Birth <span class="text-danger"></span></label>
+                                <input type="date" class="form-control" name="date_of_birth"
+                                    value="{{ old('date_of_birth') }}">
+                            </div> --}}
+
+
                             <div class="mb-3 col-md-4">
                                 <label class="form-label">Date Of Birth <span class="text-danger"></span></label>
-                                <input type="date" class="form-control" name="date_of_birth" value="{{ old('date_of_birth') }}">
+
+                                <div class="input-group">
+                                    <input id="dobPicker" type="text" class="form-control" placeholder="Select Date"
+                                        readonly>
+
+                                    <span class="input-group-text calendar-btn" id="openCalendar">
+                                        <i class="bi bi-calendar3"></i>
+                                    </span>
+                                </div>
                             </div>
+
+
+
+
+
                             <div class="mb-3 col-md-4">
                                 <label class="form-label">Address <span class="text-danger"></span></label>
                                 <input type="text" class="form-control" name="address" value="{{ old('address') }}">
                             </div>
                             <div class="mb-3 col-md-4">
-                                <label class="form-label">Driving License Number <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" name="driving_license_number" value="{{ old('driving_license_number') }}">
+                                <label class="form-label">Driving License Number <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="driving_license_number"
+                                    value="{{ old('driving_license_number') }}">
                             </div>
 
                             <div class="mb-3 col-md-4">
@@ -922,7 +989,8 @@
 
                             <div class="mb-3 col-md-4">
                                 <label class="form-label">Driving Exprience <span class="text-danger"></span></label>
-                                <input type="text" class="form-control" name="driving_exprience" value="{{ old('driving_exprience') }}">
+                                <input type="text" class="form-control" name="driving_exprience"
+                                    value="{{ old('driving_exprience') }}">
                             </div>
 
                         </div>
@@ -934,25 +1002,41 @@
             </form>
         </div>
     </div>
-
 @endsection
 
 @section('scripts')
     <script src="https://code.jquery.com/ui/1.14.1/jquery-ui.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="{{ asset('assets/dashboard-assets/assets/plugins/select2/js/select2-custom.js') }}"></script>
-    
-    <script>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+    {{-- <script>
         flatpickr("#delivery_date", {
             dateFormat: "d/m/Y",
             minDate: "today",
             closeOnSelect: true,
         });
-    </script>
+    </script> --}}
 
     <script>
-        $(document).ready(function () {
-            $("#openDeliveryNoteBtn").on("click", function () {
+        // Initialize Flatpickr on DOB input
+        const dobPicker = flatpickr("#delivery_date", {
+            dateFormat: "d/m/Y",
+            defaultDate: "{{ old('date_of_birth') }}",
+            allowInput: true,
+        });
+
+        // Open calendar when clicking the icon
+        document.getElementsByClassName("flatpickr-input").addEventListener("click", function() {
+            dobPicker.open();
+        });
+    </script>
+
+
+    <script>
+        $(document).ready(function() {
+            $("#openDeliveryNoteBtn").on("click", function() {
                 let isValid = true;
 
                 // reset previous invalid states
@@ -997,7 +1081,7 @@
         });
     </script>
 
-    
+
     <script>
         function addRow() {
             const container = document.getElementById('product-container');
@@ -1038,7 +1122,7 @@
 
         function bindEvents(row) {
             row.querySelectorAll('input, select').forEach(el => {
-            el.addEventListener('input', updateTotal);
+                el.addEventListener('input', updateTotal);
             });
         }
 
@@ -1063,7 +1147,8 @@
 
     <script>
         $(document).on('change', '.payment-type', function() {
-            let $amountInput = $(this).closest('.custom-input-wrapper').next('.custom-input-wrapper').find('.amount');
+            let $amountInput = $(this).closest('.custom-input-wrapper').next('.custom-input-wrapper').find(
+                '.amount');
 
             if ($(this).val() === 'Pre-Paid') {
                 $amountInput.val('0.00').prop('readonly', true);
@@ -1126,16 +1211,16 @@
 
     {{-- add new vehicle --}}
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             // Open modal when "Add New Vehicle" is selected
-            $("#vehicle_id").on("change", function () {
+            $("#vehicle_id").on("change", function() {
                 if ($(this).val() === "add_new") {
                     $("#addVehicleModal").modal("show");
                 }
             });
 
             // Handle form submission
-            $("#addVehicleForm").on("submit", function (e) {
+            $("#addVehicleForm").on("submit", function(e) {
                 e.preventDefault();
 
                 let formData = $(this).serialize();
@@ -1144,12 +1229,13 @@
                     url: "{{ route('vehicle.store') }}", // your store route
                     type: "POST",
                     data: formData,
-                    success: function (response) {
+                    success: function(response) {
                         if (response.success) {
                             // Insert new option before "Add New"
                             let newOption = $("<option>")
                                 .val(response.vehicle.id)
-                                .text(response.vehicle.name + " | " + response.vehicle.vehicle_number);
+                                .text(response.vehicle.name + " | " + response.vehicle
+                                    .vehicle_number);
 
                             $("#vehicle_id option[value='add_new']").before(newOption);
 
@@ -1163,27 +1249,26 @@
                             alert("Error: " + response.message);
                         }
                     },
-                    error: function (xhr) {
+                    error: function(xhr) {
                         alert("Something went wrong!");
                     }
                 });
             });
         });
-
     </script>
 
     {{-- add new driver --}}
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             // Open modal when "Add New Driver" is selected
-            $("#driver_id").on("change", function () {
+            $("#driver_id").on("change", function() {
                 if ($(this).val() === "add_new") {
                     $("#addDriverModal").modal("show");
                 }
             });
 
             // Handle form submission
-            $("#addDriverForm").on("submit", function (e) {
+            $("#addDriverForm").on("submit", function(e) {
                 e.preventDefault();
 
                 let formData = $(this).serialize();
@@ -1192,12 +1277,13 @@
                     url: "{{ route('driver.store') }}", // your store route
                     type: "POST",
                     data: formData,
-                    success: function (response) {
+                    success: function(response) {
                         if (response.success) {
                             // Insert new option before "Add New"
                             let newOption = $("<option>")
                                 .val(response.driver.id)
-                                .text(response.driver.name + " (" + response.driver.phone + ")");
+                                .text(response.driver.name + " (" + response.driver.phone +
+                                    ")");
 
                             $("#driver_id option[value='add_new']").before(newOption);
 
@@ -1211,24 +1297,25 @@
                             alert("Error: " + response.message);
                         }
                     },
-                    error: function (xhr) {
+                    error: function(xhr) {
                         if (xhr.status === 422) {
                             // Validation error messages from Laravel
                             let errors = xhr.responseJSON.errors;
-                            $.each(errors, function (field, messages) {
-                                $.each(messages, function (index, message) {
-                                    round_warning_noti(message); // show each error message
+                            $.each(errors, function(field, messages) {
+                                $.each(messages, function(index, message) {
+                                    round_warning_noti(
+                                        message); // show each error message
                                 });
                             });
                         } else {
                             // Other errors
-                            round_warning_noti(xhr.responseJSON.message || "Something went wrong!");
+                            round_warning_noti(xhr.responseJSON.message ||
+                                "Something went wrong!");
                         }
                     }
                 });
             });
         });
-
     </script>
 
     <script>
@@ -1412,18 +1499,18 @@
         // let driverLat = 22.5059365;
         // let driverLng = 88.3716779;
 
-        @if(auth()->user()->hasRole('Employee'))
+        @if (auth()->user()->hasRole('Employee'))
             let driverLat = {{ auth()->user()->employee?->branch?->branch?->latitude }};
             let driverLng = {{ auth()->user()->employee?->branch?->branch?->longitude }};
         @endif
 
-        @if(auth()->user()->hasRole('Branch'))
+        @if (auth()->user()->hasRole('Branch'))
             let driverLat = {{ auth()->user()->branch?->latitude }};
             let driverLng = {{ auth()->user()->branch?->longitude }};
         @endif
 
         function initializeMap() {
-            
+
             map = new google.maps.Map(document.getElementById("shopMap"), {
                 center: {
                     lat: driverLat,
@@ -1526,7 +1613,7 @@
                 decodedPath.forEach(p => bounds.extend(p));
                 map.fitBounds(bounds);
 
-                google.maps.event.addListenerOnce(map, "bounds_changed", function () {
+                google.maps.event.addListenerOnce(map, "bounds_changed", function() {
                     map.setZoom(12); // closer view
                 });
 
@@ -1629,7 +1716,10 @@
 
             allPoints.forEach(point => {
                 const marker = new google.maps.Marker({
-                    position: { lat: point.lat, lng: point.lng },
+                    position: {
+                        lat: point.lat,
+                        lng: point.lng
+                    },
                     map,
                     icon: {
                         path: google.maps.SymbolPath.CIRCLE,
@@ -1643,7 +1733,8 @@
                 });
 
                 marker.addListener("click", () => {
-                    const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${point.lat},${point.lng}`;
+                    const mapsUrl =
+                        `https://www.google.com/maps/search/?api=1&query=${point.lat},${point.lng}`;
                     const content = `
                         <strong>${point.label}</strong><br>
                         ${point.address || ''}<br>
@@ -1663,7 +1754,7 @@
             allPoints.forEach(p => bounds.extend(new google.maps.LatLng(p.lat, p.lng)));
             map.fitBounds(bounds);
 
-            google.maps.event.addListenerOnce(map, "bounds_changed", function () {
+            google.maps.event.addListenerOnce(map, "bounds_changed", function() {
                 map.setZoom(12); // closer view
             });
         }
@@ -1728,7 +1819,7 @@
             });
 
             // ✅ Step 3: Add selected shop to list
-            $suggestions.on('click', 'a', function (e) {
+            $suggestions.on('click', 'a', function(e) {
                 e.preventDefault();
                 const data = $(this).data();
                 $('#search_shop_name').val(data.name);
@@ -1738,16 +1829,16 @@
                 $('#shop_latitude').val(data.lat);
                 $('#shop_longitude').val(data.lng);
 
-                    selectedShops.push({
-                        id: data.id,
-                        name: data.name,
-                        lat: parseFloat(data.lat),
-                        lng: parseFloat(data.lng),
-                        address: data.address
-                    });
+                selectedShops.push({
+                    id: data.id,
+                    name: data.name,
+                    lat: parseFloat(data.lat),
+                    lng: parseFloat(data.lng),
+                    address: data.address
+                });
 
-                    // showLocationsOnly();
-                    drawMultiStopRoute();
+                // showLocationsOnly();
+                drawMultiStopRoute();
                 //     updateShopSerialNumbers();
                 // }
 
@@ -1755,7 +1846,7 @@
                 $suggestions.empty().hide();
             });
 
-            
+
 
 
             // ✅ Step 4: Remove shop from list
@@ -1781,7 +1872,7 @@
                                 id: $li.data('id'),
                                 name: $li.find('input[name="shop_names[]"]').val(),
                                 address: $li.find('input[name="shop_addresses[]"]')
-                                .val(),
+                                    .val(),
                                 lat: parseFloat($li.find(
                                     'input[name="shop_latitudes[]"]').val()),
                                 lng: parseFloat($li.find(
@@ -1881,7 +1972,7 @@
                 // Rotate icon for feedback
                 $(this).find('i').toggleClass('fa-chevron-down fa-chevron-up');
             });
-            
+
             $(document).on('click', function(e) {
                 const $target = $(e.target);
                 const isInsideRelevantBlock = $target.closest(
@@ -1915,105 +2006,106 @@
     </script>
 
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
 
-        // Add Delivery Task
-        $("#task-form").on("submit", function (e) {
-            e.preventDefault();
+            // Add Delivery Task
+            $("#task-form").on("submit", function(e) {
+                e.preventDefault();
 
-            let isValid = true;
+                let isValid = true;
 
-            // Reset invalid states
-            $("#task-form .form-control, #task-form .form-select").removeClass("is-invalid");
+                // Reset invalid states
+                $("#task-form .form-control, #task-form .form-select").removeClass("is-invalid");
 
-            // Get values
-            let orderNo = $('input[name="invoice_no"]').val().trim();
-            let consignee = $('#search_shop_name').val().trim();
-            let paymentType = $('select[name="payment_type"]').val();
-            let amount = $('input[name="amount"]').val().trim();
-            let shop_id = $("#shop_id").val();
-            let shop_name = $("#shop_name").val();
-            let shop_addresse = $("#shop_addresse").val();
-            let shop_latitude = $("#shop_latitude").val();
-            let shop_longitude = $("#shop_longitude").val();
-            let branch_id = $("#branch_id").val();
+                // Get values
+                let orderNo = $('input[name="invoice_no"]').val().trim();
+                let consignee = $('#search_shop_name').val().trim();
+                let paymentType = $('select[name="payment_type"]').val();
+                let amount = $('input[name="amount"]').val().trim();
+                let shop_id = $("#shop_id").val();
+                let shop_name = $("#shop_name").val();
+                let shop_addresse = $("#shop_addresse").val();
+                let shop_latitude = $("#shop_latitude").val();
+                let shop_longitude = $("#shop_longitude").val();
+                let branch_id = $("#branch_id").val();
 
-            // Validate fields
-            if (orderNo === "") {
-                $('input[name="invoice_no"]').addClass("is-invalid");
-                isValid = false;
-            }
-            if (consignee === "") {
-                $('#search_shop_name').addClass("is-invalid");
-                isValid = false;
-            }
-            if (!paymentType) {
-                $('select[name="payment_type"]').addClass("is-invalid");
-                isValid = false;
-            }
-            if (amount === "") {
-                $('input[name="amount"]').addClass("is-invalid");
-                isValid = false;
-            }
-
-            $(".product-title").each(function () {
-                if ($.trim($(this).val()) === "") {
-                    $(this).addClass("is-invalid");
+                // Validate fields
+                if (orderNo === "") {
+                    $('input[name="invoice_no"]').addClass("is-invalid");
                     isValid = false;
-                } else {
-                    $(this).removeClass("is-invalid");
                 }
-            });
-
-            // Validate product rows
-            let hasValidProduct = false;
-            $("#product-container .product-row").each(function () {
-                let title = $(this).find(".product-title").val().trim();
-                let qty = $(this).find(".product-qty").val();
-                let unit = $(this).find(".product-unit").val();
-
-                if (title !== "" && qty > 0 && unit !== "") {
-                    hasValidProduct = true;
-                } else {
-                    if (title === "") $(this).find(".product-title").addClass("is-invalid");
-                    if (qty <= 0 || qty === "") $(this).find(".product-qty").addClass("is-invalid");
-                    if (unit === "") $(this).find(".product-unit").addClass("is-invalid");
+                if (consignee === "") {
+                    $('#search_shop_name').addClass("is-invalid");
+                    isValid = false;
                 }
-            });
+                if (!paymentType) {
+                    $('select[name="payment_type"]').addClass("is-invalid");
+                    isValid = false;
+                }
+                if (amount === "") {
+                    $('input[name="amount"]').addClass("is-invalid");
+                    isValid = false;
+                }
 
-            if (!hasValidProduct) {
-                isValid = false;
-            }
+                $(".product-title").each(function() {
+                    if ($.trim($(this).val()) === "") {
+                        $(this).addClass("is-invalid");
+                        isValid = false;
+                    } else {
+                        $(this).removeClass("is-invalid");
+                    }
+                });
 
-            // If invalid, stop here (don’t close offcanvas)
-            if (!isValid) {
-                return false;
-            }
+                // Validate product rows
+                let hasValidProduct = false;
+                $("#product-container .product-row").each(function() {
+                    let title = $(this).find(".product-title").val().trim();
+                    let qty = $(this).find(".product-qty").val();
+                    let unit = $(this).find(".product-unit").val();
 
-            // ✅ If valid → close offcanvas
-            $(".btn-close[data-bs-dismiss='offcanvas']").trigger("click");
+                    if (title !== "" && qty > 0 && unit !== "") {
+                        hasValidProduct = true;
+                    } else {
+                        if (title === "") $(this).find(".product-title").addClass("is-invalid");
+                        if (qty <= 0 || qty === "") $(this).find(".product-qty").addClass(
+                            "is-invalid");
+                        if (unit === "") $(this).find(".product-unit").addClass("is-invalid");
+                    }
+                });
 
-            // Count locations
-            let locationCount = $("#locations .location-box").length + 1;
+                if (!hasValidProduct) {
+                    isValid = false;
+                }
 
-            // Products HTML
-            let productsHTML = "";
-            let productInputs = "";
-            $("#product-container .product-row").each(function () {
-                let title = $(this).find(".product-title").val().trim();
-                let qty = $(this).find(".product-qty").val();
-                let unit = $(this).find(".product-unit").val();
+                // If invalid, stop here (don’t close offcanvas)
+                if (!isValid) {
+                    return false;
+                }
 
-                productsHTML += `<div class="item-row">${title} - ${qty} ${unit}</div>`;
-                productInputs += `
+                // ✅ If valid → close offcanvas
+                $(".btn-close[data-bs-dismiss='offcanvas']").trigger("click");
+
+                // Count locations
+                let locationCount = $("#locations .location-box").length + 1;
+
+                // Products HTML
+                let productsHTML = "";
+                let productInputs = "";
+                $("#product-container .product-row").each(function() {
+                    let title = $(this).find(".product-title").val().trim();
+                    let qty = $(this).find(".product-qty").val();
+                    let unit = $(this).find(".product-unit").val();
+
+                    productsHTML += `<div class="item-row">${title} - ${qty} ${unit}</div>`;
+                    productInputs += `
                     <input type="hidden" name="product_titles[${locationCount}][]" value="${title}">
                     <input type="hidden" name="product_qtys[${locationCount}][]" value="${qty}">
                     <input type="hidden" name="product_units[${locationCount}][]" value="${unit}">
                 `;
-            });
+                });
 
-            // Location HTML
-            let locationHTML = `
+                // Location HTML
+                let locationHTML = `
             <div class="d-flex w-100 align-items-start gap-3 mb-3 location-item" data-shop-id="${shop_id}">
                 <div class="bg-primary d-flex align-items-center justify-content-center rounded-circle flex-shrink-0"
                     style="width: 30px; height: 30px;">
@@ -2071,14 +2163,14 @@
                 </a>
             </div>`;
 
-            // Append to locations
-            $("#locations").append(locationHTML);
+                // Append to locations
+                $("#locations").append(locationHTML);
 
-            toggleSearchBar();
+                toggleSearchBar();
 
-            // Reset form
-            this.reset();
-            $("#product-container").html(`
+                // Reset form
+                this.reset();
+                $("#product-container").html(`
                 <div class="product-row">
                     <input type="text" placeholder="Product Title" class="product-title form-control custom-input">
                     <select class="product-unit form-select custom-input">
@@ -2094,55 +2186,55 @@
                     </button>
                 </div>
             `);
-            bindEvents(document.querySelector('.product-row'));
-        });
+                bindEvents(document.querySelector('.product-row'));
+            });
 
-        // Remove invalid state on change
-        $(document).on("input change", ".form-control, .form-select", function () {
-            $(this).removeClass("is-invalid");
-        });
-
-
-        $(document).on("click", ".remove-location", function () {
-            const id = $(this).closest(".d-flex.w-100.align-items-start")
-                            .find("input[name='shop_ids[]']").val();
-            
-            $(this).closest(".d-flex.w-100.align-items-start").remove();
-            
-            selectedShops = selectedShops.filter(s => s.id != id);
-            // updateShopSerialNumbers();
-            drawMultiStopRoute();
-        });
+            // Remove invalid state on change
+            $(document).on("input change", ".form-control, .form-select", function() {
+                $(this).removeClass("is-invalid");
+            });
 
 
-        $(document).on("click", ".edit-location", function () {
-            let locationBox = $(this).closest(".location-box");
+            $(document).on("click", ".remove-location", function() {
+                const id = $(this).closest(".d-flex.w-100.align-items-start")
+                    .find("input[name='shop_ids[]']").val();
 
-            // Get data from inside the location
-            let orderNo = locationBox.find('input[placeholder="Enter Invoice"]').val();
-            let paymentType = locationBox.find("select.form-select").val();
-            let amount = locationBox.find('input[type="number"]').val();
+                $(this).closest(".d-flex.w-100.align-items-start").remove();
 
-            let consignor = locationBox.find(".location-header div:first").text().trim();
-            let shop_id = locationBox.find('input[name="shop_ids[]"]').val();
+                selectedShops = selectedShops.filter(s => s.id != id);
+                // updateShopSerialNumbers();
+                drawMultiStopRoute();
+            });
 
-            // Populate back to form
-            $('input[name="invoice_no"]').val(orderNo);
-            $("#search_shop_name").val(consignor);
-            $('select[name="payment_type"]').val(paymentType);
-            $('input[name="amount"]').val(amount);
-            $("#shop_id").val(shop_id);
 
-            // Products
-            let productContainer = $("#product-container").empty();
-            locationBox.find(".item-row").each(function () {
-                let parts = $(this).text().trim().split(" - ");
-                let title = parts[0];
-                let qtyUnit = parts[1].split(" ");
-                let qty = qtyUnit[0];
-                let unit = qtyUnit[1];
+            $(document).on("click", ".edit-location", function() {
+                let locationBox = $(this).closest(".location-box");
 
-                productContainer.append(`
+                // Get data from inside the location
+                let orderNo = locationBox.find('input[placeholder="Enter Invoice"]').val();
+                let paymentType = locationBox.find("select.form-select").val();
+                let amount = locationBox.find('input[type="number"]').val();
+
+                let consignor = locationBox.find(".location-header div:first").text().trim();
+                let shop_id = locationBox.find('input[name="shop_ids[]"]').val();
+
+                // Populate back to form
+                $('input[name="invoice_no"]').val(orderNo);
+                $("#search_shop_name").val(consignor);
+                $('select[name="payment_type"]').val(paymentType);
+                $('input[name="amount"]').val(amount);
+                $("#shop_id").val(shop_id);
+
+                // Products
+                let productContainer = $("#product-container").empty();
+                locationBox.find(".item-row").each(function() {
+                    let parts = $(this).text().trim().split(" - ");
+                    let title = parts[0];
+                    let qtyUnit = parts[1].split(" ");
+                    let qty = qtyUnit[0];
+                    let unit = qtyUnit[1];
+
+                    productContainer.append(`
                     <div class="product-row">
                         <input type="text" value="${title}" placeholder="Product Title" class="product-title form-control custom-input">
                         <select class="product-unit form-select custom-input">
@@ -2158,39 +2250,39 @@
                         </button>
                     </div>
                 `);
-            });
+                });
 
-            // Remove the old location (we'll re-add after form submit)
-            locationBox.closest(".d-flex.w-100.align-items-start").remove();
-            // ✅ Change button text
-            $("#ofcanvus-submit-btn button[type='submit']").text("Edit Delivery Task");
+                // Remove the old location (we'll re-add after form submit)
+                locationBox.closest(".d-flex.w-100.align-items-start").remove();
+                // ✅ Change button text
+                $("#ofcanvus-submit-btn button[type='submit']").text("Edit Delivery Task");
 
-            // ✅ Change close button to submit
-            $(".btn-close[data-bs-dismiss='offcanvas']").hide();
+                // ✅ Change close button to submit
+                $(".btn-close[data-bs-dismiss='offcanvas']").hide();
                 // .attr("data-bs-dismiss", "") // remove dismiss attribute
                 // .attr("type", "submit")      // make it submit button
                 // .attr("id", "editSubmitBtn") // optional: give ID for tracking
                 // .off("click");               // remove default close behavior
 
-            $("#edit-submit-close-btn").show();
+                $("#edit-submit-close-btn").show();
 
-            // ✅ Prevent closing on backdrop
-            var deliveryNote = new bootstrap.Offcanvas('#deliveryNote', {
-                backdrop: 'static',
-                keyboard: false
+                // ✅ Prevent closing on backdrop
+                var deliveryNote = new bootstrap.Offcanvas('#deliveryNote', {
+                    backdrop: 'static',
+                    keyboard: false
+                });
+                deliveryNote.show();
+
+                // var deliveryNote = new bootstrap.Offcanvas('#deliveryNote');
+                // deliveryNote.show();
+                updateTotal();
             });
-            deliveryNote.show();
-
-            // var deliveryNote = new bootstrap.Offcanvas('#deliveryNote');
-            // deliveryNote.show();
-            updateTotal();
-        });
 
 
 
-        // Add Product Row
-        // window.addRow = function () {
-        //     $("#product-container").append(`
+            // Add Product Row
+            // window.addRow = function () {
+            //     $("#product-container").append(`
         //         <div class="product-row">
         //             <input type="text" placeholder="Product Title" class="product-title form-control custom-input">
         //             <select class="product-unit form-select custom-input">
@@ -2206,58 +2298,59 @@
         //             </button>
         //         </div>
         //     `);
-        // };
+            // };
 
-        // Remove Location
-        $(document).on("click", ".remove-location", function () {
-            $(this).closest(".d-flex").remove();
+            // Remove Location
+            $(document).on("click", ".remove-location", function() {
+                $(this).closest(".d-flex").remove();
+            });
+
+            $("#locations").sortable({
+                items: ".location-item", // Make only location-item draggable
+                handle: ".location-header", // Only drag from the header area
+                placeholder: "sortable-placeholder", // Placeholder style
+                tolerance: "pointer",
+                start: function(e, ui) {
+                    ui.placeholder.height(ui.item.height());
+                },
+                stop: function() {
+                    // Update the numbering after reorder
+                    $("#locations .location-item").each(function(index) {
+                        $(this).find(".bg-primary p").text(index + 1);
+                    });
+
+                    // Rebuild selectedShops array based on new order
+                    let newOrder = [];
+                    $("#locations .location-item").each(function() {
+                        const id = $(this).data("shop-id");
+                        const shop = selectedShops.find(s => s.id == id);
+                        if (shop) newOrder.push(shop);
+                    });
+                    selectedShops = newOrder;
+
+                    // Redraw route based on the new order
+                    drawMultiStopRoute();
+                }
+            });
+
+
         });
-
-        $("#locations").sortable({
-            items: ".location-item",                // Make only location-item draggable
-            handle: ".location-header",             // Only drag from the header area
-            placeholder: "sortable-placeholder",    // Placeholder style
-            tolerance: "pointer",
-            start: function (e, ui) {
-                ui.placeholder.height(ui.item.height());
-            },
-            stop: function () {
-                // Update the numbering after reorder
-                $("#locations .location-item").each(function (index) {
-                    $(this).find(".bg-primary p").text(index + 1);
-                });
-
-                // Rebuild selectedShops array based on new order
-                let newOrder = [];
-                $("#locations .location-item").each(function () {
-                    const id = $(this).data("shop-id");
-                    const shop = selectedShops.find(s => s.id == id);
-                    if (shop) newOrder.push(shop);
-                });
-                selectedShops = newOrder;
-
-                // Redraw route based on the new order
-                drawMultiStopRoute();
-            }
-        });
-
-
-    });
     </script>
 
     {{-- search in div id="locations" --}}
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             // Show search bar only if #locations is not empty
             toggleSearchBar();
 
             // When typing in the search box
-            $("#searchShop").on("keyup", function () {
+            $("#searchShop").on("keyup", function() {
                 let searchText = $(this).val().toLowerCase();
                 // console.log(searchText);
 
-                $("#locations > .d-flex").each(function () {
-                    let shopName = $(this).find(".location-header div.d-flex:first").text().toLowerCase();
+                $("#locations > .d-flex").each(function() {
+                    let shopName = $(this).find(".location-header div.d-flex:first").text()
+                        .toLowerCase();
 
                     if (shopName.indexOf(searchText) > -1) {
                         // console.log(shopName);
@@ -2280,7 +2373,5 @@
                 $("#searchWrapper").hide();
             }
         }
-
     </script>
-
 @endsection

@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Plan;
 use App\Models\Feature;
 use App\Models\PlanFeature;
+use App\Models\PlanFeaturePermission;
+use Spatie\Permission\Models\Permission;
 use Illuminate\Support\Facades\DB;
 
 class PlanController extends Controller
@@ -15,7 +17,8 @@ class PlanController extends Controller
     {
         $plans = Plan::with('features')->orderBy('id', 'asc')->get();
         $features = Feature::orderBy('category')->orderBy('order')->get();
-        return view('admin.plan.index', compact('plans', 'features'));
+        $allPermissions = Permission::all();
+        return view('admin.plan.index', compact('plans', 'features', 'allPermissions'));
     }
 
     public function storePlan(Request $request)
@@ -39,12 +42,17 @@ class PlanController extends Controller
             'category' => 'nullable|string|max:50',
             'order' => 'nullable|integer',
         ]);
-
-        Feature::create($request->only('name', 'category', 'order'));
+        // Feature::create($request->only('name', 'category', 'order'));
+        Feature::create([
+            'slug' => createSlug($request->name,Feature::class),
+            'name' => $request->name,
+            'category' => $request->category ?? 'general',
+            'order' => $request->order ?? 0,
+        ]);
         return back()->with('success', 'Feature created successfully!');
     }
 
-    public function updateMapping(Request $request)
+    /*public function updateMapping(Request $request)
     {
         $data = $request->input('mapping', []);
 
@@ -56,6 +64,7 @@ class PlanController extends Controller
                         [
                             'availability' => $map['availability'] ?? 'no',
                             'details' => $map['details'] ?? null,
+                            'limit' =>$map['limit'] ?? null
                         ]
                     );
                 }
@@ -63,6 +72,63 @@ class PlanController extends Controller
         });
 
         return back()->with('success', 'Plan feature mapping updated!');
+    }*/
+
+    public function updateMapping(Request $request)
+    {
+        $data = $request->input('mapping', []);
+        $featurePermissions = $request->input('feature_permissions', []);
+
+        DB::transaction(function () use ($data, $featurePermissions) {
+            // 🔹 1. Update Plan ↔ Feature mapping
+            foreach ($data as $planId => $features) {
+                foreach ($features as $featureId => $map) {
+                    PlanFeature::updateOrCreate(
+                        ['plan_id' => $planId, 'feature_id' => $featureId],
+                        [
+                            'availability' => $map['availability'] ?? 'no',
+                            'details' => $map['details'] ?? null,
+                            'limit' => $map['limit'] ?? null,
+                        ]
+                    );
+                }
+            }
+
+            // 🔹 2. Update Feature ↔ Permission mapping
+            // foreach ($featurePermissions as $featureId => $permissionIds) {
+            //     $feature = Feature::find($featureId);
+            //     if ($feature) {
+            //         // Sync Spatie permissions for this feature
+            //         $feature->permissions()->sync($permissionIds);
+            //     }
+            // }
+
+            foreach ($featurePermissions as $planId => $features) {
+    
+                foreach ($features as $featureId => $permissionIds) {
+                    
+                    // Convert to array
+                    $permissionIds = (array) $permissionIds;
+
+                    // Delete previous permissions for this plan + feature
+                    PlanFeaturePermission::where([
+                        'plan_id'    => $planId,
+                        'feature_id' => $featureId
+                    ])->delete();
+
+                    // Insert new permissions
+                    foreach ($permissionIds as $pid) {
+                        PlanFeaturePermission::create([
+                            'plan_id'       => $planId,
+                            'feature_id'    => $featureId,
+                            'permission_id' => $pid,
+                        ]);
+                    }
+                }
+            }
+        });
+
+        return back()->with('success', 'Plan feature & permission mapping updated successfully!');
     }
 
     // Edit Plan

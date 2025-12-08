@@ -61,7 +61,6 @@
                                     target="_blank">
                                     Route Playback
                                 </a>
-
                             </td>
                         </tr>
                     @endforeach
